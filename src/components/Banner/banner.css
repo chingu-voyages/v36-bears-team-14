@@ -1,0 +1,24 @@
+.Banner__main {
+  background-color: var(--green-0);
+}
+.Banner__main__titleText {
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 8vw;
+  color: var(--white);
+  padding-top: 8%;
+  margin-left: 2%;
+}
+
+.Banner__main__bannerImage {
+  position: absolute;
+  width: 100%;
+  text-align: right;
+  margin-top: -10%;
+}
+.Banner__main__bannerImage__image {
+  width: 20vw;
+  margin-right: 10%;
+  border: 2px solid white;
+}
