@@ -1,0 +1,1 @@
+export const MAX_RECIPE_BODY_TEXT_LENGTH = 70;
