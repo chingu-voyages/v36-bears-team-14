@@ -43,7 +43,7 @@ function RecipeCard(props: IRecipeCardProps) {
 
   return (
     <div
-      className={`Card__main ${props.customBodyClassNames || ""}`}
+      className={`Card__main ${props.customBodyClassNames || ""} roboto`}
       onClick={() => props.onCardClicked && props.onCardClicked(props.id)}
     >
       <img
