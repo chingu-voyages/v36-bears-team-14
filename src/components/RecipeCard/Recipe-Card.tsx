@@ -24,12 +24,7 @@ function RecipeCard(props: IRecipeCardProps) {
     props.title.bodyText.length > MAX_RECIPE_BODY_TEXT_LENGTH
       ? "Card__main__title__overflow"
       : "";
-  const headerTextStyles =
-    props.title &&
-    props.title.bodyText &&
-    props.title.bodyText.length > MAX_RECIPE_BODY_TEXT_LENGTH
-      ? "Card__main__header-text__overflow"
-      : "";
+
   const bodyTextStyles =
     props.title &&
     props.title.bodyText &&
@@ -45,7 +40,7 @@ function RecipeCard(props: IRecipeCardProps) {
       text: props.title.bodyText,
       maxLength: MAX_RECIPE_BODY_TEXT_LENGTH,
     });
-  console.log(props.title?.bodyText?.length);
+
   return (
     <div
       className={`Card__main ${props.customBodyClassNames || ""}`}
