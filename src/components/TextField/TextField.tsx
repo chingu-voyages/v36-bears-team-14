@@ -1,4 +1,3 @@
-//@ts-nocheck
 import React, { useState } from "react";
 
 interface ITextFieldProps {
@@ -6,8 +5,9 @@ interface ITextFieldProps {
   value?: string;
   label?: string;
   type: string;
+  name?: string;
   placeholder?: string;
-  onChange(name: string): any;
+  onChange: () => string;
 }
 
 function TextField(props: ITextFieldProps) {
@@ -25,16 +25,5 @@ function TextField(props: ITextFieldProps) {
     </label>
   );
 }
-
-// const TextField = ({ value, label, name, placeholder, type, onChange }) => (
-
-//     <input
-//       type={type}
-//       value={value}
-//       name={name}
-//       placeholder={placeholder}
-//       onChange={onChange}
-//     />
-// );
 
 export default TextField;

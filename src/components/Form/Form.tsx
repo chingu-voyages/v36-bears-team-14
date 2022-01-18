@@ -15,6 +15,7 @@ const Form = () => {
       ...prev,
       [name]: value,
     }));
+    console.log(ingredientList);
   };
 
   return (
