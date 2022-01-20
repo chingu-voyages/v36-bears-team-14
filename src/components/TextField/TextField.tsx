@@ -15,7 +15,7 @@ function TextField(props: ITextFieldProps) {
     <label>
       {props.label}
       <input
-        className={`${props.customClassNames}`}
+        className={`${props.customClassNames ? props.customClassNames : "" }`}
         type={props.type}
         value={props.value}
         placeholder={props.placeholder}
