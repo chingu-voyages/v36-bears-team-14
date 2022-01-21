@@ -1,4 +1,5 @@
-export interface ISecureUser {
+export type TSecureUser = {
+  _id: string;
   firstName: string;
   lastName: string;
   email: string;
@@ -7,7 +8,7 @@ export interface ISecureUser {
   favoriteFoods: Array<string>;
   createdAt: Date;
   updatedAt: Date;
-}
+};
 
 export interface IUserRegistrationDetails {
   email: string;
