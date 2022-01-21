@@ -1,19 +1,16 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { EStatus, IStateStatus } from "../definitions";
+
 import { TSecureUser } from "../services/user/user.types";
 
-export enum AppStateStatus {
-  Idle = "idle",
-  Loading = "loading",
-  Error = "error",
-}
 interface IAppState {
-  status: AppStateStatus;
+  stateStatus: IStateStatus;
   isAuthenticated: boolean;
   authenticatedUser: TSecureUser | null;
 }
 
 const initialState: IAppState = {
-  status: AppStateStatus.Idle,
+  stateStatus: { status: EStatus.Idle },
   isAuthenticated: false,
   authenticatedUser: null,
 };
