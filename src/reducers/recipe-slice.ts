@@ -3,7 +3,7 @@ import { EStatus, IStateStatus } from "../definitions";
 
 import { IRecipe } from "../services/recipe/recipe.types";
 
-interface IRecipeState {
+export interface IRecipeState {
   stateStatus: IStateStatus;
   recipes: IRecipe[];
 }
