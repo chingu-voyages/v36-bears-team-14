@@ -10,9 +10,21 @@ export type TSecureUser = {
   updatedAt: Date;
 };
 
-export interface IUserRegistrationDetails {
+export type TUserRegistrationDetails = {
   email: string;
   firstName: string;
   lastName: string;
   plainTextPassword: string;
+};
+
+export type TUserLoginRequest = Pick<
+  TUserRegistrationDetails,
+  "email" | "plainTextPassword"
+> & {
+  onSuccess?: ({ id }: { id: string }) => void;
+  onError?: ({ message }: { message: string }) => void;
+};
+export interface IUserRegistrationRequest extends TUserRegistrationDetails {
+  onSuccess?: ({ id }: { id: string }) => void;
+  onError?: ({ message }: { message: string }) => void;
 }

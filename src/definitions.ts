@@ -1,5 +1,6 @@
 import { IAppState } from "./reducers/app-slice";
 import { IRecipeState } from "./reducers/recipe-slice";
+import { TSecureUser } from "./services/user/user.types";
 
 export enum EStatus {
   Idle = "idle",
@@ -15,4 +16,9 @@ export interface IStateStatus {
 export interface IGlobalAppStore {
   app: IAppState;
   recipe: IRecipeState;
+}
+
+export interface ICheckSessionResponseData {
+  session: boolean;
+  sessionUser?: TSecureUser | null;
 }

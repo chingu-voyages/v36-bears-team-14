@@ -1,5 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { EStatus, IGlobalAppStore, IStateStatus } from "../definitions";
+import {
+  EStatus,
+  ICheckSessionResponseData,
+  IGlobalAppStore,
+  IStateStatus,
+} from "../definitions";
 import { checkHasSession } from "../services/app/app.service";
 
 import { TSecureUser } from "../services/user/user.types";
@@ -18,7 +23,7 @@ const initialState: IAppState = {
 
 export const checkHasSessionAsync = createAsyncThunk(
   "app/checkHasSession",
-  async (): Promise<boolean> => {
+  async (): Promise<ICheckSessionResponseData> => {
     return checkHasSession();
   }
 );
@@ -35,7 +40,10 @@ const appSlice = createSlice({
         };
       })
       .addCase(checkHasSessionAsync.fulfilled, (state, action) => {
-        state.isAuthenticated = action.payload;
+        state.isAuthenticated = action.payload.session;
+        if (action.payload.sessionUser) {
+          state.authenticatedUser = action.payload.sessionUser;
+        }
         state.stateStatus = { status: EStatus.Idle };
       })
       .addCase(checkHasSessionAsync.rejected, (state) => {
@@ -50,4 +58,8 @@ const appSlice = createSlice({
 
 export const selectHasSession = (state: IGlobalAppStore) =>
   state.app.isAuthenticated;
+export const selectAuthenticatedUser = (state: IGlobalAppStore) =>
+  state.app.authenticatedUser;
+export const selectAppStateStatus = (state: IGlobalAppStore): IStateStatus =>
+  state.app.stateStatus;
 export default appSlice.reducer;
