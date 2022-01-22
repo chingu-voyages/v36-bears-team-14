@@ -8,6 +8,7 @@ export type TSecureUser = {
   favoriteFoods: Array<string>;
   createdAt: Date;
   updatedAt: Date;
+  photoUrl?: string;
 };
 
 export type TUserRegistrationDetails = {
