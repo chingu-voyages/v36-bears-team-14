@@ -2,27 +2,36 @@ import React, { useState } from "react";
 
 interface ITextFieldProps {
   customClassNames?: string;
+  inputClassname?: string;
   value?: string;
   label?: string;
   type: "text" | "number" | "url";
   name?: string;
   placeholder?: string;
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange: ({ value, name }: { value: string; name: string }) => void;
 }
 
 function TextField(props: ITextFieldProps) {
+  const handleTextInputChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    props.onChange({ value: event.target.value, name: event.target.name });
+  };
+
   return (
-    <label>
-      {props.label}
-      <input
-        className={`${props.customClassNames ? props.customClassNames : "" }`}
-        type={props.type}
-        value={props.value}
-        placeholder={props.placeholder}
-        onChange={props.onChange}
-        name={props.name}
-      />
-    </label>
+    <div className={`${props.customClassNames ? props.customClassNames : ""}`}>
+      <label>
+        {props.label}
+        <input
+          className={`${props.inputClassname ? props.inputClassname : ""}`}
+          type={props.type}
+          value={props.value}
+          placeholder={props.placeholder}
+          onChange={handleTextInputChange}
+          name={`${props.name ? props.name : ""}`}
+        />
+      </label>
+    </div>
   );
 }
 
