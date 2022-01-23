@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import TextField from "../TextField/TextField";
+import NumberTextField from "../NumberTextField/NumberTextField";
 
 interface IIngredientsFormProps {
   customClassname?: string;
@@ -8,11 +9,17 @@ interface IIngredientsFormProps {
 const IngredientsForm = (props: IIngredientsFormProps) => {
   const [ingredientList, setIngredientList] = useState({
     ingredient: "",
-    quantity: "",
+    quantity: 1,
   });
   const { ingredient, quantity } = ingredientList;
 
-  const handleChange = ({ value, name }: { value: string; name: string }) => {
+  const handleChange = ({
+    name,
+    value,
+  }: {
+    name: string;
+    value: string | number;
+  }) => {
     setIngredientList((prev) => ({
       ...prev,
       [name]: value,
@@ -31,7 +38,7 @@ const IngredientsForm = (props: IIngredientsFormProps) => {
           name="ingredient"
           onChange={handleChange}
         />
-        <TextField
+        <NumberTextField
           type="number"
           value={quantity}
           placeholder="Add quantity"

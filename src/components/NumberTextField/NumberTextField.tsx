@@ -1,21 +1,24 @@
 import React, { useState } from "react";
 
-interface ITextFieldProps {
+interface INumberFieldProps {
   customClassNames?: string;
   inputClassname?: string;
-  value?: string | number;
+  value?: number;
   label?: string;
-  type: "text" | "number" | "url";
+  type: "number";
   name?: string;
   placeholder?: string;
-  onChange: ({ value, name }: { value: string; name: string }) => void;
+  onChange: ({ value, name }: { value: number; name: string }) => void;
 }
 
-function TextField(props: ITextFieldProps) {
+function NumberField(props: INumberFieldProps) {
   const handleTextInputChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    props.onChange({ value: event.target.value, name: event.target.name });
+    props.onChange({
+      value: event.target.valueAsNumber,
+      name: event.target.name,
+    });
   };
 
   return (
@@ -35,4 +38,4 @@ function TextField(props: ITextFieldProps) {
   );
 }
 
-export default TextField;
+export default NumberField;
