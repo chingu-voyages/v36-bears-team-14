@@ -5,7 +5,7 @@ interface ITextFieldProps {
 
   inputClassname?: string;
   value?: string | number;
-  label?: string;
+  label: string;
   type: "text" | "number" | "url";
   name?: string;
   placeholder?: string;
