@@ -1,13 +1,27 @@
-import React from "react";
-
+import "./button-style.css";
 interface IButtonProps {
   buttonText: string;
-  buttonClass: string;
-  onClick: () => void;
+  customClassNames?: string;
+  customTextClassNames?: string;
+  onClick?: () => void;
 }
 
 function Button(props: IButtonProps) {
-  return <div className={props.buttonClass}>{props.buttonText}</div>;
+  return (
+    <div
+      className={`Button__main ${
+        props.customClassNames ? props.customClassNames : ""
+      }`}
+    >
+      <div
+        className={`Button__text ${
+          props.customTextClassNames ? props.customTextClassNames : ""
+        }`}
+      >
+        {props.buttonText}
+      </div>
+    </div>
+  );
 }
 
 export default Button;
