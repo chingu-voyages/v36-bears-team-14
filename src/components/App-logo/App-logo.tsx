@@ -2,6 +2,7 @@ import ApplicationLogo from "./app-logo-essen.png";
 import "./app-logo-style.css";
 interface IApplicationLogoProps {
   customImageClassNames?: string;
+  customClassNames?: string;
   onClick?: () => void;
 }
 function AppLogo(props: IApplicationLogoProps) {

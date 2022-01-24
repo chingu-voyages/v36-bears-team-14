@@ -1,4 +1,27 @@
+.AppLogo__main {
+  max-width: fit-content;
+  margin-left: 2%;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
 .regular-logo {
-  width: 148px;
-  height: 148px;
+  width: 50px;
+}
+
+.black-border {
+  border: 2px solid black;
+}
+
+.margin-2pct {
+  margin: 2%;
+}
+
+@media only screen and (max-width: 480px) {
+  .AppLogo__main {
+    display: none;
+  }
+}
+
+@media only screen and (min-width: 481px) and (max-width: 768px) {
+
 }
