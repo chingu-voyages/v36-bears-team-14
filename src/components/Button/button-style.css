@@ -1,0 +1,48 @@
+.Button__main {
+  text-align: center;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  width: max-content;
+  min-width: 10vw;
+}
+
+.Button__main:hover {
+  cursor: pointer;
+}
+/**
+  square vs round - shape of the button
+**/
+.square {
+  border-radius: 0px;
+}
+
+.round {
+  border-radius: 30px;
+}
+
+.white-text {
+  color: white;
+}
+
+.green-text {
+  color: var(--green-0);
+}
+
+.black-text {
+  color: black;
+}
+.green-fill {
+  background-color: var(--green-0);
+  border: 2px solid var(--green-0);
+}
+
+.white-fill {
+  background-color: white;
+  border: 2px solid var(--green-0);
+}
+
+.text-size-36 {
+  font-size: 36px;
+}
