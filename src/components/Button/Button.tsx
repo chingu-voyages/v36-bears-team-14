@@ -1,19 +1,17 @@
 import "./button-style.css";
 import WhitePlusButton from "./white-plus-button.svg";
-import GreenPlusButton from "./green-plus-button.svg";
 interface IButtonProps {
-  buttonText?: string;
+  text?: string;
   customClassNames?: string;
   customTextClassNames?: string;
   onClick?: () => void;
-  plusButton: {
-    yes: boolean;
-    color: "white" | "green";
+  plusButton?: {
+    color: "white";
   };
 }
 
 function Button(props: IButtonProps) {
-  return !props.plusButton.yes ? (
+  return !props.plusButton ? (
     <div
       className={`Button__main ${
         props.customClassNames ? props.customClassNames : ""
@@ -24,7 +22,7 @@ function Button(props: IButtonProps) {
           props.customTextClassNames ? props.customTextClassNames : ""
         }`}
       >
-        {props.buttonText}
+        {props.text}
       </div>
     </div>
   ) : (
@@ -34,9 +32,7 @@ function Button(props: IButtonProps) {
       }`}
     >
       <img
-        src={`${
-          props.plusButton.color === "white" ? WhitePlusButton : GreenPlusButton
-        }`}
+        src={`${props.plusButton.color === "white" && WhitePlusButton}`}
         alt="add"
       />
     </div>
