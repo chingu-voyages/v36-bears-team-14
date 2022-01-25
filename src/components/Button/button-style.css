@@ -1,11 +1,19 @@
 .Button__main {
   text-align: center;
-  padding-left: 2rem;
-  padding-right: 2rem;
-  padding-top: 1rem;
-  padding-bottom: 1rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
   width: max-content;
-  min-width: 10vw;
+  align-self: center;
+}
+
+.PlusButton__Img {
+  width: 30px;
+}
+
+.Button__text {
+  font-size: 10px;
 }
 
 .Button__main:hover {
@@ -46,3 +54,4 @@
 .text-size-36 {
   font-size: 36px;
 }
+
