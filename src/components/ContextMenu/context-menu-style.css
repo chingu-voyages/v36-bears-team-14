@@ -1,0 +1,29 @@
+.ContextMenu__Main {
+  border: 0px solid black;
+  box-shadow: 0px 6px 6px darkgray;
+}
+.ContextMenuOption__main:hover {
+  cursor: pointer;
+  background-color: var(--super-light-grey);
+}
+
+.bold-text {
+  font-weight: bold;
+}
+
+.font-size-20 {
+  font-size: 20px;
+}
+
+.dark-charcoal-grey {
+  color: var(--dark-charcoal-grey);
+}
+
+.menu-padding {
+  padding: 2%;
+}
+
+
+.ContextMenuOption__text {
+  text-align: center;
+}

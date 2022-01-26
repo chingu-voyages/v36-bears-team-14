@@ -4,6 +4,8 @@ html * {
 :root {
   --white: #FFFFFF;
   --green-0: #18A96C;
+  --dark-charcoal-grey: #333333;
+  --super-light-grey: #EDEDED;
 }
 
 body { margin: 0; } 
@@ -19,4 +21,8 @@ body { margin: 0; }
 
 .flex {
   display: flex;
+}
+
+.menu-hover-color {
+  color: var(--super-light-grey);
 }
