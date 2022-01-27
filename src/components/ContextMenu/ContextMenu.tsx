@@ -68,3 +68,27 @@ function ContextMenu(props: IContextMenuProps) {
 }
 
 export default ContextMenu;
+
+/**
+ <ContextMenu actions={
+      { login:
+        {
+          text: "Sign in",
+          onClick: handleOnMenuClick,
+          customTextClassNames: "font-size-20 bold-text dark-charcoal-grey menu-padding"
+        },
+        logout: 
+        {
+          text: "Sign out",
+          onClick: handleOnMenuClick,
+          customTextClassNames: "font-size-20 bold-text dark-charcoal-grey menu-padding"
+        },
+        profile:
+        {
+          text: "Profile",
+          onClick: handleOnMenuClick,
+          customTextClassNames: "font-size-20 bold-text dark-charcoal-grey menu-padding"
+        }
+      }
+    } />
+ */

@@ -1,12 +1,41 @@
 .NavBar__AppLogoGroup {
   align-self: center;
+  margin-left: 2%;
 }
 .NavBar__nav__main {
-  box-shadow: 0px 6px 6px #8D8D8D;
+  box-shadow: 0px 0px 6px #8D8D8D;
   display: flex;
   justify-content: space-between;
 }
 
 .NavBar__SecondGroup {
   display: flex;
+}
+
+.Submit-Recipe-Text-Button {
+  display: none;
+}
+
+@media only screen and (max-width: 480px) {
+  .responsive-login-hamburger-icon {
+    display: block;
+  }
+  .responsive-login-text {
+    display: none;
+  }
+}
+
+@media only screen and (min-width: 481px) {
+  .Submit-Recipe-Text-Button {
+    display: block;
+  }
+  .Submit-Recipe-Plus-Button {
+    display: none;
+  }
+  .responsive-login-hamburger-icon {
+    display: none;
+  }
+  .responsive-login-text {
+    display: block;
+  }
 }

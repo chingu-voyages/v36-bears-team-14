@@ -1,6 +1,5 @@
 .AppLogo__main {
   max-width: fit-content;
-  margin-left: 2%;
   margin-top: 5px;
   margin-bottom: 5px;
 }
@@ -9,7 +8,8 @@
 }
 
 .black-border {
-  border: 2px solid black;
+  border: 0px solid black;
+  box-shadow: 2px 2px 5px lightslategray;
 }
 
 .margin-2pct {
@@ -18,10 +18,6 @@
 
 @media only screen and (max-width: 480px) {
   .AppLogo__main {
-    display: none;
+    visibility: hidden;
   }
-}
-
-@media only screen and (min-width: 481px) and (max-width: 768px) {
-
 }
