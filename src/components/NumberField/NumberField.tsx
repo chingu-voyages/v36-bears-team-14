@@ -4,7 +4,7 @@ interface INumberFieldProps {
   customClassNames?: string;
   inputClassname?: string;
   value?: number;
-  label?: string;
+  label: string;
   type: "number";
   name?: string;
   placeholder?: string;
