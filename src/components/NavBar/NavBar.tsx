@@ -5,18 +5,33 @@ import { EButtonType } from "../Button/Button";
 import LoginButton from "../Button/LoginButton";
 import ContextMenu from "../ContextMenu";
 import ModalContainer from "../ModalContainer";
+import TextField from "../TextField";
 import "./nav-bar-style.css";
 
-interface INavBarProps {}
+interface INavBarProps {
+  customClassNames?: string;
+}
 
 function NavBar(props: INavBarProps) {
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
   return (
-    <nav className="NavBar__nav__main">
+    <nav
+      className={`NavBar__nav__main white-background ${
+        props.customClassNames ? props.customClassNames : ""
+      }`}
+    >
       <div className="NavBar__AppLogoGroup">
         <AppLogo
           customClassNames="margin-2pct"
           customImageClassNames="regular-logo black-border"
+        />
+      </div>
+      <div className="NavBar__TextBarSearchGroup">
+        <TextField
+          type="text"
+          name="search_bar"
+          placeholder="Search"
+          inputClassNames="round thin-border-width green-border nav-bar-flex-width search-bar-left-margin"
         />
       </div>
       <div className="NavBar__SecondGroup">

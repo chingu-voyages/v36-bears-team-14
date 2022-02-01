@@ -39,12 +39,12 @@ const IngredientsForm = (props: IIngredientsFormProps) => {
           onChange={handleChange}
         />
         <NumberField
-          type="number"
           value={quantity}
           placeholder="Add quantity"
           label="Quantity"
           name="quantity"
           onChange={handleChange}
+          numericalRangeLimit={{ max: 20, min: 0 }}
         />
       </form>
     </div>

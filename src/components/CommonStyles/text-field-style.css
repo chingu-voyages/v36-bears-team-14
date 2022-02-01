@@ -1,0 +1,42 @@
+/**
+  Border 
+**/
+.square {
+  border-radius: 0px;
+}
+
+.round {
+  border-radius: 12px;
+}
+
+.green-border {
+  border-color: var(--green-0);
+  border-top-color: mediumspringgreen;
+  border-left-color: mediumspringgreen;
+}
+
+.dark-border {
+  border-color: var(--dark-charcoal-grey);
+}
+
+.thin-border-width {
+  border-width: 2px;
+}
+
+.thicker-border-width {
+  border-width: 4px;
+}
+
+.TextInput__Text__common {
+  line-height: 25px;
+  padding: 3px;
+  padding-left: 20px;
+}
+
+.TextInput__Main__common {
+  align-self: center;
+}
+
+.TextInput__label__common {
+  display: block;
+}
