@@ -1,0 +1,44 @@
+.UserRegistration__Controls {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+  margin-right: 6%;
+}
+
+.UserRegistration__innerForm__main {
+  margin-top: 10px;
+}
+
+.vertical-spacing {
+  margin-bottom: 20px;
+}
+@media only screen and (max-width: 480px) {
+  .text-box-flex-width {
+    width: 90%;
+  }
+  .UserRegistration__innerForm__main {
+    margin-left: 5px;
+    margin-right: 5px;
+  }
+}
+
+@media only screen and (min-width: 481px) and (max-width: 1024px) {
+  .text-box-flex-width {
+    width: 90%;
+  }
+  .UserRegistration__innerForm__main {
+    margin-left: 10%;
+    margin-right: 10%;
+  }
+}
+
+@media only screen and (min-width: 1025px) {
+  .UserRegistration__innerForm__main {
+    margin-left: 40%;
+    margin-right: 40%;
+  }
+
+  .UserRegistration__Controls {
+    margin-right: -9%;
+  }
+}

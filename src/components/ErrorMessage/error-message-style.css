@@ -1,0 +1,16 @@
+.ErrorMessage__text {
+  color: #FF0000;
+}
+
+.flex-size {
+  width: 30px;
+  height: auto;
+}
+
+.error-left-margin {
+  margin-left: 10px;
+}
+
+.error-margin-bottom {
+  margin-bottom: 10px;
+}

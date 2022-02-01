@@ -1,11 +1,12 @@
 .Banner__main {
   background-color: var(--green-0);
+  max-height: 160px;
 }
 .Banner__main__titleText {
   font-family: Roboto;
   font-style: normal;
   font-weight: normal;
-  font-size: 8vw;
+  font-size: 3rem;
   color: var(--white);
   padding-top: 8%;
   margin-left: 2%;
@@ -21,4 +22,17 @@
   width: 20vw;
   margin-right: 10%;
   border: 2px solid white;
+}
+
+@media only screen and (min-width: 481px) and (max-width: 1024px) {
+  .Banner__main__titleText {
+    font-size: 4rem;
+  }
+}
+
+@media only screen and (min-width: 1025px) {
+  .Banner__main__titleText {
+    font-size: 6rem;
+    padding-top: 50px;
+  }
 }
