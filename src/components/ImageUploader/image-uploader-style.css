@@ -1,0 +1,7 @@
+.upload-input {
+  opacity: 0;
+}
+
+.ImageUploader__sendUploadIcon:hover {
+  cursor: pointer;
+}
