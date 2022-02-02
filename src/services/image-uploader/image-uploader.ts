@@ -1,11 +1,3 @@
-import {
-  TProfilePhotoUploadContext,
-  TRecipePhotoUploadContext,
-  TRecipeDirectionStepUploadContext,
-  PhotoUploadType,
-  TFileList,
-} from "./image-uploader.types";
-import axios from "axios";
 import AWS from "aws-sdk";
 import {
   SPACES_ACCESS_TOKEN,
@@ -15,36 +7,22 @@ import {
   SPACES_SECRET_KEY,
 } from "../../environment";
 
-const spacesEndpoint = new AWS.Endpoint(SPACES_ENDPOINT!);
+const awsEndpoint = new AWS.Endpoint(SPACES_ENDPOINT!);
 const spacesConfig = {
   domain: SPACES_DOMAIN!,
   bucketName: SPACES_BUCKET_NAME!,
 };
 
-export const uploadPhotoToApi = async ({
+export const uploadPhotoToCloud = async ({
   data,
-  uploadType,
-  context,
   onSuccess,
   onError,
 }: {
   data: any;
-  context:
-    | TProfilePhotoUploadContext
-    | TRecipePhotoUploadContext
-    | TRecipeDirectionStepUploadContext;
-  uploadType: PhotoUploadType;
   onSuccess: (imageUrl: string) => void;
   onError: (message: string) => void;
 }): Promise<void> => {
-  switch (uploadType) {
-    case PhotoUploadType.ProfilePhoto:
-      uploadImageToSpaces({ data, onSuccess, onError });
-      break;
-    case PhotoUploadType.RecipePhoto:
-      break;
-    default:
-  }
+  uploadImageToSpaces({ data, onSuccess, onError });
 };
 
 const uploadImageToSpaces = async ({
@@ -57,7 +35,7 @@ const uploadImageToSpaces = async ({
   onError: (message: string) => void;
 }) => {
   const s3 = new AWS.S3({
-    endpoint: spacesEndpoint,
+    endpoint: awsEndpoint,
     accessKeyId: SPACES_ACCESS_TOKEN,
     secretAccessKey: SPACES_SECRET_KEY,
   });
@@ -78,12 +56,10 @@ const uploadImageToSpaces = async ({
     })
     .send((err) => {
       if (err) {
-        console.log(err);
-        onError("Unable to upload image");
+        onError(`Unable to upload image: ${err.message}`);
       } else {
         const imageUrl = `${spacesConfig.domain}/${blob.name}`;
         onSuccess(imageUrl);
-        console.log("Image name is imageUrl", imageUrl);
       }
     });
 };
