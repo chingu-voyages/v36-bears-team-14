@@ -21,7 +21,7 @@ const initialState: IAppState = {
   stateStatus: { status: EStatus.Idle },
   isAuthenticated: false,
   authenticatedUser: null,
-  scene: EAppScene.Register,
+  scene: EAppScene.RecipeView,
 };
 
 export const checkHasSessionAsync = createAsyncThunk(

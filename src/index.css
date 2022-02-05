@@ -2,13 +2,15 @@ html * {
   font-family: Roboto;
 }
 :root {
-  --white: #FFFFFF;
-  --green-0: #18A96C;
+  --white: #ffffff;
+  --green-0: #18a96c;
   --dark-charcoal-grey: #333333;
-  --super-light-grey: #EDEDED;
+  --super-light-grey: #ededed;
 }
 
-body { margin: 0; } 
+body {
+  margin: 0;
+}
 
 .roboto {
   font-family: Roboto;
@@ -28,7 +30,7 @@ body { margin: 0; }
 }
 
 .MenuModal {
-  position:  absolute;
+  position: absolute;
   left: 0px;
   width: 100vw;
   height: 100vh;
