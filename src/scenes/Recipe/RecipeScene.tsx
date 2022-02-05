@@ -61,7 +61,7 @@ function RecipeScene(props: IRecipeSceneProps) {
           bannerImageUrl: recipeHasImage()
             ? recipeContext?.images[0].url!
             : GenericRecipeImage,
-          imageClassNames: "responsive-recipe-image",
+          imageClassNames: "responsive-image",
         }}
         hasSubtitle={{
           subtitleText1:

@@ -3,6 +3,7 @@ import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { selectCurrentScene } from "../../reducers/app-slice";
 import { setCurrentRecipeContextByIdAsync } from "../../reducers/recipe-slice";
 import LoginScene from "../../scenes/Login";
+import ProfileScene from "../../scenes/Profile";
 import RecipeScene from "../../scenes/Recipe";
 import RegistrationScene from "../../scenes/UserRegistration/UserRegistration";
 import { EAppScene } from "../../services/app/app.types";
@@ -19,6 +20,8 @@ function renderCurrentScene(scene: EAppScene) {
       return <RegistrationScene />;
     case EAppScene.RecipeView:
       return <RecipeScene />;
+    case EAppScene.Profile:
+      return <ProfileScene />;
     default:
       throw new Error(
         "Define your scene in the EAppScene enum and add it to the case"
