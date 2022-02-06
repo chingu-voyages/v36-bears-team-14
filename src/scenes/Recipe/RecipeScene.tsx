@@ -88,7 +88,7 @@ function RecipeScene(props: IRecipeSceneProps) {
             {recipeContext &&
               recipeContext.ingredients &&
               recipeContext.ingredients.map((ingredient) => (
-                <li className="RecipeScene_list-item centered-text">
+                <li className="Recipe Scene_list-item centered-text">
                   {`${ingredient.quantity} ${ingredient.unit} ${ingredient.name}`}
                 </li>
               ))}
@@ -103,7 +103,7 @@ function RecipeScene(props: IRecipeSceneProps) {
           </div>
         </div>
         <div className="Recipe Scene__body__footer">
-          <ul className="Recipe RecipeScene_body__directionsList no-list-bullets box-padding">
+          <ul className="Recipe Scene__body__directionsList no-list-bullets box-padding">
             {recipeContext &&
               recipeContext.directions &&
               recipeContext.directions.length > 0 &&

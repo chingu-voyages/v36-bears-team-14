@@ -22,8 +22,7 @@ export type TUserLoginRequest = Pick<
   TUserRegistrationDetails,
   "email" | "plainTextPassword"
 > & {
-  onSuccess?: ({ id }: { id: string }) => void;
-  onError?: ({ message }: { message: string }) => void;
+  onSuccess: () => void;
 };
 export interface IUserRegistrationRequest extends TUserRegistrationDetails {
   onSuccess?: ({ id }: { id: string }) => void;

@@ -1,23 +1,32 @@
 import { useState } from "react";
+import { shallowEqual, useSelector } from "react-redux";
 import Banner from "../../components/Banner";
 import Button from "../../components/Button";
 import { EButtonType } from "../../components/Button/Button";
 import ErrorMessage from "../../components/ErrorMessage";
+import Spinner from "../../components/Spinner";
 import TextField from "../../components/TextField";
+import { EStatus } from "../../definitions";
+import { selectLoginStateStatus } from "../../reducers/app-slice";
 import "./login-style.css";
 
 interface ILoginSceneProps {
   onDismiss?: () => void;
+  onLoginSubmit?: ({
+    email,
+    plainTextPassword,
+  }: {
+    email: string;
+    plainTextPassword: string;
+  }) => void;
+  errorMessage?: string | null;
+  customSceneClassNames?: string;
 }
 
 function LoginScene(props: ILoginSceneProps) {
+  const loginStateStatus = useSelector(selectLoginStateStatus, shallowEqual);
   const [email, setEmail] = useState<string>("");
   const [plainTextPassword, setPlainTextPassword] = useState<string | null>(
-    null
-  );
-
-  const [hasLoginError, setHasLoginError] = useState<boolean>(false);
-  const [loginErrorMessage, setHasLoginErrorMessage] = useState<string | null>(
     null
   );
 
@@ -41,8 +50,41 @@ function LoginScene(props: ILoginSceneProps) {
   }) => {
     setPlainTextPassword(value);
   };
+
+  const handleCancelLoginDismiss = () => {
+    props.onDismiss && props.onDismiss();
+  };
+
+  const validateLoginInput = () => {
+    clearAllErrors();
+    if (!email || !email.length) {
+      setHasEmailError(true);
+      setEmailErrorMessage("Please enter valid e-mail");
+    }
+    if (!plainTextPassword || !plainTextPassword.length) {
+      setHasPasswordError(true);
+      setPasswordErrorMessage("Please enter a password");
+      return;
+    }
+    props.onLoginSubmit && props.onLoginSubmit({ email, plainTextPassword });
+  };
+
+  const clearAllErrors = () => {
+    setHasPasswordError(false);
+    setHasEmailError(false);
+    setEmailErrorMessage(null);
+    setPasswordErrorMessage(null);
+  };
+
   return (
-    <div className="LoginScene__Main">
+    <div
+      className={`LoginScene__Main ${
+        props.customSceneClassNames ? props.customSceneClassNames : ""
+      }`}
+    >
+      {loginStateStatus && loginStateStatus.status === EStatus.Loading && (
+        <Spinner customClassNames="burgundy-spinner-color" />
+      )}
       <Banner titleText="Log in" />
       <div className="LoginScene__innerForm__main">
         <div className="LoginScene__Email__div">
@@ -69,34 +111,43 @@ function LoginScene(props: ILoginSceneProps) {
           />
           {hasPasswordError && (
             <ErrorMessage
-              text={passwordErrorMessage ?? "Problem with password"}
+              text={passwordErrorMessage ?? "Please check your password"}
             />
           )}
         </div>
-        <div className="LoginScene__Controls__main">
+        <div className="LoginScene__Controls__main login-bottom-padding">
           <div className="LoginScene__Controls login-vertical-spacing">
             <Button
               type={EButtonType.Normal}
               customClassNames="square green-fill"
               text="Go"
               customTextClassNames="white-text"
+              onClick={validateLoginInput}
             />
             <Button
               type={EButtonType.Normal}
               customClassNames="square white-fill"
               text="Cancel"
               customTextClassNames="black-text"
+              onClick={handleCancelLoginDismiss}
             />
           </div>
-          {hasLoginError && (
-            <div className="LoginScene__ErrorMessage_Main">
-              <ErrorMessage text={loginErrorMessage ?? "Login error"} />
-            </div>
-          )}
         </div>
+        {props.errorMessage && (
+          <div className="Error_footer">
+            <ErrorMessage text={props.errorMessage} />
+          </div>
+        )}
       </div>
     </div>
   );
 }
 
 export default LoginScene;
+
+/**
+ * 
+ *     {spinnerStatus && spinnerStatus.status === EStatus.Loading && (
+        <Spinner title={spinnerStatus.message && "Loading"} />
+      )}
+ */

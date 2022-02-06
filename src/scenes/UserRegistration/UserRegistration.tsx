@@ -8,6 +8,7 @@ import "./user-registration-style.css";
 
 interface IUserRegistrationSceneProps {
   onDismiss?: () => void;
+  customSceneClassNames?: string;
 }
 function RegistrationScene(props: IUserRegistrationSceneProps) {
   const [hasRegistrationError, setHasRegistrationError] =
@@ -15,8 +16,17 @@ function RegistrationScene(props: IUserRegistrationSceneProps) {
   const [registrationErrorMessage, setRegistrationErrorMessage] = useState<
     string | null
   >(null);
+
+  const handleRegistrationCancelDismiss = () => {
+    props.onDismiss && props.onDismiss();
+  };
+
   return (
-    <div className="UserRegistration__Main">
+    <div
+      className={`UserRegistration__Main ${
+        props.customSceneClassNames ? props.customSceneClassNames : ""
+      }`}
+    >
       <Banner titleText="Sign Up" />
       <div className="UserRegistration__innerForm__main">
         <div className="UserRegistration__innerForm__email">
@@ -64,7 +74,7 @@ function RegistrationScene(props: IUserRegistrationSceneProps) {
             inputClassNames="text-box-flex-width round green-border"
           />
         </div>
-        <div className="UserRegistration__Controls__main">
+        <div className="UserRegistration__Controls__main registration-bottom-padding">
           <div className="UserRegistration__Controls vertical-spacing">
             <Button
               type={EButtonType.Normal}
@@ -77,6 +87,7 @@ function RegistrationScene(props: IUserRegistrationSceneProps) {
               customClassNames="square white-fill"
               text="Cancel"
               customTextClassNames="black-text"
+              onClick={handleRegistrationCancelDismiss}
             />
           </div>
           {hasRegistrationError && (

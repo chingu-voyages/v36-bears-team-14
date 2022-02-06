@@ -55,3 +55,14 @@
   font-size: 36px;
 }
 
+.username-top-padding-adjustment {
+  padding-top: 15px;
+}
+
+.username-top-padding-adjustment-logged-in {
+  padding-top: 10%;
+}
+
+.generic-profile-icon-width-adjustment {
+  width: 35px;
+}

@@ -3,6 +3,7 @@ import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { selectCurrentScene } from "../../reducers/app-slice";
 import { setCurrentRecipeContextByIdAsync } from "../../reducers/recipe-slice";
 import LoginScene from "../../scenes/Login";
+import PlaceHolderLandingScene from "../../scenes/PlaceHolderLanding";
 import ProfileScene from "../../scenes/Profile";
 import RecipeScene from "../../scenes/Recipe";
 import RegistrationScene from "../../scenes/UserRegistration/UserRegistration";
@@ -22,6 +23,8 @@ function renderCurrentScene(scene: EAppScene) {
       return <RecipeScene />;
     case EAppScene.Profile:
       return <ProfileScene />;
+    case EAppScene.PlaceHolder:
+      return <PlaceHolderLandingScene />;
     default:
       throw new Error(
         "Define your scene in the EAppScene enum and add it to the case"
@@ -39,6 +42,7 @@ function Stage() {
   return (
     <div className="Stage__main">
       {currentScene && renderCurrentScene(currentScene)}
+      {/* <Spinner title="Hi!" /> */}
     </div>
   );
 }

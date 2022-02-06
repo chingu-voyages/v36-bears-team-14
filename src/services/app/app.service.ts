@@ -35,43 +35,34 @@ export const logInUser = async ({
   email,
   plainTextPassword,
   onSuccess,
-  onError,
-}: TUserLoginRequest): Promise<void> => {
+}: TUserLoginRequest): Promise<TSecureUser> => {
   const response = await axios({
     method: "POST",
     url: `${API_URL}/api/authentication/local`,
     withCredentials: true,
     data: {
       email,
-      plainTextPassword,
+      password: plainTextPassword,
     },
   });
   if (response.status === 200) {
     // A successful response should send an id property in the response body
-    const { id } = response.data;
-    onSuccess && onSuccess({ id });
+    onSuccess();
+    return response.data as TSecureUser;
   } else {
-    onError && onError({ message: "Unable to log in" });
+    throw new Error("Log in failed");
   }
 };
 
-export const logOutUser = async ({
-  onSuccess,
-  onError,
-}: {
-  onSuccess?: () => void;
-  onError?: ({ message }: { message: string }) => void;
-}): Promise<void> => {
+export const logOutUser = async (): Promise<void> => {
   const response = await axios({
     method: "POST",
     url: `${API_URL}/api/authentication/logout`,
     withCredentials: true,
   });
 
-  if (response.status === 200) {
-    onSuccess && onSuccess();
-  } else {
-    onError && onError({ message: "Unable to process log out request" });
+  if (response.status !== 200) {
+    throw new Error("Unable to do log out request");
   }
 };
 
