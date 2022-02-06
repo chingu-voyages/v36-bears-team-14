@@ -73,7 +73,7 @@ export const registerNewUser = async ({
   plainTextPassword,
   onSuccess,
   onError,
-}: IUserRegistrationRequest): Promise<void> => {
+}: IUserRegistrationRequest): Promise<TSecureUser> => {
   const response = await axios({
     method: "POST",
     url: `${API_URL}/api/authentication/local/register`,
@@ -88,8 +88,10 @@ export const registerNewUser = async ({
 
   if (response.status === 200) {
     const data = response.data as TSecureUser;
-    onSuccess && onSuccess({ id: data._id });
-  } else if (response.status === 400) {
+    onSuccess && onSuccess({ user: data });
+    return data;
+  } else {
     onError && onError({ message: response.data.error });
+    throw new Error(`Registration failed: ${response.data.error}`);
   }
 };

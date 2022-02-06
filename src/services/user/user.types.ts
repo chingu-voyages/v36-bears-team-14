@@ -25,6 +25,6 @@ export type TUserLoginRequest = Pick<
   onSuccess: () => void;
 };
 export interface IUserRegistrationRequest extends TUserRegistrationDetails {
-  onSuccess?: ({ id }: { id: string }) => void;
+  onSuccess?: ({ user }: { user: TSecureUser }) => void;
   onError?: ({ message }: { message: string }) => void;
 }

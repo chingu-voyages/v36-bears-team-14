@@ -9,14 +9,21 @@ import {
   checkHasSession,
   logInUser,
   logOutUser,
+  registerNewUser,
 } from "../services/app/app.service";
 import { EAppScene } from "../services/app/app.types";
 
-import { TSecureUser, TUserLoginRequest } from "../services/user/user.types";
+import {
+  IUserRegistrationRequest,
+  TSecureUser,
+  TUserLoginRequest,
+  TUserRegistrationDetails,
+} from "../services/user/user.types";
 
 export interface IAppState {
   stateStatus: IStateStatus;
   logInStatus: IStateStatus;
+  registrationStatus: IStateStatus;
   isAuthenticated: boolean;
   authenticatedUser: TSecureUser | null;
   scene: EAppScene;
@@ -25,9 +32,14 @@ export interface IAppState {
 const initialState: IAppState = {
   stateStatus: { status: EStatus.Idle },
   logInStatus: { status: EStatus.Idle },
+  registrationStatus: { status: EStatus.Idle },
   isAuthenticated: false,
   authenticatedUser: null,
   scene: EAppScene.PlaceHolder,
+};
+
+const setAuthenticatedUserInLocalStorage = (data: any) => {
+  window.sessionStorage.setItem("authenticatedUser", JSON.stringify(data));
 };
 
 export const checkHasSessionAsync = createAsyncThunk(
@@ -52,6 +64,27 @@ export const logOutUserAsync = createAsyncThunk(
   "app/logOutUser",
   async (): Promise<void> => {
     return logOutUser();
+  }
+);
+
+export const registerNewUserAsync = createAsyncThunk(
+  "app/registerNewUser",
+  async ({
+    email,
+    firstName,
+    lastName,
+    plainTextPassword,
+    onSuccess,
+    onError,
+  }: IUserRegistrationRequest) => {
+    return registerNewUser({
+      email,
+      firstName,
+      lastName,
+      plainTextPassword,
+      onSuccess,
+      onError,
+    });
   }
 );
 const appSlice = createSlice({
@@ -80,14 +113,15 @@ const appSlice = createSlice({
         state.isAuthenticated = action.payload.session;
         if (action.payload.sessionUser) {
           state.authenticatedUser = action.payload.sessionUser;
+          setAuthenticatedUserInLocalStorage(action.payload.sessionUser);
         }
         state.stateStatus = { status: EStatus.Idle };
       })
-      .addCase(checkHasSessionAsync.rejected, (state) => {
+      .addCase(checkHasSessionAsync.rejected, (state, action) => {
         state.isAuthenticated = false;
         state.stateStatus = {
           status: EStatus.Error,
-          message: "Unable to get session status",
+          message: `Unable to get session status: ${action.error.message}`,
         };
       })
       .addCase(logInUserAsync.pending, (state) => {
@@ -99,16 +133,13 @@ const appSlice = createSlice({
       .addCase(logInUserAsync.fulfilled, (state, action) => {
         state.logInStatus = { status: EStatus.Idle, message: "" };
         state.authenticatedUser = action.payload;
-        window.sessionStorage.setItem(
-          "authenticatedUser",
-          JSON.stringify(action.payload)
-        );
+        setAuthenticatedUserInLocalStorage(action.payload);
         state.isAuthenticated = true;
       })
-      .addCase(logInUserAsync.rejected, (state) => {
+      .addCase(logInUserAsync.rejected, (state, action) => {
         state.logInStatus = {
           status: EStatus.Error,
-          message: "Log in failed. Check your credentials.",
+          message: `Log in failed: ${action.error.message}`,
         };
       })
       .addCase(logOutUserAsync.pending, (state) => {
@@ -128,6 +159,27 @@ const appSlice = createSlice({
         window.sessionStorage.clear();
         state.authenticatedUser = null;
         state.isAuthenticated = false;
+      })
+      .addCase(registerNewUserAsync.pending, (state) => {
+        state.registrationStatus = {
+          status: EStatus.Loading,
+          message: "Registering user...",
+        };
+      })
+      .addCase(registerNewUserAsync.fulfilled, (state, action) => {
+        state.registrationStatus = {
+          status: EStatus.Idle,
+          message: "",
+        };
+        setAuthenticatedUserInLocalStorage(action.payload);
+        state.isAuthenticated = true;
+        state.authenticatedUser = action.payload;
+      })
+      .addCase(registerNewUserAsync.rejected, (state, action) => {
+        state.registrationStatus = {
+          status: EStatus.Error,
+          message: `There was a problem registering the account. ${action.error.message}`,
+        };
       });
   },
 });
@@ -140,6 +192,10 @@ export const selectAppStateStatus = (state: IGlobalAppStore): IStateStatus =>
   state.app.stateStatus;
 export const selectLoginStateStatus = (state: IGlobalAppStore): IStateStatus =>
   state.app.logInStatus;
+
+export const selectRegistrationStatus = (
+  state: IGlobalAppStore
+): IStateStatus => state.app.registrationStatus;
 export const selectCurrentScene = (state: IGlobalAppStore) => state.app.scene;
 
 export const { setScene, clearLogInErrorStatus } = appSlice.actions;

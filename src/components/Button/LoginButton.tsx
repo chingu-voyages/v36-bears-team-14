@@ -41,7 +41,9 @@ export function LoginButton(props: ILoginButtonProps) {
               props.customTextClassNames ? props.customTextClassNames : ""
             }`}
           >
-            {props.isLoggedIn.firstName}
+            {props.isLoggedIn.firstName.length <= 8
+              ? props.isLoggedIn.firstName
+              : ""}
           </div>
         </div>
       ) : (
