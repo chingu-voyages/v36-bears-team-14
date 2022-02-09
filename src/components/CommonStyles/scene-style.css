@@ -56,6 +56,37 @@
   margin:0;
 }
 
+.section-header {
+  font-weight: bold;
+}
+
+.profile-flex-flow {
+  display: flex;
+}
+
+.smaller-edit-button-icon {
+  width: 20px;
+}
+.slim-padding-right {
+  padding: 0px;
+}
+
+.padding-center-text {
+  padding-top: 7px;
+}
+
+.slight-margin-left {
+  margin-left: 10%;
+}
+
+.slight-bottom-margin {
+  margin-bottom: 10px;
+  padding-bottom: 0px;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
 @media only screen and (max-width: 466px) {
   .responsive-image {
     max-width: 100vw;
@@ -76,22 +107,50 @@
   }
 }
 
+@media only screen and (max-width: 480px) {
+  .responsive-bio-text {
+    width: 90vw;
+    max-height: 10vh;
+  }
+  .responsive-margining {
+    margin-left: 5%;
+    margin-right: 5%;
+  }
+}
+
 @media only screen and (min-width: 481px) and (max-width: 768px) {
   .responsive-image {
     max-width: 250px;
     max-height: 140.635px;
     margin-left: 68vw;
   }
+  .responsive-bio-text {
+    width: 90vw;
+    max-height: 10vh;
+  }
+  .responsive-margining {
+    margin-left: 5%;
+    margin-right: 5%;
+  }
 }
 @media only screen and (min-width: 769px) and (max-width: 1024px) {
   .responsive-image {
     max-width: 320px;
     max-height: 180px;
-    margin-left: 63vw;
+    margin-left: 30%;
+    position: relative;
   }
   .flex-responsive-middle {
     display: flex;
     justify-content: space-around;
+  }
+  .responsive-margining {
+    margin-left: 10%;
+    margin-right: 10%;
+  }
+  .responsive-bio-text {
+    width: 76vw;
+    max-height: 10vh;
   }
 }
 
@@ -104,5 +163,14 @@
   .flex-responsive-middle {
     display: flex;
     justify-content: space-around;
+  }
+  .responsive-margining {
+    margin-left: 15%;
+    margin-right: 20%;
+  }
+  .responsive-bio-text {
+    width: 76vw;
+    max-height: 25vh;
+    font-size:larger;
   }
 }

@@ -20,7 +20,7 @@ export function LoginButton(props: ILoginButtonProps) {
   };
   return (
     <div
-      className={`Button__main ${
+      className={`Button__main bottom-padding-halfRem top-padding-halfRem left-padding-1rem right-padding-1rem ${
         props.customClassNames ? props.customClassNames : ""
       }`}
       onClick={handleOnClick}
@@ -63,7 +63,9 @@ export function LoginButton(props: ILoginButtonProps) {
           <Button
             type={EButtonType.Normal}
             text={props.buttonText ? props.buttonText : ""}
-            customClassNames="round white-fill responsive-login-text"
+            customClassNames={`round white-fill responsive-login-text ${
+              props.customClassNames ? props.customClassNames : ""
+            }`}
             customTextClassNames="green-text"
           />
         </div>

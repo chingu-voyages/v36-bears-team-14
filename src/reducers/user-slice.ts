@@ -4,8 +4,13 @@ import { IRecipe } from "../services/recipe/recipe.types";
 import {
   getAllRecipesForUserFromUserContext,
   getUserById,
+  patchUserProfileDataByUserId,
 } from "../services/user/user.service";
-import { TSecureUser } from "../services/user/user.types";
+import {
+  TSecureUser,
+  TUserProfilePatchRequestData,
+  TUserProfilePatchResponseData,
+} from "../services/user/user.types";
 
 export interface IUserState {
   stateStatus: IStateStatus;
@@ -32,6 +37,27 @@ export const setCurrentUserContextRecipes = createAsyncThunk(
   "user/setCurrentUserRecipes",
   async ({ user }: { user: TSecureUser }): Promise<IRecipe[]> => {
     return getAllRecipesForUserFromUserContext({ user });
+  }
+);
+
+export const patchUserProfileDataAsync = createAsyncThunk(
+  "user/patchUserProfileData",
+  async ({
+    id,
+    bio,
+    favoriteFoods,
+    photoUrl,
+    onSuccess,
+    onError,
+  }: TUserProfilePatchRequestData): Promise<TUserProfilePatchResponseData> => {
+    return patchUserProfileDataByUserId({
+      id,
+      bio,
+      favoriteFoods,
+      photoUrl,
+      onSuccess,
+      onError,
+    });
   }
 );
 
@@ -74,6 +100,24 @@ const userSlice = createSlice({
         state.stateStatus = {
           status: EStatus.Error,
         };
+      })
+      .addCase(patchUserProfileDataAsync.pending, (state) => {
+        state.stateStatus = {
+          status: EStatus.Loading,
+          message: "Attempting user profile patch request...",
+        };
+      })
+      .addCase(patchUserProfileDataAsync.fulfilled, (state, action) => {
+        state.stateStatus = {
+          status: EStatus.Idle,
+        };
+        state.currentUserContext = action.payload.user;
+      })
+      .addCase(patchUserProfileDataAsync.rejected, (state, action) => {
+        state.stateStatus = {
+          status: EStatus.Error,
+          message: action.error.message,
+        };
       });
   },
 });
@@ -82,4 +126,8 @@ export const selectCurrentUserContext = (state: IGlobalAppStore) =>
   state.user.currentUserContext;
 export const selectCurrentUserContextRecipes = (state: IGlobalAppStore) =>
   state.user.currentUserContextRecipes;
+
+export const selectUserStateStatus = (state: IGlobalAppStore) =>
+  state.user.stateStatus;
+
 export default userSlice.reducer;

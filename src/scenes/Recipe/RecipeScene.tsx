@@ -8,6 +8,9 @@ import { formatDate } from "../../utils/date-helpers/format-date";
 import { isURLValid } from "../../utils/string-helpers/validate-url";
 import GenericRecipeImage from "../../components/RecipeCard/sample-pasta.jpeg";
 import "../../components/CommonStyles/scene-style.css";
+import "./recipe-scene-style.css";
+import Button from "../../components/Button";
+import { EButtonType } from "../../components/Button/Button";
 
 interface IRecipeSceneProps {
   customClassNames?: string;
@@ -45,11 +48,14 @@ function RecipeScene(props: IRecipeSceneProps) {
   }, [recipeContext]);
   return (
     <div
-      className={`Recipe Scene__main ${
+      className={`Recipe Scene__main white-background ${
         props.customClassNames ? props.customClassNames : ""
       }`}
     >
-      <div className="Recipe Scene__back">{`< Back`}</div>
+      <Button
+        type={EButtonType.Back}
+        onClick={() => props.onDismiss && props.onDismiss()}
+      />
       <Banner
         customClassNames="bottom-margin-buffer"
         titleText={
@@ -61,7 +67,8 @@ function RecipeScene(props: IRecipeSceneProps) {
           bannerImageUrl: recipeHasImage()
             ? recipeContext?.images[0].url!
             : GenericRecipeImage,
-          imageClassNames: "responsive-image",
+          imageClassNames: "responsive-image-recipe",
+          imageContainerClassNames: "recipe-responsive-image-container",
         }}
         hasSubtitle={{
           subtitleText1:

@@ -26,6 +26,9 @@ body {
   display: flex;
 }
 
+.color-crimson-red {
+  color: #CA3433
+}
 .menu-hover-color {
   color: var(--super-light-grey);
 }

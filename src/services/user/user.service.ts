@@ -1,4 +1,8 @@
-import { TSecureUser } from "./user.types";
+import {
+  TSecureUser,
+  TUserProfilePatchRequestData,
+  TUserProfilePatchResponseData,
+} from "./user.types";
 import axios from "axios";
 import { API_URL } from "../../environment";
 import { getRecipeById } from "../recipe/recipe.service";
@@ -37,5 +41,33 @@ export const getAllRecipesForUserFromUserContext = async ({
     return fetchedRecipes;
   } catch (exception) {
     throw new Error("Unable to get all recipes for user by context");
+  }
+};
+
+export const patchUserProfileDataByUserId = async ({
+  id,
+  bio,
+  favoriteFoods,
+  photoUrl,
+  onSuccess,
+  onError,
+}: TUserProfilePatchRequestData): Promise<TUserProfilePatchResponseData> => {
+  const req = await axios({
+    method: "PATCH",
+    url: `${API_URL}/api/user/${id}`,
+    withCredentials: true,
+    data: {
+      bio,
+      favoriteFoods,
+      photoUrl,
+    },
+  });
+  if (req.status === 200) {
+    const response = req.data as TUserProfilePatchResponseData;
+    onSuccess && onSuccess({ responseData: response });
+    return response;
+  } else {
+    onError && onError({ message: `Unable to patch user ` });
+    throw new Error(`Unable to patch user`);
   }
 };

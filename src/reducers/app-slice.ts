@@ -17,7 +17,6 @@ import {
   IUserRegistrationRequest,
   TSecureUser,
   TUserLoginRequest,
-  TUserRegistrationDetails,
 } from "../services/user/user.types";
 
 export interface IAppState {
@@ -131,7 +130,7 @@ const appSlice = createSlice({
         };
       })
       .addCase(logInUserAsync.fulfilled, (state, action) => {
-        state.logInStatus = { status: EStatus.Idle, message: "" };
+        state.logInStatus = { status: EStatus.Idle };
         state.authenticatedUser = action.payload;
         setAuthenticatedUserInLocalStorage(action.payload);
         state.isAuthenticated = true;

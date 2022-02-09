@@ -10,7 +10,9 @@ import {
   selectIsAuthenticated,
   selectLoginStateStatus,
 } from "../../reducers/app-slice";
+import { setCurrentUserContextByIdAsync } from "../../reducers/user-slice";
 import LoginScene from "../../scenes/Login";
+import ProfileScene from "../../scenes/Profile";
 import RegistrationScene from "../../scenes/UserRegistration/UserRegistration";
 import AppLogo from "../App-logo/App-logo";
 import Button from "../Button";
@@ -28,6 +30,7 @@ interface INavBarProps {
 enum EModalType {
   Login = "login",
   Register = "register",
+  Profile = "profile",
 }
 
 function NavBar(props: INavBarProps) {
@@ -50,7 +53,9 @@ function NavBar(props: INavBarProps) {
   };
 
   const showProfileScreen = () => {
-    // Show profile screen
+    dispatch(setCurrentUserContextByIdAsync({ id: "me" }));
+    setModalType(EModalType.Profile);
+    setIsModalOpen(true);
   };
 
   const handleLogOut = () => {
@@ -87,12 +92,15 @@ function NavBar(props: INavBarProps) {
     plainTextPassword: string;
   }) => {
     // This should be validated at this point
-    dispatch(clearLogInErrorStatus());
     dispatch(
       logInUserAsync({ email, plainTextPassword, onSuccess: onLoginSuccess })
     );
+    dispatch(clearLogInErrorStatus());
   };
 
+  const dismissProfileWindow = () => {
+    closeModal();
+  };
   useEffect(() => {
     dispatch(checkHasSessionAsync());
   }, []);
@@ -123,11 +131,11 @@ function NavBar(props: INavBarProps) {
             <div className="NavBar__authenticated-function-buttons">
               <Button
                 text="Submit Recipe"
-                customClassNames="Submit-Recipe-Text-Button round white-fill green-text full-recipe-top-margin-adjustment"
+                customClassNames="Submit-Recipe-Text-Button round white-fill green-text full-recipe-top-margin-adjustment bottom-padding-halfRem left-padding-1rem right-padding-1rem top-padding-halfRem"
                 type={EButtonType.Normal}
               />
               <Button
-                customClassNames="Submit-Recipe-Plus-Button mobile-add-recipes-plus-button plus-button-recipe-margin-adjustment"
+                customClassNames="Submit-Recipe-Plus-Button mobile-add-recipes-plus-button plus-button-recipe-margin-adjustment bottom-padding-halfRem left-padding-1rem right-padding-1rem top-padding-halfRem"
                 type={EButtonType.Plus}
               />
             </div>
@@ -142,6 +150,7 @@ function NavBar(props: INavBarProps) {
           ) : (
             <LoginButton
               buttonText="Log in"
+              customClassNames="bottom-padding-halfRem left-padding-1rem right-padding-1rem top-padding-halfRem"
               onClick={() => setMenuOpen(true)}
             />
           )}
@@ -197,6 +206,9 @@ function NavBar(props: INavBarProps) {
                 onDismiss={dismissRegistrationWindow}
                 customSceneClassNames="window-body white-background"
               />
+            )}
+            {modalType && modalType === EModalType.Profile && (
+              <ProfileScene onDismiss={dismissProfileWindow} />
             )}
           </div>
         )}

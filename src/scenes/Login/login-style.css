@@ -17,6 +17,10 @@
   padding-bottom: 20px;
 }
 
+.error-footer-bottom-margin {
+  margin-bottom: 10px;
+}
+
 @media only screen and (max-width: 480px) {
   .text-box-flex-width {
     width: 90%;

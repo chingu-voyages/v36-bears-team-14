@@ -46,9 +46,8 @@ export const logInUser = async ({
     },
   });
   if (response.status === 200) {
-    // A successful response should send an id property in the response body
     onSuccess();
-    return response.data as TSecureUser;
+    return response.data.user as TSecureUser;
   } else {
     throw new Error("Log in failed");
   }

@@ -119,7 +119,7 @@ function LoginScene(props: ILoginSceneProps) {
           <div className="LoginScene__Controls login-vertical-spacing">
             <Button
               type={EButtonType.Normal}
-              customClassNames="square green-fill"
+              customClassNames="square green-fill bottom-padding-halfRem left-padding-1rem right-padding-1rem top-padding-halfRem"
               text="Go"
               customTextClassNames="white-text"
               onClick={validateLoginInput}
@@ -128,7 +128,7 @@ function LoginScene(props: ILoginSceneProps) {
               type={EButtonType.Normal}
               customClassNames="square white-fill"
               text="Cancel"
-              customTextClassNames="black-text"
+              customTextClassNames="black-text bottom-padding-halfRem left-padding-1rem right-padding-1rem top-padding-halfRem"
               onClick={handleCancelLoginDismiss}
             />
           </div>

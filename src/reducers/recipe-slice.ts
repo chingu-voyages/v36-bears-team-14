@@ -25,7 +25,11 @@ export const setCurrentRecipeContextByIdAsync = createAsyncThunk(
 const recipeSlice = createSlice({
   name: "recipe",
   initialState,
-  reducers: {},
+  reducers: {
+    clearCurrentRecipeContext(state) {
+      state.currentRecipeContext = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(setCurrentRecipeContextByIdAsync.pending, (state) => {
@@ -51,4 +55,5 @@ const recipeSlice = createSlice({
 
 export const selectCurrentRecipeContext = (state: IGlobalAppStore) =>
   state.recipe.currentRecipeContext;
+export const { clearCurrentRecipeContext } = recipeSlice.actions;
 export default recipeSlice.reducer;
