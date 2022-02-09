@@ -2,13 +2,16 @@ html * {
   font-family: Roboto;
 }
 :root {
-  --white: #FFFFFF;
-  --green-0: #18A96C;
+  --white: #ffffff;
+  --green-0: #18a96c;
   --dark-charcoal-grey: #333333;
-  --super-light-grey: #EDEDED;
+  --super-light-grey: #ededed;
+  --burgundy: #a92e18
 }
 
-body { margin: 0; } 
+body {
+  margin: 0;
+}
 
 .roboto {
   font-family: Roboto;
@@ -23,13 +26,28 @@ body { margin: 0; }
   display: flex;
 }
 
+.color-crimson-red {
+  color: #CA3433
+}
 .menu-hover-color {
   color: var(--super-light-grey);
 }
 
 .MenuModal {
-  position:  absolute;
+  position: absolute;
   left: 0px;
   width: 100vw;
   height: 100vh;
+}
+
+.modal__main {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  z-index: 1000;
+  left: 0px;
+  top: 0px;
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
 }

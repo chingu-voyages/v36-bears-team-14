@@ -22,10 +22,36 @@ export type TUserLoginRequest = Pick<
   TUserRegistrationDetails,
   "email" | "plainTextPassword"
 > & {
-  onSuccess?: ({ id }: { id: string }) => void;
+  onSuccess: () => void;
+};
+
+export type TUserProfilePatchRequestData = {
+  id: string;
+  bio?: {
+    action: "update" | "delete";
+    data: string;
+  };
+  favoriteFoods?: {
+    action: "update" | "delete";
+    data: string[];
+  };
+  photoUrl?: {
+    action: "update" | "delete";
+    data: string;
+  };
+  onSuccess?: ({
+    responseData,
+  }: {
+    responseData: TUserProfilePatchResponseData;
+  }) => void;
   onError?: ({ message }: { message: string }) => void;
 };
+
+export type TUserProfilePatchResponseData = {
+  user: TSecureUser;
+  profileDataUpdated: string[];
+};
 export interface IUserRegistrationRequest extends TUserRegistrationDetails {
-  onSuccess?: ({ id }: { id: string }) => void;
+  onSuccess?: ({ user }: { user: TSecureUser }) => void;
   onError?: ({ message }: { message: string }) => void;
 }

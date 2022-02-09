@@ -1,5 +1,6 @@
 import { IAppState } from "./reducers/app-slice";
 import { IRecipeState } from "./reducers/recipe-slice";
+import { IUserState } from "./reducers/user-slice";
 import { TSecureUser } from "./services/user/user.types";
 
 export enum EStatus {
@@ -16,6 +17,7 @@ export interface IStateStatus {
 export interface IGlobalAppStore {
   app: IAppState;
   recipe: IRecipeState;
+  user: IUserState;
 }
 
 export interface ICheckSessionResponseData {

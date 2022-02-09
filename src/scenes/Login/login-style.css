@@ -13,6 +13,14 @@
   margin-bottom: 20px;
 }
 
+.login-bottom-padding {
+  padding-bottom: 20px;
+}
+
+.error-footer-bottom-margin {
+  margin-bottom: 10px;
+}
+
 @media only screen and (max-width: 480px) {
   .text-box-flex-width {
     width: 90%;
@@ -33,12 +41,12 @@
   }
 }
 
-@media only screen and (min-width:1025px) {
+@media only screen and (min-width: 1025px) {
   .text-box-flex-width {
     width: 100%;
   }
   .LoginScene__innerForm__main {
-    margin-left: 40%;
-    margin-right: 40%;
+    margin-left: 5%;
+    margin-right: 10%;
   }
 }

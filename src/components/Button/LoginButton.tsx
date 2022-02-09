@@ -12,6 +12,7 @@ interface ILoginButtonProps {
   };
   imageSource?: string;
   onClick?: () => void;
+  buttonText?: string;
 }
 export function LoginButton(props: ILoginButtonProps) {
   const handleOnClick = () => {
@@ -19,7 +20,7 @@ export function LoginButton(props: ILoginButtonProps) {
   };
   return (
     <div
-      className={`Button__main ${
+      className={`Button__main bottom-padding-halfRem top-padding-halfRem left-padding-1rem right-padding-1rem ${
         props.customClassNames ? props.customClassNames : ""
       }`}
       onClick={handleOnClick}
@@ -27,7 +28,7 @@ export function LoginButton(props: ILoginButtonProps) {
       {props.isLoggedIn ? (
         <div className="Button__main__LoggedInButton__enclosure flex">
           <img
-            className={`Button__main__LoggedInButton__Image ${
+            className={`Button__main__LoggedInButton__Image generic-profile-icon-width-adjustment ${
               props.customProfileImageClassNames
                 ? props.customProfileImageClassNames
                 : ""
@@ -36,11 +37,13 @@ export function LoginButton(props: ILoginButtonProps) {
             alt="profile-icon"
           />
           <div
-            className={`Button__main__LoggedInButton__UserNameText ${
+            className={`Button__main__LoggedInButton__UserNameText username-top-padding-adjustment-logged-in ${
               props.customTextClassNames ? props.customTextClassNames : ""
             }`}
           >
-            {props.isLoggedIn.firstName}
+            {props.isLoggedIn.firstName.length <= 8
+              ? props.isLoggedIn.firstName
+              : ""}
           </div>
         </div>
       ) : (
@@ -49,7 +52,7 @@ export function LoginButton(props: ILoginButtonProps) {
           onClick={handleOnClick}
         >
           <img
-            className={`Button__main__LoggedInButton__Image responsive-login-hamburger-icon ${
+            className={`Button__main__LoggedInButton__Image responsive-login-hamburger-icon generic-profile-icon-width-adjustment ${
               props.customProfileImageClassNames
                 ? props.customProfileImageClassNames
                 : ""
@@ -59,8 +62,10 @@ export function LoginButton(props: ILoginButtonProps) {
           />
           <Button
             type={EButtonType.Normal}
-            text="Login"
-            customClassNames="round white-fill responsive-login-text"
+            text={props.buttonText ? props.buttonText : ""}
+            customClassNames={`round white-fill responsive-login-text ${
+              props.customClassNames ? props.customClassNames : ""
+            }`}
             customTextClassNames="green-text"
           />
         </div>
