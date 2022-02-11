@@ -1,3 +1,8 @@
+.Nav {
+  position: fixed;
+  width: 100vw;
+  z-index: 2000;
+}
 .NavBar__AppLogoGroup {
   align-self: center;
   margin-left: 2%;

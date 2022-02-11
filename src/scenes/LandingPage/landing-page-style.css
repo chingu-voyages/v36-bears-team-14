@@ -1,0 +1,25 @@
+.recipe-list-responsive-flex {
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+}
+
+.LandingPage__main {
+  z-index: -1000;
+  
+}
+
+.modal-top-margining {
+  margin-top: 15%;
+}
+
+.landing-page-slight-top-bottom-margin {
+  margin-bottom: 5%;
+  margin-top: 10%;
+}
+
+@media only screen and (min-width: 769px) {
+  .landing-page-slight-top-bottom-margin {
+    margin-top: 5%;
+  }
+}

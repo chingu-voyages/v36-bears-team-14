@@ -6,7 +6,7 @@ interface INumberFieldProps {
   label?: string;
   name: string;
   placeholder?: string;
-  onChange?: ({ value, name }: { value: number; name: string }) => void;
+  onChange?: ({ value, HTMLName }: { value: number; HTMLName: string }) => void;
   numericalRangeLimit?: { min?: number; max?: number };
   labelClassNames?: string;
 }
@@ -18,7 +18,7 @@ function NumberField(props: INumberFieldProps) {
     props.onChange &&
       props.onChange({
         value: event.target.valueAsNumber,
-        name: event.target.name,
+        HTMLName: event.target.name,
       });
   };
 

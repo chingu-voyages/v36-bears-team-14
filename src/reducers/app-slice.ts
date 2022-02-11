@@ -25,7 +25,6 @@ export interface IAppState {
   registrationStatus: IStateStatus;
   isAuthenticated: boolean;
   authenticatedUser: TSecureUser | null;
-  scene: EAppScene;
 }
 
 const initialState: IAppState = {
@@ -34,7 +33,6 @@ const initialState: IAppState = {
   registrationStatus: { status: EStatus.Idle },
   isAuthenticated: false,
   authenticatedUser: null,
-  scene: EAppScene.PlaceHolder,
 };
 
 const setAuthenticatedUserInLocalStorage = (data: any) => {
@@ -90,9 +88,6 @@ const appSlice = createSlice({
   name: "app",
   initialState,
   reducers: {
-    setScene(state, action: { payload: EAppScene }) {
-      state.scene = action.payload;
-    },
     clearLogInErrorStatus(state) {
       state.logInStatus = {
         status: EStatus.Idle,
@@ -195,7 +190,6 @@ export const selectLoginStateStatus = (state: IGlobalAppStore): IStateStatus =>
 export const selectRegistrationStatus = (
   state: IGlobalAppStore
 ): IStateStatus => state.app.registrationStatus;
-export const selectCurrentScene = (state: IGlobalAppStore) => state.app.scene;
 
-export const { setScene, clearLogInErrorStatus } = appSlice.actions;
+export const { clearLogInErrorStatus } = appSlice.actions;
 export default appSlice.reducer;

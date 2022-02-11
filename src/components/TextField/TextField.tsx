@@ -9,25 +9,34 @@ interface ITextFieldProps {
   multiLine?: boolean;
   name: string;
   placeholder?: string;
-  onChange?: ({ value, name }: { value: string; name: string }) => void;
+  onChange?: ({ value, HTMLName }: { value: string; HTMLName: string }) => void;
   labelClassNames?: string;
   rows?: number;
   cols?: number;
+  maxLength?: number;
 }
+
+const TEXT_MAX_LENGTH = 5000;
 
 function TextField(props: ITextFieldProps) {
   const handleTextInputChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     props.onChange &&
-      props.onChange({ value: event.target.value, name: event.target.name });
+      props.onChange({
+        value: event.target.value,
+        HTMLName: event.target.name,
+      });
   };
 
   const handleTextAreaChange = (
     event: React.ChangeEvent<HTMLTextAreaElement>
   ) => {
     props.onChange &&
-      props.onChange({ value: event.target.value, name: event.target.name });
+      props.onChange({
+        value: event.target.value,
+        HTMLName: event.target.name,
+      });
   };
 
   return (
@@ -58,6 +67,7 @@ function TextField(props: ITextFieldProps) {
           id={props.name}
           rows={props.rows ?? 10}
           cols={props.cols ?? 6}
+          maxLength={props.maxLength ?? TEXT_MAX_LENGTH}
         />
       ) : (
         <input
@@ -70,6 +80,7 @@ function TextField(props: ITextFieldProps) {
           onChange={handleTextInputChange}
           name={`${props.name}`}
           id={props.name}
+          maxLength={props.maxLength ?? TEXT_MAX_LENGTH}
         />
       )}
     </div>

@@ -32,10 +32,6 @@
   text-align: center;
 }
 
-.no-list-bullets {
-  list-style-type: none;
-}
-
 .box-padding {
   padding: 10px;
 }
@@ -87,6 +83,20 @@
 .flex-wrap {
   flex-wrap: wrap;
 }
+
+.buffer-padding-5px {
+  padding: 5px;
+}
+
+.responsive-buffer-padding {
+  padding: 10px;
+}
+
+.navigation-controls-buffer-margin {
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+
 @media only screen and (max-width: 466px) {
   .responsive-image {
     max-width: 100vw;

@@ -5,5 +5,4 @@ export enum EAppScene {
   Profile = "profile",
   NewRecipe = "new_recipe",
   RecipeView = "recipe_view",
-  PlaceHolder = "placeholder",
 }

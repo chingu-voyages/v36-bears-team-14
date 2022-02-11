@@ -1,0 +1,6 @@
+.Stage__main {
+  position: fixed;
+  margin-top: 6%;
+  overflow-y: scroll;
+  max-height: 100%;
+}

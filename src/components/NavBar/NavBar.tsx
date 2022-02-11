@@ -12,6 +12,7 @@ import {
 } from "../../reducers/app-slice";
 import { setCurrentUserContextByIdAsync } from "../../reducers/user-slice";
 import LoginScene from "../../scenes/Login";
+import NewRecipeScene from "../../scenes/NewRecipe";
 import ProfileScene from "../../scenes/Profile";
 import RegistrationScene from "../../scenes/UserRegistration/UserRegistration";
 import AppLogo from "../App-logo/App-logo";
@@ -31,6 +32,7 @@ enum EModalType {
   Login = "login",
   Register = "register",
   Profile = "profile",
+  NewRecipe = "newRecipe",
 }
 
 function NavBar(props: INavBarProps) {
@@ -73,6 +75,9 @@ function NavBar(props: INavBarProps) {
   const dismissRegistrationWindow = () => {
     closeModal();
   };
+  const dismissNewRecipeWindow = () => {
+    closeModal();
+  };
 
   const closeModal = () => {
     setIsModalOpen(false);
@@ -100,6 +105,11 @@ function NavBar(props: INavBarProps) {
 
   const dismissProfileWindow = () => {
     closeModal();
+  };
+
+  const handleAddNewRecipe = () => {
+    setModalType(EModalType.NewRecipe);
+    setIsModalOpen(true);
   };
   useEffect(() => {
     dispatch(checkHasSessionAsync());
@@ -133,10 +143,12 @@ function NavBar(props: INavBarProps) {
                 text="Submit Recipe"
                 customClassNames="Submit-Recipe-Text-Button round white-fill green-text full-recipe-top-margin-adjustment bottom-padding-halfRem left-padding-1rem right-padding-1rem top-padding-halfRem"
                 type={EButtonType.Normal}
+                onClick={handleAddNewRecipe}
               />
               <Button
                 customClassNames="Submit-Recipe-Plus-Button mobile-add-recipes-plus-button plus-button-recipe-margin-adjustment bottom-padding-halfRem left-padding-1rem right-padding-1rem top-padding-halfRem"
                 type={EButtonType.Plus}
+                onClick={handleAddNewRecipe}
               />
             </div>
           )}
@@ -209,6 +221,9 @@ function NavBar(props: INavBarProps) {
             )}
             {modalType && modalType === EModalType.Profile && (
               <ProfileScene onDismiss={dismissProfileWindow} />
+            )}
+            {modalType && modalType === EModalType.NewRecipe && (
+              <NewRecipeScene onDismiss={dismissNewRecipeWindow} />
             )}
           </div>
         )}
