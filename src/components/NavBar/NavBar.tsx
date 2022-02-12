@@ -10,6 +10,7 @@ import {
   selectIsAuthenticated,
   selectLoginStateStatus,
 } from "../../reducers/app-slice";
+import { getAllRecipesAsync } from "../../reducers/recipe-slice";
 import { setCurrentUserContextByIdAsync } from "../../reducers/user-slice";
 import LoginScene from "../../scenes/Login";
 import NewRecipeScene from "../../scenes/NewRecipe";
@@ -21,6 +22,8 @@ import { EButtonType } from "../Button/Button";
 import LoginButton from "../Button/LoginButton";
 import ContextMenu from "../ContextMenu";
 import ModalContainer from "../ModalContainer";
+import ModalPopUp from "../ModalPop/ModalPop";
+import { EModalPopType } from "../ModalPop/types";
 import TextField from "../TextField";
 import "./nav-bar-style.css";
 
@@ -33,12 +36,15 @@ enum EModalType {
   Register = "register",
   Profile = "profile",
   NewRecipe = "newRecipe",
+  ModalPop = "modalPop",
 }
 
 function NavBar(props: INavBarProps) {
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [modalType, setModalType] = useState<EModalType | null>(null);
+  const [modalPopText, setModalPopText] = useState<string | null>(null);
+  const [modalPopType, setModalPopType] = useState<EModalPopType | null>(null);
   const isAuthenticated = useSelector(selectIsAuthenticated, shallowEqual);
   const logInStatus = useSelector(selectLoginStateStatus, shallowEqual);
   const authenticatedUser = useSelector(selectAuthenticatedUser, shallowEqual);
@@ -111,9 +117,41 @@ function NavBar(props: INavBarProps) {
     setModalType(EModalType.NewRecipe);
     setIsModalOpen(true);
   };
+
   useEffect(() => {
     dispatch(checkHasSessionAsync());
   }, []);
+
+  const refreshRecipesAfterSubmit = () => {
+    dispatch(getAllRecipesAsync({}));
+    showDialog({
+      type: EModalPopType.Success,
+      text: "Thanks! Your recipe was added.",
+    });
+  };
+
+  const showDialog = ({
+    type,
+    text,
+  }: {
+    type: EModalPopType;
+    text: string;
+  }) => {
+    setModalPopType(type);
+    setModalPopText(text);
+    setModalType(EModalType.ModalPop);
+    setIsModalOpen(true);
+  };
+
+  const handleModalPopClose = () => {
+    setModalPopText(null);
+    setModalPopType(null);
+    closeModal();
+  };
+
+  // useEffect(()=> {
+  //   if (!modalPopType && !modalPopText && !modalType) closeModal()
+  // }, [modalPopType, modalPopText, modalType, isModalOpen ])
 
   return (
     <div className="Nav">
@@ -223,8 +261,22 @@ function NavBar(props: INavBarProps) {
               <ProfileScene onDismiss={dismissProfileWindow} />
             )}
             {modalType && modalType === EModalType.NewRecipe && (
-              <NewRecipeScene onDismiss={dismissNewRecipeWindow} />
+              <NewRecipeScene
+                onDismiss={dismissNewRecipeWindow}
+                onSubmitSuccess={refreshRecipesAfterSubmit}
+              />
             )}
+            {modalType &&
+              modalType === EModalType.ModalPop &&
+              modalPopType &&
+              modalPopText && (
+                <ModalPopUp
+                  text={modalPopText ? modalPopText : "Text is not defined"}
+                  customClassNames="pop-text-responsive-padding"
+                  type={modalPopType}
+                  onDismiss={handleModalPopClose}
+                />
+              )}
           </div>
         )}
       </nav>

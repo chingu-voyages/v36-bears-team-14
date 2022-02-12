@@ -79,7 +79,7 @@ const DirectionsForm = (props: IDirectionsFormProps) => {
           value={description}
           placeholder="Add a recipe instruction"
           label="step"
-          name="direction"
+          name="description"
           onChange={handleChange}
         />
         <Button

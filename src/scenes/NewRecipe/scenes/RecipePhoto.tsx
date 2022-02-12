@@ -105,6 +105,7 @@ function RecipePhotoScene(props: IRecipePhotoProps) {
             text="Cancel"
             onClick={handleOnDismissWindow}
             type={EButtonType.Normal}
+            customTextClassNames="color-crimson-red"
           />
         </div>
       </div>

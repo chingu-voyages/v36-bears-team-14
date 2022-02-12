@@ -3,9 +3,10 @@ import { EStatus, IGlobalAppStore, IStateStatus } from "../definitions";
 import {
   getAllRecipes,
   getRecipeById,
+  postNewRecipe,
 } from "../services/recipe/recipe.service";
 
-import { IRecipe } from "../services/recipe/recipe.types";
+import { IRecipe, TRecipeCreationData } from "../services/recipe/recipe.types";
 
 export interface IRecipeState {
   stateStatus: IStateStatus;
@@ -39,6 +40,33 @@ export const getAllRecipesAsync = createAsyncThunk(
     skip?: number;
   }): Promise<IRecipe[]> => {
     return getAllRecipes({ limit, skip });
+  }
+);
+
+export const postNewRecipeAsync = createAsyncThunk(
+  "recipe/postNewRecipe",
+  async ({
+    name,
+    description,
+    cookTimeMinutes,
+    prepTimeMinutes,
+    directions,
+    ingredients,
+    imageUrl,
+    onError,
+    onSuccess,
+  }: TRecipeCreationData) => {
+    return postNewRecipe({
+      name,
+      description,
+      cookTimeMinutes,
+      prepTimeMinutes,
+      directions,
+      ingredients,
+      imageUrl,
+      onError,
+      onSuccess,
+    });
   }
 );
 
@@ -87,6 +115,24 @@ const recipeSlice = createSlice({
         state.stateStatus = {
           status: EStatus.Error,
           message: `Unable to get recipe by id: ${action.error.message}`,
+        };
+      })
+      .addCase(postNewRecipeAsync.pending, (state) => {
+        state.stateStatus = {
+          status: EStatus.Loading,
+          message: "posting new recipe",
+        };
+      })
+      .addCase(postNewRecipeAsync.fulfilled, (state) => {
+        state.stateStatus = {
+          status: EStatus.Idle,
+        };
+        // We won't do anything with the payload - we'll re-render the page with the onSuccess callback
+      })
+      .addCase(postNewRecipeAsync.rejected, (state, action) => {
+        state.stateStatus = {
+          status: EStatus.Error,
+          message: `Unable to post new recipe: ${action.error.message}`,
         };
       });
   },

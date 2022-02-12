@@ -1,7 +1,9 @@
 import { useState } from "react";
 import Button from "../../../components/Button";
 import { EButtonType } from "../../../components/Button/Button";
+import ErrorMessage from "../../../components/ErrorMessage";
 import TextField from "../../../components/TextField";
+import { titleDescriptionValidator } from "../../../utils/validators";
 import "../new-recipe-style.css";
 import { SceneName } from "../scene.types";
 
@@ -27,6 +29,8 @@ interface ITitleDescriptionSceneProps {
 }
 
 function TitleDescriptionScene(props: ITitleDescriptionSceneProps) {
+  const [hasError, setHasError] = useState<boolean>(false);
+  const [errorText, setErrorText] = useState<string | null>(null);
   const [recipeNameText, setRecipeNameText] = useState<string>("");
   const [recipeDescriptionText, setRecipeDescriptionText] =
     useState<string>("");
@@ -43,14 +47,31 @@ function TitleDescriptionScene(props: ITitleDescriptionSceneProps) {
   };
 
   const handleGoToNext = () => {
-    props.onClickNext &&
-      props.onClickNext({
-        currentIndex: props.index,
-        sceneName: props.sceneName,
-        recipeTitle: recipeNameText,
-        recipeDescription: recipeDescriptionText,
-      });
+    clearErrors();
+    titleDescriptionValidator({
+      recipeTitle: recipeNameText,
+      recipeDescription: recipeDescriptionText,
+      onError: (message: string) => {
+        setHasError(true);
+        setErrorText(message);
+      },
+      onSuccess: ({ sanitizedTitle, sanitizedDescription }) => {
+        props.onClickNext &&
+          props.onClickNext({
+            currentIndex: props.index,
+            sceneName: props.sceneName,
+            recipeTitle: sanitizedTitle,
+            recipeDescription: sanitizedDescription,
+          });
+      },
+    });
   };
+
+  const clearErrors = () => {
+    setHasError(false);
+    setErrorText(null);
+  };
+
   return (
     <div
       className={`NewRecipe__title-description-scene__main white-background buffer-padding ${
@@ -79,6 +100,7 @@ function TitleDescriptionScene(props: ITitleDescriptionSceneProps) {
             inputClassNames="new-recipe-text-responsive"
           />
         </div>
+        {hasError && errorText && <ErrorMessage text={errorText} />}
         <div className="NewRecipe__title-description-scene__main__controls__main flex flex-right navigation-controls-buffer-margin">
           <Button
             text="Next"
@@ -90,6 +112,7 @@ function TitleDescriptionScene(props: ITitleDescriptionSceneProps) {
             text="Cancel"
             onClick={handleOnDismissWindow}
             type={EButtonType.Normal}
+            customTextClassNames="color-crimson-red"
           />
         </div>
       </div>

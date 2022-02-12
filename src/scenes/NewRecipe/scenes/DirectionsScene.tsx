@@ -6,6 +6,8 @@ import "../new-recipe-style.css";
 import { SceneName } from "../scene.types";
 import { v4 as uuidv4 } from "uuid";
 import DirectionsForm from "../../../components/DirectionsForm";
+import ErrorMessage from "../../../components/ErrorMessage";
+import { directionsValidator } from "../../../utils/validators";
 
 export type TRecipeDirectionsCallBackData = ({
   currentIndex,
@@ -68,19 +70,35 @@ function DirectionItem(props: IDirectionItemProps) {
 
 function DirectionsScene(props: IDirectionsSceneProps) {
   const [recipeStepList, setRecipeStepList] = useState<TRecipeStepItem[]>([]);
+  const [hasError, setHasError] = useState<boolean>(false);
+  const [errorText, setErrorText] = useState<string | null>(null);
   const handleOnDismissWindow = () => {
     props.onDismiss && props.onDismiss();
   };
 
   const handleGoToNext = () => {
-    props.onClickNext &&
-      props.onClickNext({
-        currentIndex: props.index,
-        sceneName: props.sceneName,
-        directionsList: recipeStepList,
-      });
+    clearErrors();
+    directionsValidator({
+      directionsList: recipeStepList,
+      onError: (message: string) => {
+        setHasError(true);
+        setErrorText(message);
+      },
+      onSuccess: () => {
+        props.onClickNext &&
+          props.onClickNext({
+            currentIndex: props.index,
+            sceneName: props.sceneName,
+            directionsList: recipeStepList,
+          });
+      },
+    });
   };
 
+  const clearErrors = () => {
+    setHasError(false);
+    setErrorText(null);
+  };
   const handleAddRecipeStep = (data: TRecipeStep) => {
     const stepWithAppendedId = {
       ...data,
@@ -140,6 +158,7 @@ function DirectionsScene(props: IDirectionsSceneProps) {
               onSubmit={handleAddRecipeStep}
             />
           </div>
+          {hasError && errorText && <ErrorMessage text={errorText} />}
         </div>
         <div className="NewRecipe__title-description-scene__main__controls__main flex flex-right navigation-controls-buffer-margin">
           <Button
@@ -158,6 +177,7 @@ function DirectionsScene(props: IDirectionsSceneProps) {
             text="Cancel"
             onClick={handleOnDismissWindow}
             type={EButtonType.Normal}
+            customTextClassNames="color-crimson-red"
           />
         </div>
       </div>

@@ -1,7 +1,7 @@
 import Button from "../../../components/Button";
 import { EButtonType } from "../../../components/Button/Button";
 import { SceneName } from "../scene.types";
-
+import "../new-recipe-style.css";
 interface INewRecipeSubmitData {
   onSubmit: () => void;
   onDismiss?: () => void;
@@ -23,15 +23,15 @@ function CreateRecipeSubmitScene(props: INewRecipeSubmitData) {
   };
   return (
     <div
-      className={`RecipeSubmitScene__main ${
+      className={`RecipeSubmitScene__main white-background ${
         props.customClassNames ? props.customClassNames : ""
       }`}
     >
       <div className="RecipeSubmitScene__main__controlsEnclosure responsive-margin">
-        <div className="RecipeSubmitScene__header">
+        <div className="RecipeSubmitScene__header submit-responsive-padding">
           Do you want to submit this recipe?
         </div>
-        <div className="RecipeSubmitScene__flexControls">
+        <div className="RecipeSubmitScene__flexControls flex-container bottom-padding ">
           <Button
             text="Back"
             onClick={handleGoBack}
@@ -42,11 +42,13 @@ function CreateRecipeSubmitScene(props: INewRecipeSubmitData) {
             text="Submit Recipe"
             onClick={handleSubmit}
             type={EButtonType.Normal}
+            customClassNames="green-fill white-text round generic-padding"
           />
           <Button
             text="Cancel"
             onClick={handleOnDismissWindow}
             type={EButtonType.Normal}
+            customTextClassNames="color-crimson-red"
           />
         </div>
       </div>

@@ -67,3 +67,96 @@ export const recipeDirectionsValidator = ({
     imageUrl: data.imageUrl ?? "",
   });
 };
+
+export const titleDescriptionValidator = ({
+  recipeTitle,
+  recipeDescription,
+  onError,
+  onSuccess,
+}: {
+  recipeTitle: string;
+  recipeDescription: string;
+  onError: (message: string) => void;
+  onSuccess: ({
+    sanitizedTitle,
+    sanitizedDescription,
+  }: {
+    sanitizedTitle: string;
+    sanitizedDescription: string;
+  }) => void;
+}) => {
+  if (!recipeTitle || recipeTitle.trim() === "") {
+    onError("Please enter a title");
+    return;
+  }
+  if (!recipeDescription || recipeDescription.trim() === "") {
+    onError("Please enter a description");
+    return;
+  }
+  onSuccess({
+    sanitizedTitle: recipeTitle.trim(),
+    sanitizedDescription: recipeDescription.trim(),
+  });
+};
+
+export const cookTimePrepTimeValidator = ({
+  cookTime,
+  prepTime,
+  onError,
+  onSuccess,
+}: {
+  cookTime: number;
+  prepTime: number;
+  onError: (message: string) => void;
+  onSuccess: () => void;
+}) => {
+  if (!cookTime || isNaN(cookTime)) {
+    onError("Please enter a cooking time in minutes.");
+    return;
+  }
+  if (!prepTime || isNaN(prepTime)) {
+    onError("Please enter a preparation time in minutes.");
+    return;
+  }
+  if (prepTime <= 0) {
+    onError("Please enter a preparation time value greater than zero");
+    return;
+  }
+  if (cookTime <= 0) {
+    onError("Please enter a cooking time value greater than zero");
+    return;
+  }
+  onSuccess();
+};
+
+export const ingredientsValidator = ({
+  ingredientsList,
+  onError,
+  onSuccess,
+}: {
+  ingredientsList: TRecipeIngredient[];
+  onError: (message: string) => void;
+  onSuccess: () => void;
+}) => {
+  if (!ingredientsList || ingredientsList.length === 0) {
+    onError("Please enter at least one ingredient");
+    return;
+  }
+  onSuccess();
+};
+
+export const directionsValidator = ({
+  directionsList,
+  onError,
+  onSuccess,
+}: {
+  directionsList: TRecipeStep[];
+  onError: (message: string) => void;
+  onSuccess: () => void;
+}) => {
+  if (!directionsList || directionsList.length === 0) {
+    onError("Please enter at least one recipe step");
+    return;
+  }
+  onSuccess();
+};

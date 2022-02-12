@@ -1,7 +1,9 @@
 import { useState } from "react";
 import Button from "../../../components/Button";
 import { EButtonType } from "../../../components/Button/Button";
+import ErrorMessage from "../../../components/ErrorMessage";
 import NumberField from "../../../components/NumberField";
+import { cookTimePrepTimeValidator } from "../../../utils/validators";
 import "../new-recipe-style.css";
 import { SceneName } from "../scene.types";
 
@@ -29,6 +31,8 @@ interface ICookPrepTimeSceneProps {
 function CookPrepTimeScene(props: ICookPrepTimeSceneProps) {
   const [cookTimeValue, setCookTimeValue] = useState<number>(0);
   const [prepTimeValue, setPrepTimeValue] = useState<number>(0);
+  const [hasError, setHasError] = useState<boolean>(false);
+  const [errorText, setErrorText] = useState<string | null>(null);
 
   const handleCookTimeValueChange = ({ value }: { value: number }) => {
     setCookTimeValue(value);
@@ -42,13 +46,24 @@ function CookPrepTimeScene(props: ICookPrepTimeSceneProps) {
   };
 
   const handleGoToNext = () => {
-    props.onClickNext &&
-      props.onClickNext({
-        currentIndex: props.index,
-        sceneName: props.sceneName,
-        cookTime: cookTimeValue,
-        prepTime: prepTimeValue,
-      });
+    clearErrors();
+    cookTimePrepTimeValidator({
+      cookTime: cookTimeValue,
+      prepTime: prepTimeValue,
+      onError: (message: string) => {
+        setHasError(true);
+        setErrorText(message);
+      },
+      onSuccess: () => {
+        props.onClickNext &&
+          props.onClickNext({
+            currentIndex: props.index,
+            sceneName: props.sceneName,
+            cookTime: cookTimeValue,
+            prepTime: prepTimeValue,
+          });
+      },
+    });
   };
 
   const handleGoBack = () => {
@@ -59,6 +74,11 @@ function CookPrepTimeScene(props: ICookPrepTimeSceneProps) {
         cookTime: cookTimeValue,
         prepTime: prepTimeValue,
       });
+  };
+
+  const clearErrors = () => {
+    setHasError(false);
+    setErrorText(null);
   };
   return (
     <div
@@ -73,18 +93,19 @@ function CookPrepTimeScene(props: ICookPrepTimeSceneProps) {
           <NumberField
             label="Cook Time (minutes)"
             name="cook_time_minutes"
-            numericalRangeLimit={{ min: 0 }}
+            numericalRangeLimit={{ min: 1 }}
             onChange={handleCookTimeValueChange}
             inputClassName=""
           />
           <NumberField
             label="Prep Time (minutes)"
             name="prep_time_minutes"
-            numericalRangeLimit={{ min: 0 }}
+            numericalRangeLimit={{ min: 1 }}
             onChange={handlePrepTimeValueChange}
             inputClassName=""
           />
         </div>
+        {hasError && errorText && <ErrorMessage text={errorText} />}
         <div className="NewRecipe__title-description-scene__main__controls__main flex flex-right navigation-controls-buffer-margin">
           <Button
             text="Next"
@@ -102,6 +123,7 @@ function CookPrepTimeScene(props: ICookPrepTimeSceneProps) {
             text="Cancel"
             onClick={handleOnDismissWindow}
             type={EButtonType.Normal}
+            customTextClassNames="color-crimson-red"
           />
         </div>
       </div>

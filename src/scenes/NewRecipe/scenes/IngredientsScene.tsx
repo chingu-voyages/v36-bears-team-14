@@ -6,6 +6,8 @@ import { TRecipeIngredient } from "../../../services/recipe/recipe.types";
 import "../new-recipe-style.css";
 import { SceneName } from "../scene.types";
 import { v4 as uuidv4 } from "uuid";
+import ErrorMessage from "../../../components/ErrorMessage";
+import { ingredientsValidator } from "../../../utils/validators";
 
 export type TRecipeIngredientsCallBackData = ({
   currentIndex,
@@ -68,17 +70,34 @@ function IngredientItem(props: IIngredientItemProps) {
 
 function IngredientsScene(props: IIngredientsSceneProps) {
   const [ingredientsList, setIngredientsList] = useState<TRecipeListItem[]>([]);
+  const [hasError, setHasError] = useState<boolean>(false);
+  const [errorText, setErrorText] = useState<string | null>(null);
   const handleOnDismissWindow = () => {
     props.onDismiss && props.onDismiss();
   };
 
   const handleGoToNext = () => {
-    props.onClickNext &&
-      props.onClickNext({
-        currentIndex: props.index,
-        sceneName: props.sceneName,
-        ingredientsList,
-      });
+    clearErrors();
+    ingredientsValidator({
+      onError: (message: string) => {
+        setHasError(true);
+        setErrorText(message);
+      },
+      onSuccess: () => {
+        props.onClickNext &&
+          props.onClickNext({
+            currentIndex: props.index,
+            sceneName: props.sceneName,
+            ingredientsList,
+          });
+      },
+      ingredientsList,
+    });
+  };
+
+  const clearErrors = () => {
+    setHasError(false);
+    setErrorText(null);
   };
 
   const handleAddRecipeIngredient = (data: TRecipeIngredient) => {
@@ -141,6 +160,7 @@ function IngredientsScene(props: IIngredientsSceneProps) {
             />
           </div>
         </div>
+        {hasError && errorText && <ErrorMessage text={errorText} />}
         <div className="NewRecipe__title-description-scene__main__controls__main flex flex-right navigation-controls-buffer-margin">
           <Button
             text="Next"
@@ -158,6 +178,7 @@ function IngredientsScene(props: IIngredientsSceneProps) {
             text="Cancel"
             onClick={handleOnDismissWindow}
             type={EButtonType.Normal}
+            customTextClassNames="color-crimson-red"
           />
         </div>
       </div>

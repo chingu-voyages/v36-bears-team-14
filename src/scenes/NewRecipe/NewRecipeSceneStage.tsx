@@ -1,5 +1,8 @@
 import { useState } from "react";
+import { useDispatch } from "react-redux";
 import Banner from "../../components/Banner";
+import ErrorMessage from "../../components/ErrorMessage";
+import { postNewRecipeAsync } from "../../reducers/recipe-slice";
 import {
   TRecipeIngredient,
   TRecipeStep,
@@ -16,6 +19,7 @@ import TitleDescriptionScene from "./scenes/TitleDescriptionScene";
 interface INewRecipeSceneProps {
   customClassNames?: string;
   onDismiss: () => void;
+  onSubmitSuccess?: () => void;
 }
 
 export function NewRecipeScene(props: INewRecipeSceneProps) {
@@ -34,6 +38,10 @@ export function NewRecipeScene(props: INewRecipeSceneProps) {
   );
   const [recipeSteps, setRecipeSteps] = useState<TRecipeStep[]>([]);
 
+  const [hasError, setHasError] = useState<boolean>(false);
+  const [errorText, setErrorText] = useState<string | null>(null);
+
+  const dispatch = useDispatch();
   const getNewRecipeScene = ({ idx }: { idx: number }) => {
     switch (idx) {
       case 0:
@@ -114,6 +122,9 @@ export function NewRecipeScene(props: INewRecipeSceneProps) {
       } else if (data.sceneName === SceneName.Ingredients) {
         setIngredientsList(data.ingredientsList);
         setCurrentStageIndex(() => currentStageIndex + 1);
+      } else if (data.sceneName === SceneName.Directions) {
+        setRecipeSteps(data.directionsList);
+        setCurrentStageIndex(() => currentStageIndex + 1);
       }
     }
   };
@@ -144,6 +155,7 @@ export function NewRecipeScene(props: INewRecipeSceneProps) {
     setPrepTime(null);
     setPhotoUrl(null);
     setIngredientsList([]);
+    setRecipeSteps([]);
   };
 
   const handleClickCancel = () => {
@@ -153,7 +165,22 @@ export function NewRecipeScene(props: INewRecipeSceneProps) {
   };
 
   const handleSubmit = () => {
-    // validate, dispatch
+    dispatch(
+      postNewRecipeAsync({
+        name: recipeTitle!,
+        description: recipeDescription!,
+        cookTimeMinutes: cookTime!,
+        prepTimeMinutes: prepTime!,
+        directions: recipeSteps!,
+        ingredients: ingredientsList!,
+        imageUrl: photoUrl!,
+        onSuccess: handleSuccessfulSubmit,
+        onError: (message: string) => {
+          setHasError(true);
+          setErrorText(message);
+        },
+      })
+    );
   };
 
   const testLog = () => {
@@ -166,9 +193,12 @@ export function NewRecipeScene(props: INewRecipeSceneProps) {
     console.log(recipeSteps);
   };
   testLog();
+  const handleSuccessfulSubmit = () => {
+    props.onSubmitSuccess && props.onSubmitSuccess();
+  };
   return (
     <div
-      className={`NewRecipe__main ${
+      className={`NewRecipe__main response-new-recipe-modal responsive-new-recipe-top-margin ${
         props.customClassNames ? props.customClassNames : ""
       }`}
     >
@@ -176,6 +206,7 @@ export function NewRecipeScene(props: INewRecipeSceneProps) {
       <div className="NewRecipe__main__Stage__main">
         {getNewRecipeScene({ idx: currentStageIndex })}
       </div>
+      {hasError && errorText && <ErrorMessage text={errorText} />}
     </div>
   );
 }
