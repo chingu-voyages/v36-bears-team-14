@@ -79,4 +79,19 @@
   }
 }
 
+@media only screen and (min-width: 769px) and (max-width: 1024px) {
+  .nav-responsive-modal-profile {
+    margin-top: 64px;
+    margin-left: 20%;
+    margin-right: 20%;
+  }
+}
 
+
+@media only screen and (min-width: 1025px) {
+  .nav-responsive-modal-profile {
+    margin-top: 64px;
+    margin-left: 20%;
+    margin-right: 20%;
+  }
+}

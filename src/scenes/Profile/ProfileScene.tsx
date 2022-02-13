@@ -4,6 +4,7 @@ import Banner from "../../components/Banner";
 import Button from "../../components/Button";
 import { EButtonType } from "../../components/Button/Button";
 import "../../components/CommonStyles/scene-style.css";
+import ImageUploader from "../../components/ImageUploader";
 import RecipeCard from "../../components/RecipeCard";
 import TextField from "../../components/TextField";
 import { selectAuthenticatedUser } from "../../reducers/app-slice";
@@ -111,6 +112,16 @@ function ProfileScene(props: IProfileSceneProps) {
     }
   };
 
+  const isOwnProfile = (): boolean => {
+    if (
+      userContext &&
+      authenticatedUser &&
+      userContext._id === authenticatedUser._id
+    )
+      return true;
+    return false;
+  };
+
   const handleCommaSeparatedFavoriteFoodsChange = ({
     value,
   }: {
@@ -129,11 +140,9 @@ function ProfileScene(props: IProfileSceneProps) {
   }, [userContext]);
 
   const handleRecipeCardClicked = (recipeId: string) => {
-    // do something
     dispatch(setCurrentRecipeContextByIdAsync({ id: recipeId }));
     setModalType(EModalType.FullRecipeView);
     setIsModalOpen(true);
-    console.log(`Recipe with id ${recipeId} clicked`);
   };
 
   const handleCloseFullRecipeView = () => {
@@ -141,6 +150,20 @@ function ProfileScene(props: IProfileSceneProps) {
     setIsModalOpen(false);
 
     // Do we want to clear recipe context?
+  };
+
+  const handleUpdateProfilePhoto = (url: string) => {
+    if (userContext && userContext._id && url) {
+      dispatch(
+        patchUserProfileDataAsync({
+          id: userContext._id,
+          photoUrl: {
+            action: "update",
+            data: url,
+          },
+        })
+      );
+    }
   };
   return (
     <div
@@ -165,6 +188,17 @@ function ProfileScene(props: IProfileSceneProps) {
         }}
       />
       <div className="Profile Scene__body top-margin-padding responsive-margining">
+        {isOwnProfile() && (
+          <div className="Profile Scene__body__image-edit-controls__enclosure slight-bottom-margin flex">
+            <div className="Profile Scene__body__image-edit-controls__prompt smaller-font">
+              Edit profile photo
+            </div>
+            <ImageUploader
+              customClassNames="even-slighter-left-margin"
+              onUploadSuccess={handleUpdateProfilePhoto}
+            />
+          </div>
+        )}
         <div className="Profile Scene__body__header">
           {!isBioEditMode ? (
             <div className="Profile Scene__body__bio__readonly">
@@ -172,15 +206,13 @@ function ProfileScene(props: IProfileSceneProps) {
                 <div className="Profile Scene__body__bio__header-text section-header padding-center-text">
                   Bio
                 </div>
-                {userContext &&
-                  authenticatedUser &&
-                  userContext._id === authenticatedUser._id && (
-                    <Button
-                      type={EButtonType.Edit}
-                      editButtonClassNames="smaller-edit-button-icon slim-padding-right"
-                      onClick={handleSetBioEditMode}
-                    />
-                  )}
+                {isOwnProfile() && (
+                  <Button
+                    type={EButtonType.Edit}
+                    editButtonClassNames="smaller-edit-button-icon slim-padding-right"
+                    onClick={handleSetBioEditMode}
+                  />
+                )}
               </div>
               <div className="Profile Scene__body__bio__text">
                 {userContext && userContext.bio ? userContext.bio : ""}
@@ -251,6 +283,11 @@ function ProfileScene(props: IProfileSceneProps) {
             </div>
           ) : (
             <div className="Profile Scene__body__header__favorite-foods-edit">
+              <div className="Profile Scene__body__header__favorite-foods-edit__instructions top-bottom-buffer">
+                <p>Enter a comma separated list of foods, then click Save </p>
+                <p>Tap Delete to clear all foods.</p>
+                <p>Tap Cancel to abort</p>
+              </div>
               <div className="Profile Scene__body__header__favorite-foods-edit__controls-container flex slight-bottom-margin">
                 <Button
                   type={EButtonType.Normal}
@@ -307,7 +344,7 @@ function ProfileScene(props: IProfileSceneProps) {
               ))}
           </div>
           {userContextRecipes && userContextRecipes.length > 4 && (
-            <div className="Profile Scene__body__footer__more-recipes-button">
+            <div className="Profile Scene__body__footer__more-recipes-button bottom-buffer-padding">
               <Button
                 type={EButtonType.Normal}
                 text="More Recipes..."

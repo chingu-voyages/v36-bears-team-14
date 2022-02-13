@@ -258,7 +258,10 @@ function NavBar(props: INavBarProps) {
               />
             )}
             {modalType && modalType === EModalType.Profile && (
-              <ProfileScene onDismiss={dismissProfileWindow} />
+              <ProfileScene
+                onDismiss={dismissProfileWindow}
+                customClassNames="nav-responsive-modal-profile"
+              />
             )}
             {modalType && modalType === EModalType.NewRecipe && (
               <NewRecipeScene

@@ -7,26 +7,16 @@ import ErrorMessage from "../ErrorMessage";
 
 interface IImageUploaderProps {
   onUploadSuccess?: (url: string) => void;
+  customClassNames?: string;
 }
 
 function ImageUploader(props: IImageUploaderProps) {
-  const [isFileSelected, setIsFileSelected] = useState<boolean>(false);
-  const [fileData, setFileData] = useState<FileList | null>(null);
-  const [isImageUploadSuccessful, setIsImageUploadSuccessful] =
-    useState<boolean>(false);
+  const [, setIsFileSelected] = useState<boolean>(false);
+  const [, setIsImageUploadSuccessful] = useState<boolean>(false);
   const [isUploadError, setIsUploadError] = useState<boolean>(false);
-
-  // const handleOnFileInputChange = (event: any) => {
-  //   if (event.target && event.target.files && event.target.files.length === 1) {
-  //     setIsFileSelected(true);
-  //     setFileData(event.target.files);
-  //   }
-  // };
-
   const handleOnFileInputChange = (event: any) => {
     if (event.target && event.target.files && event.target.files.length === 1) {
       setIsFileSelected(true);
-      // setFileData(event.target.files);
       if (event.target.files.length && event.target.files.length > 0) {
         uploadPhotoToCloud({
           data: event.target.files,
@@ -57,7 +47,11 @@ function ImageUploader(props: IImageUploaderProps) {
   //   }
   // };
   return (
-    <div className={`ImageUploader__main`}>
+    <div
+      className={`ImageUploader__main ${
+        props.customClassNames ? props.customClassNames : ""
+      }`}
+    >
       <img src={UploadIcon} alt="upload" />
 
       <input

@@ -1,4 +1,5 @@
 import { EAppScene } from "../../services/app/app.types";
+import ImageUploader from "../ImageUploader";
 import "./banner.css";
 
 interface IBannerProps {
@@ -8,7 +9,7 @@ interface IBannerProps {
   hasSubtitle?: {
     customSubtitleClassNames?: string;
     customSubtitleTextClassNames?: string;
-    subtitleText1: string;
+    subtitleText1?: string;
     subtitleText2?: string;
     hasLink?: {
       type: EAppScene;
@@ -23,11 +24,6 @@ interface IBannerProps {
   };
 }
 function Banner(props: IBannerProps) {
-  const handleSubtitle1Click = () => {
-    if (props.hasSubtitle && props.hasSubtitle.hasLink) {
-      // Here we can bring up a modal window for some kind of modal view
-    }
-  };
   return (
     <div
       className={`Banner__main ${
@@ -54,7 +50,6 @@ function Banner(props: IBannerProps) {
           }`}
         >
           <div
-            onClick={handleSubtitle1Click}
             className={`Banner_main__subtitle__text1 ${
               props.hasSubtitle && props.hasSubtitle.hasLink
                 ? "Banner_main__subtitle__link"

@@ -4,6 +4,7 @@ import {
   getAllRecipes,
   getRecipeById,
   postNewRecipe,
+  toggleLikeRecipe,
 } from "../services/recipe/recipe.service";
 
 import { IRecipe, TRecipeCreationData } from "../services/recipe/recipe.types";
@@ -70,6 +71,12 @@ export const postNewRecipeAsync = createAsyncThunk(
   }
 );
 
+export const toggleLikeRecipeAsync = createAsyncThunk(
+  "recipe/toggleLike",
+  async ({ id }: { id: string }) => {
+    return toggleLikeRecipe({ id });
+  }
+);
 const recipeSlice = createSlice({
   name: "recipe",
   initialState,
@@ -133,6 +140,22 @@ const recipeSlice = createSlice({
         state.stateStatus = {
           status: EStatus.Error,
           message: `Unable to post new recipe: ${action.error.message}`,
+        };
+      })
+      .addCase(toggleLikeRecipeAsync.pending, (state) => {
+        state.stateStatus = {
+          status: EStatus.Loading,
+          message: "toggling like...",
+        };
+      })
+      .addCase(toggleLikeRecipeAsync.fulfilled, (state, action) => {
+        state.currentRecipeContext = action.payload.updatedRecipeDocument;
+        console.debug(action.payload.actionTaken); // just to test
+      })
+      .addCase(toggleLikeRecipeAsync.rejected, (state, action) => {
+        state.stateStatus = {
+          status: EStatus.Error,
+          message: `Unable to toggle like ${action.error.message}`,
         };
       });
   },

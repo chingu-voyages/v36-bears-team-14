@@ -1,4 +1,8 @@
-import { IRecipe, TRecipeCreationData } from "./recipe.types";
+import {
+  IRecipe,
+  TRecipeCreationData,
+  TRecipeToggleLikeAction,
+} from "./recipe.types";
 import axios from "axios";
 import { API_URL } from "../../environment";
 
@@ -72,5 +76,22 @@ export const postNewRecipe = async ({
   } else {
     onError && onError(` Problem with posting new recipe: ${req.statusText}`);
     throw new Error("Problem posting new recipe");
+  }
+};
+
+export const toggleLikeRecipe = async ({
+  id,
+}: {
+  id: string;
+}): Promise<TRecipeToggleLikeAction> => {
+  const req = await axios({
+    method: "PATCH",
+    withCredentials: true,
+    url: `${API_URL}/api/recipe/${id}/like`,
+  });
+  if (req.status === 200) {
+    return req.data;
+  } else {
+    throw new Error(`Unable to toggle like/unlike for recipe by id ${id}`);
   }
 };

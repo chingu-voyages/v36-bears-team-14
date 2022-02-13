@@ -20,6 +20,7 @@ interface IButtonProps {
   backButtonClassNames?: string;
   editButtonClassNames?: string;
   loginButtonClassNames?: string;
+  likeButtonClassNames?: string;
   onClick?: () => void;
   type: EButtonType;
   likeButtonState?: {
@@ -55,6 +56,9 @@ function Button(props: IButtonProps) {
       }`}
     >
       <img
+        className={`Button__main like-button-svg ${
+          props.likeButtonClassNames ? props.likeButtonClassNames : ""
+        }`}
         src={
           props.likeButtonState && props.likeButtonState.liked
             ? LikeTrueIcon

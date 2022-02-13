@@ -88,6 +88,14 @@ body {
   margin-left: 20px;
 }
 
+.even-slighter-left-margin {
+  margin-left: 3px;
+}
+
+.slight-percent-margin-left {
+  margin-left: 2%;
+}
+
 .faded-italic-text {
   color: grey;
   font-style: italic;
@@ -95,4 +103,20 @@ body {
 
 .bold-header {
   font-weight: bold;
+}
+
+.pointer-cursor:hover {
+  cursor: pointer;
+}
+
+.top-margin-padding {
+  margin-top: 2%;
+}
+
+.slight-bottom-margin {
+  margin-bottom: 15px;
+}
+
+.smaller-font {
+  font-size: 12px;
 }

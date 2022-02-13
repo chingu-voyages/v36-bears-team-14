@@ -4,6 +4,9 @@
   margin-left: 5%;
 }
 
+.recipe-user-font {
+  font-size: small;
+}
 .recipe-responsive-image-container {
   display: flex;
   justify-content: right;
