@@ -1,0 +1,7 @@
+.responsive-wrap {
+  flex-wrap: wrap;
+}
+
+.form-flex-spacing {
+  justify-content: space-around;
+}

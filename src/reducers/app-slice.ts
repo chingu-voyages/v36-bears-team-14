@@ -12,11 +12,14 @@ import {
   registerNewUser,
 } from "../services/app/app.service";
 import { EAppScene } from "../services/app/app.types";
+import { patchUserProfileDataByUserId } from "../services/user/user.service";
 
 import {
   IUserRegistrationRequest,
   TSecureUser,
   TUserLoginRequest,
+  TUserProfilePatchRequestData,
+  TUserProfilePatchResponseData,
 } from "../services/user/user.types";
 
 export interface IAppState {
@@ -25,7 +28,6 @@ export interface IAppState {
   registrationStatus: IStateStatus;
   isAuthenticated: boolean;
   authenticatedUser: TSecureUser | null;
-  scene: EAppScene;
 }
 
 const initialState: IAppState = {
@@ -34,7 +36,6 @@ const initialState: IAppState = {
   registrationStatus: { status: EStatus.Idle },
   isAuthenticated: false,
   authenticatedUser: null,
-  scene: EAppScene.PlaceHolder,
 };
 
 const setAuthenticatedUserInLocalStorage = (data: any) => {
@@ -86,13 +87,30 @@ export const registerNewUserAsync = createAsyncThunk(
     });
   }
 );
+export const patchUserProfileDataAsync = createAsyncThunk(
+  "user/patchUserProfileData",
+  async ({
+    id,
+    bio,
+    favoriteFoods,
+    photoUrl,
+    onSuccess,
+    onError,
+  }: TUserProfilePatchRequestData): Promise<TUserProfilePatchResponseData> => {
+    return patchUserProfileDataByUserId({
+      id,
+      bio,
+      favoriteFoods,
+      photoUrl,
+      onSuccess,
+      onError,
+    });
+  }
+);
 const appSlice = createSlice({
   name: "app",
   initialState,
   reducers: {
-    setScene(state, action: { payload: EAppScene }) {
-      state.scene = action.payload;
-    },
     clearLogInErrorStatus(state) {
       state.logInStatus = {
         status: EStatus.Idle,
@@ -179,6 +197,24 @@ const appSlice = createSlice({
           status: EStatus.Error,
           message: `There was a problem registering the account. ${action.error.message}`,
         };
+      })
+      .addCase(patchUserProfileDataAsync.pending, (state) => {
+        state.stateStatus = {
+          status: EStatus.Loading,
+          message: "Attempting user profile patch request...",
+        };
+      })
+      .addCase(patchUserProfileDataAsync.fulfilled, (state, action) => {
+        state.authenticatedUser = action.payload.user;
+        state.stateStatus = {
+          status: EStatus.Idle,
+        };
+      })
+      .addCase(patchUserProfileDataAsync.rejected, (state, action) => {
+        state.stateStatus = {
+          status: EStatus.Error,
+          message: action.error.message,
+        };
       });
   },
 });
@@ -195,7 +231,6 @@ export const selectLoginStateStatus = (state: IGlobalAppStore): IStateStatus =>
 export const selectRegistrationStatus = (
   state: IGlobalAppStore
 ): IStateStatus => state.app.registrationStatus;
-export const selectCurrentScene = (state: IGlobalAppStore) => state.app.scene;
 
-export const { setScene, clearLogInErrorStatus } = appSlice.actions;
+export const { clearLogInErrorStatus } = appSlice.actions;
 export default appSlice.reducer;

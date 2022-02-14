@@ -28,9 +28,17 @@ export type TRecipeCreationData = Pick<
   IRecipe,
   | "name"
   | "description"
-  | "postedBy"
   | "ingredients"
   | "directions"
   | "cookTimeMinutes"
   | "prepTimeMinutes"
->;
+> & {
+  imageUrl?: string;
+  onSuccess?: (data: IRecipe) => void;
+  onError?: (message: string) => void;
+};
+
+export type TRecipeToggleLikeAction = {
+  actionTaken: "like" | "unlike";
+  updatedRecipeDocument: IRecipe;
+};

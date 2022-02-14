@@ -5,7 +5,6 @@ import {
 } from "./user.types";
 import axios from "axios";
 import { API_URL } from "../../environment";
-import { getRecipeById } from "../recipe/recipe.service";
 import { IRecipe } from "../recipe/recipe.types";
 
 export const getUserById = async ({
@@ -25,22 +24,25 @@ export const getUserById = async ({
   }
 };
 
-export const getAllRecipesForUserFromUserContext = async ({
-  user,
+export const getAllRecipesForUserId = async ({
+  userId,
 }: {
-  user: TSecureUser;
+  userId: string;
 }): Promise<IRecipe[]> => {
-  if (!user.recipes) return [];
-  const userRecipes = Object.keys(user.recipes);
-  if (userRecipes.length === 0) return [];
-  const recipeObjects = userRecipes.map((recipeId) =>
-    getRecipeById({ id: recipeId })
-  );
-  try {
-    const fetchedRecipes = await Promise.all(recipeObjects);
-    return fetchedRecipes;
-  } catch (exception) {
-    throw new Error("Unable to get all recipes for user by context");
+  console.log("get all recipes by id, 32 userId", userId);
+  const req = await axios({
+    method: "GET",
+    url: `${API_URL}/api/user/${userId}/recipes`,
+    withCredentials: true,
+  });
+  if (req.status === 200) {
+    return req.data;
+  } else {
+    console.error(
+      `there was an error fetching recipes for this user context for id:`,
+      userId
+    );
+    return [];
   }
 };
 

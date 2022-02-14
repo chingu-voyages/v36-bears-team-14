@@ -1,18 +1,24 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { EStatus, IGlobalAppStore, IStateStatus } from "../definitions";
-import { getRecipeById } from "../services/recipe/recipe.service";
+import {
+  getAllRecipes,
+  getRecipeById,
+  postNewRecipe,
+} from "../services/recipe/recipe.service";
 
-import { IRecipe } from "../services/recipe/recipe.types";
+import { IRecipe, TRecipeCreationData } from "../services/recipe/recipe.types";
 
 export interface IRecipeState {
   stateStatus: IStateStatus;
   recipes: IRecipe[];
-  currentRecipeContext: IRecipe | null;
+  limit: number;
+  skip: number;
 }
 const initialState: IRecipeState = {
   stateStatus: { status: EStatus.Idle },
   recipes: [],
-  currentRecipeContext: null,
+  limit: 0,
+  skip: 0,
 };
 
 export const setCurrentRecipeContextByIdAsync = createAsyncThunk(
@@ -22,38 +28,95 @@ export const setCurrentRecipeContextByIdAsync = createAsyncThunk(
   }
 );
 
+export const getAllRecipesAsync = createAsyncThunk(
+  "recipe/getAllRecipes",
+  async ({
+    limit,
+    skip,
+  }: {
+    limit?: number;
+    skip?: number;
+  }): Promise<IRecipe[]> => {
+    return getAllRecipes({ limit, skip });
+  }
+);
+
+export const postNewRecipeAsync = createAsyncThunk(
+  "recipe/postNewRecipe",
+  async ({
+    name,
+    description,
+    cookTimeMinutes,
+    prepTimeMinutes,
+    directions,
+    ingredients,
+    imageUrl,
+    onError,
+    onSuccess,
+  }: TRecipeCreationData) => {
+    return postNewRecipe({
+      name,
+      description,
+      cookTimeMinutes,
+      prepTimeMinutes,
+      directions,
+      ingredients,
+      imageUrl,
+      onError,
+      onSuccess,
+    });
+  }
+);
+
 const recipeSlice = createSlice({
   name: "recipe",
   initialState,
-  reducers: {
-    clearCurrentRecipeContext(state) {
-      state.currentRecipeContext = null;
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(setCurrentRecipeContextByIdAsync.pending, (state) => {
+      .addCase(getAllRecipesAsync.pending, (state) => {
         state.stateStatus = {
           status: EStatus.Loading,
-          message: "fetching recipe by id",
+          message: "getting all recipes",
         };
       })
-      .addCase(setCurrentRecipeContextByIdAsync.fulfilled, (state, action) => {
-        state.currentRecipeContext = action.payload;
+      .addCase(getAllRecipesAsync.fulfilled, (state, action) => {
         state.stateStatus = {
           status: EStatus.Idle,
         };
+        // This logic needs to be updated for limit, skip functionality
+        state.recipes = action.payload;
       })
-      .addCase(setCurrentRecipeContextByIdAsync.rejected, (state) => {
+      .addCase(getAllRecipesAsync.rejected, (state, action) => {
         state.stateStatus = {
           status: EStatus.Error,
-          message: "Unable to get recipe by id",
+          message: `Unable to get recipe by id: ${action.error.message}`,
+        };
+      })
+      .addCase(postNewRecipeAsync.pending, (state) => {
+        state.stateStatus = {
+          status: EStatus.Loading,
+          message: "posting new recipe",
+        };
+      })
+      .addCase(postNewRecipeAsync.fulfilled, (state) => {
+        state.stateStatus = {
+          status: EStatus.Idle,
+        };
+        // We won't do anything with the payload - we'll re-render the page with the onSuccess callback
+      })
+      .addCase(postNewRecipeAsync.rejected, (state, action) => {
+        state.stateStatus = {
+          status: EStatus.Error,
+          message: `Unable to post new recipe: ${action.error.message}`,
         };
       });
   },
 });
 
-export const selectCurrentRecipeContext = (state: IGlobalAppStore) =>
-  state.recipe.currentRecipeContext;
-export const { clearCurrentRecipeContext } = recipeSlice.actions;
+export const selectRecipeStateStatus = (state: IGlobalAppStore) =>
+  state.recipe.stateStatus;
+
+export const selectRecipes = (state: IGlobalAppStore) => state.recipe.recipes;
+
 export default recipeSlice.reducer;

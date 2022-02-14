@@ -1,3 +1,8 @@
+.Nav {
+  position: fixed;
+  width: 100vw;
+  z-index: 2000;
+}
 .NavBar__AppLogoGroup {
   align-self: center;
   margin-left: 2%;
@@ -10,9 +15,6 @@
   top: 0px;
 }
 
-.white-background {
-  background-color: white;
-}
 .NavBar__SecondGroup {
   display: flex;
 }
@@ -33,6 +35,10 @@
 }
 
 .plus-button-recipe-margin-adjustment {
+  margin-top: 8px;
+}
+
+.tweak-top-margin {
   margin-top: 8px;
 }
 
@@ -77,4 +83,19 @@
   }
 }
 
+@media only screen and (min-width: 769px) and (max-width: 1024px) {
+  .nav-responsive-modal-profile {
+    margin-top: 64px;
+    margin-left: 20%;
+    margin-right: 20%;
+  }
+}
 
+
+@media only screen and (min-width: 1025px) {
+  .nav-responsive-modal-profile {
+    margin-top: 64px;
+    margin-left: 20%;
+    margin-right: 20%;
+  }
+}

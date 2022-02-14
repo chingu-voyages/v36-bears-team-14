@@ -1,27 +1,27 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import TextField from "../TextField/TextField";
-import NumberField from "../NumberField/NumberField";
+
 import Button, { EButtonType } from "../Button/Button";
-import "./ingredients-form-style.css";
-import { TRecipeIngredient } from "../../services/recipe/recipe.types";
-import { recipeIngredientsValidator } from "../../utils/validators";
+import "./directions-form-style.css";
+import { TRecipeStep } from "../../services/recipe/recipe.types";
 import ErrorMessage from "../ErrorMessage";
-interface IIngredientsFormProps {
+import { recipeDirectionsValidator } from "../../utils/validators";
+
+interface IDirectionsFormProps {
   customClassNames?: string;
   customControlsClassNames?: string;
   customSubmitButtonClassNames?: string;
-  onSubmit?: (data: TRecipeIngredient) => void;
+  onSubmit?: (data: TRecipeStep) => void;
 }
 
-const IngredientsForm = (props: IIngredientsFormProps) => {
-  const [ingredientList, setIngredientList] = useState({
-    name: "",
-    quantity: 1,
-    unit: "",
+const DirectionsForm = (props: IDirectionsFormProps) => {
+  const [directionsSteps, setDirectionsSteps] = useState({
+    description: "",
+    imageUrl: "",
   });
   const [hasError, setHasError] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const { name, quantity, unit } = ingredientList;
+  const { description, imageUrl } = directionsSteps;
 
   const handleChange = ({
     HTMLName,
@@ -30,7 +30,7 @@ const IngredientsForm = (props: IIngredientsFormProps) => {
     HTMLName: string;
     value: string | number;
   }) => {
-    setIngredientList((prev) => ({
+    setDirectionsSteps((prev) => ({
       ...prev,
       [HTMLName]: value,
     }));
@@ -38,8 +38,8 @@ const IngredientsForm = (props: IIngredientsFormProps) => {
 
   const handleSubmit = () => {
     clearErrors();
-    recipeIngredientsValidator({
-      data: ingredientList,
+    recipeDirectionsValidator({
+      data: directionsSteps,
       onSuccess: (validatedData) => {
         props.onSubmit && props.onSubmit(validatedData);
         resetInputs();
@@ -52,10 +52,9 @@ const IngredientsForm = (props: IIngredientsFormProps) => {
   };
 
   const resetInputs = () => {
-    setIngredientList({
-      name: "",
-      quantity: 1,
-      unit: "",
+    setDirectionsSteps({
+      description: "",
+      imageUrl: "",
     });
   };
 
@@ -66,7 +65,7 @@ const IngredientsForm = (props: IIngredientsFormProps) => {
 
   return (
     <div
-      className={`IngredientsForm__main ${
+      className={`DirectionsForm__main ${
         props.customClassNames ? props.customClassNames : ""
       }`}
     >
@@ -77,26 +76,10 @@ const IngredientsForm = (props: IIngredientsFormProps) => {
       >
         <TextField
           type="text"
-          value={name}
-          placeholder="Ingredient Name"
-          label="name"
-          name="name"
-          onChange={handleChange}
-        />
-        <NumberField
-          value={quantity}
-          placeholder="Add quantity"
-          label="Quantity"
-          name="quantity"
-          onChange={handleChange}
-          numericalRangeLimit={{ max: 5000, min: 0 }}
-        />
-        <TextField
-          type="text"
-          value={unit}
-          placeholder="Unit"
-          label="Unit"
-          name="unit"
+          value={description}
+          placeholder="Add a recipe instruction"
+          label="step"
+          name="description"
           onChange={handleChange}
         />
         <Button
@@ -115,4 +98,4 @@ const IngredientsForm = (props: IIngredientsFormProps) => {
   );
 };
 
-export default IngredientsForm;
+export default DirectionsForm;

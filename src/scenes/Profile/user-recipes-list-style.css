@@ -1,0 +1,25 @@
+th, td {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.recipe-list-modal-padding {
+  padding: 20px;
+}
+
+.table-border {
+  border: 0.5px solid darkgray;
+}
+
+.customized-table {
+  width: 100%;
+  display: block;
+  max-height: 300px;
+  overflow-y: scroll;
+}
+
+@media only screen and (max-width: 480px) {
+  .flex-font-size {
+    font-size: 0.69rem;
+  }
+}

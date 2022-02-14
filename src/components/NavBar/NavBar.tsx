@@ -10,8 +10,9 @@ import {
   selectIsAuthenticated,
   selectLoginStateStatus,
 } from "../../reducers/app-slice";
-import { setCurrentUserContextByIdAsync } from "../../reducers/user-slice";
+import { getAllRecipesAsync } from "../../reducers/recipe-slice";
 import LoginScene from "../../scenes/Login";
+import NewRecipeScene from "../../scenes/NewRecipe";
 import ProfileScene from "../../scenes/Profile";
 import RegistrationScene from "../../scenes/UserRegistration/UserRegistration";
 import AppLogo from "../App-logo/App-logo";
@@ -20,6 +21,8 @@ import { EButtonType } from "../Button/Button";
 import LoginButton from "../Button/LoginButton";
 import ContextMenu from "../ContextMenu";
 import ModalContainer from "../ModalContainer";
+import ModalPopUp from "../ModalPop/ModalPop";
+import { EModalPopType } from "../ModalPop/types";
 import TextField from "../TextField";
 import "./nav-bar-style.css";
 
@@ -31,12 +34,16 @@ enum EModalType {
   Login = "login",
   Register = "register",
   Profile = "profile",
+  NewRecipe = "newRecipe",
+  ModalPop = "modalPop",
 }
 
 function NavBar(props: INavBarProps) {
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [modalType, setModalType] = useState<EModalType | null>(null);
+  const [modalPopText, setModalPopText] = useState<string | null>(null);
+  const [modalPopType, setModalPopType] = useState<EModalPopType | null>(null);
   const isAuthenticated = useSelector(selectIsAuthenticated, shallowEqual);
   const logInStatus = useSelector(selectLoginStateStatus, shallowEqual);
   const authenticatedUser = useSelector(selectAuthenticatedUser, shallowEqual);
@@ -53,7 +60,6 @@ function NavBar(props: INavBarProps) {
   };
 
   const showProfileScreen = () => {
-    dispatch(setCurrentUserContextByIdAsync({ id: "me" }));
     setModalType(EModalType.Profile);
     setIsModalOpen(true);
   };
@@ -71,6 +77,9 @@ function NavBar(props: INavBarProps) {
     closeModal();
   };
   const dismissRegistrationWindow = () => {
+    closeModal();
+  };
+  const dismissNewRecipeWindow = () => {
     closeModal();
   };
 
@@ -101,9 +110,46 @@ function NavBar(props: INavBarProps) {
   const dismissProfileWindow = () => {
     closeModal();
   };
+
+  const handleAddNewRecipe = () => {
+    setModalType(EModalType.NewRecipe);
+    setIsModalOpen(true);
+  };
+
   useEffect(() => {
     dispatch(checkHasSessionAsync());
   }, []);
+
+  const refreshRecipesAfterSubmit = () => {
+    dispatch(getAllRecipesAsync({}));
+    showDialog({
+      type: EModalPopType.Success,
+      text: "Thanks! Your recipe was added.",
+    });
+  };
+
+  const showDialog = ({
+    type,
+    text,
+  }: {
+    type: EModalPopType;
+    text: string;
+  }) => {
+    setModalPopType(type);
+    setModalPopText(text);
+    setModalType(EModalType.ModalPop);
+    setIsModalOpen(true);
+  };
+
+  const handleModalPopClose = () => {
+    setModalPopText(null);
+    setModalPopType(null);
+    closeModal();
+  };
+
+  // useEffect(()=> {
+  //   if (!modalPopType && !modalPopText && !modalType) closeModal()
+  // }, [modalPopType, modalPopText, modalType, isModalOpen ])
 
   return (
     <div className="Nav">
@@ -131,12 +177,14 @@ function NavBar(props: INavBarProps) {
             <div className="NavBar__authenticated-function-buttons">
               <Button
                 text="Submit Recipe"
-                customClassNames="Submit-Recipe-Text-Button round white-fill green-text full-recipe-top-margin-adjustment bottom-padding-halfRem left-padding-1rem right-padding-1rem top-padding-halfRem"
+                customClassNames="Submit-Recipe-Text-Button round white-fill green-text tweak-top-margin bottom-padding-halfRem left-padding-1rem right-padding-1rem top-padding-halfRem"
                 type={EButtonType.Normal}
+                onClick={handleAddNewRecipe}
               />
               <Button
                 customClassNames="Submit-Recipe-Plus-Button mobile-add-recipes-plus-button plus-button-recipe-margin-adjustment bottom-padding-halfRem left-padding-1rem right-padding-1rem top-padding-halfRem"
                 type={EButtonType.Plus}
+                onClick={handleAddNewRecipe}
               />
             </div>
           )}
@@ -207,9 +255,32 @@ function NavBar(props: INavBarProps) {
                 customSceneClassNames="window-body white-background"
               />
             )}
-            {modalType && modalType === EModalType.Profile && (
-              <ProfileScene onDismiss={dismissProfileWindow} />
+            {modalType &&
+              modalType === EModalType.Profile &&
+              authenticatedUser && (
+                <ProfileScene
+                  onDismiss={dismissProfileWindow}
+                  customClassNames="nav-responsive-modal-profile"
+                  userId={authenticatedUser._id}
+                />
+              )}
+            {modalType && modalType === EModalType.NewRecipe && (
+              <NewRecipeScene
+                onDismiss={dismissNewRecipeWindow}
+                onSubmitSuccess={refreshRecipesAfterSubmit}
+              />
             )}
+            {modalType &&
+              modalType === EModalType.ModalPop &&
+              modalPopType &&
+              modalPopText && (
+                <ModalPopUp
+                  text={modalPopText ? modalPopText : "Text is not defined"}
+                  customClassNames="pop-text-responsive-padding"
+                  type={modalPopType}
+                  onDismiss={handleModalPopClose}
+                />
+              )}
           </div>
         )}
       </nav>
