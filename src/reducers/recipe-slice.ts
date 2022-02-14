@@ -4,7 +4,6 @@ import {
   getAllRecipes,
   getRecipeById,
   postNewRecipe,
-  toggleLikeRecipe,
 } from "../services/recipe/recipe.service";
 
 import { IRecipe, TRecipeCreationData } from "../services/recipe/recipe.types";
@@ -12,14 +11,12 @@ import { IRecipe, TRecipeCreationData } from "../services/recipe/recipe.types";
 export interface IRecipeState {
   stateStatus: IStateStatus;
   recipes: IRecipe[];
-  currentRecipeContext: IRecipe | null;
   limit: number;
   skip: number;
 }
 const initialState: IRecipeState = {
   stateStatus: { status: EStatus.Idle },
   recipes: [],
-  currentRecipeContext: null,
   limit: 0,
   skip: 0,
 };
@@ -71,40 +68,12 @@ export const postNewRecipeAsync = createAsyncThunk(
   }
 );
 
-export const toggleLikeRecipeAsync = createAsyncThunk(
-  "recipe/toggleLike",
-  async ({ id }: { id: string }) => {
-    return toggleLikeRecipe({ id });
-  }
-);
 const recipeSlice = createSlice({
   name: "recipe",
   initialState,
-  reducers: {
-    clearCurrentRecipeContext(state) {
-      state.currentRecipeContext = null;
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(setCurrentRecipeContextByIdAsync.pending, (state) => {
-        state.stateStatus = {
-          status: EStatus.Loading,
-          message: "fetching recipe by id",
-        };
-      })
-      .addCase(setCurrentRecipeContextByIdAsync.fulfilled, (state, action) => {
-        state.currentRecipeContext = action.payload;
-        state.stateStatus = {
-          status: EStatus.Idle,
-        };
-      })
-      .addCase(setCurrentRecipeContextByIdAsync.rejected, (state) => {
-        state.stateStatus = {
-          status: EStatus.Error,
-          message: "Unable to get recipe by id",
-        };
-      })
       .addCase(getAllRecipesAsync.pending, (state) => {
         state.stateStatus = {
           status: EStatus.Loading,
@@ -141,31 +110,13 @@ const recipeSlice = createSlice({
           status: EStatus.Error,
           message: `Unable to post new recipe: ${action.error.message}`,
         };
-      })
-      .addCase(toggleLikeRecipeAsync.pending, (state) => {
-        state.stateStatus = {
-          status: EStatus.Loading,
-          message: "toggling like...",
-        };
-      })
-      .addCase(toggleLikeRecipeAsync.fulfilled, (state, action) => {
-        state.currentRecipeContext = action.payload.updatedRecipeDocument;
-        console.debug(action.payload.actionTaken); // just to test
-      })
-      .addCase(toggleLikeRecipeAsync.rejected, (state, action) => {
-        state.stateStatus = {
-          status: EStatus.Error,
-          message: `Unable to toggle like ${action.error.message}`,
-        };
       });
   },
 });
 
-export const selectCurrentRecipeContext = (state: IGlobalAppStore) =>
-  state.recipe.currentRecipeContext;
 export const selectRecipeStateStatus = (state: IGlobalAppStore) =>
   state.recipe.stateStatus;
 
 export const selectRecipes = (state: IGlobalAppStore) => state.recipe.recipes;
-export const { clearCurrentRecipeContext } = recipeSlice.actions;
+
 export default recipeSlice.reducer;

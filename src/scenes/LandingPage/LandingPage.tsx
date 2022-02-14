@@ -1,11 +1,7 @@
 import { useEffect, useState } from "react";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import RecipeCard from "../../components/RecipeCard";
-import {
-  getAllRecipesAsync,
-  selectRecipes,
-  setCurrentRecipeContextByIdAsync,
-} from "../../reducers/recipe-slice";
+import { getAllRecipesAsync, selectRecipes } from "../../reducers/recipe-slice";
 import RecipeScene from "../Recipe";
 
 import "./landing-page-style.css";
@@ -18,11 +14,12 @@ enum EModalType {
 function LandingPage() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [modalType, setModalType] = useState<EModalType | null>(null);
+  const [selectedRecipeId, setSelectedRecipeId] = useState<string | null>(null);
   const allRecipes = useSelector(selectRecipes, shallowEqual);
   const dispatch = useDispatch();
 
   const handleRecipeCardClicked = (id: string) => {
-    dispatch(setCurrentRecipeContextByIdAsync({ id }));
+    setSelectedRecipeId(id);
     setModalType(EModalType.FullRecipeView);
     setIsModalOpen(true);
   };
@@ -62,6 +59,7 @@ function LandingPage() {
             <RecipeScene
               onDismiss={handleCloseFullRecipeView}
               customClassNames="responsive-margining modal-top-margining"
+              recipeContextId={selectedRecipeId!}
             />
           )}
         </div>

@@ -12,11 +12,14 @@ import {
   registerNewUser,
 } from "../services/app/app.service";
 import { EAppScene } from "../services/app/app.types";
+import { patchUserProfileDataByUserId } from "../services/user/user.service";
 
 import {
   IUserRegistrationRequest,
   TSecureUser,
   TUserLoginRequest,
+  TUserProfilePatchRequestData,
+  TUserProfilePatchResponseData,
 } from "../services/user/user.types";
 
 export interface IAppState {
@@ -79,6 +82,26 @@ export const registerNewUserAsync = createAsyncThunk(
       firstName,
       lastName,
       plainTextPassword,
+      onSuccess,
+      onError,
+    });
+  }
+);
+export const patchUserProfileDataAsync = createAsyncThunk(
+  "user/patchUserProfileData",
+  async ({
+    id,
+    bio,
+    favoriteFoods,
+    photoUrl,
+    onSuccess,
+    onError,
+  }: TUserProfilePatchRequestData): Promise<TUserProfilePatchResponseData> => {
+    return patchUserProfileDataByUserId({
+      id,
+      bio,
+      favoriteFoods,
+      photoUrl,
       onSuccess,
       onError,
     });
@@ -173,6 +196,24 @@ const appSlice = createSlice({
         state.registrationStatus = {
           status: EStatus.Error,
           message: `There was a problem registering the account. ${action.error.message}`,
+        };
+      })
+      .addCase(patchUserProfileDataAsync.pending, (state) => {
+        state.stateStatus = {
+          status: EStatus.Loading,
+          message: "Attempting user profile patch request...",
+        };
+      })
+      .addCase(patchUserProfileDataAsync.fulfilled, (state, action) => {
+        state.authenticatedUser = action.payload.user;
+        state.stateStatus = {
+          status: EStatus.Idle,
+        };
+      })
+      .addCase(patchUserProfileDataAsync.rejected, (state, action) => {
+        state.stateStatus = {
+          status: EStatus.Error,
+          message: action.error.message,
         };
       });
   },

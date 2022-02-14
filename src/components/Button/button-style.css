@@ -91,3 +91,14 @@
   border-color: black;
   border-style: solid;
 }
+
+.disabled-stylings {
+  color: #C6C6C6;
+  pointer-events: none;
+}
+
+.disabled-stylings-image {
+  pointer-events: none;
+  opacity: 0.4;
+  filter: alpha(opacity=40); /* msie */
+}

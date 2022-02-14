@@ -38,6 +38,10 @@
   margin-top: 8px;
 }
 
+.tweak-top-margin {
+  margin-top: 8px;
+}
+
 @media only screen and (max-width: 480px) {
   .responsive-login-hamburger-icon {
     display: block;

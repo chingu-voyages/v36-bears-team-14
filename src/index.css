@@ -120,3 +120,7 @@ body {
 .smaller-font {
   font-size: 12px;
 }
+
+.top-margin-padding-px {
+  margin-top: 64px;
+}

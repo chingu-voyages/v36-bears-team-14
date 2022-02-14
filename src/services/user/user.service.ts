@@ -24,12 +24,12 @@ export const getUserById = async ({
   }
 };
 
-export const getAllRecipesForUserFromUserContext = async ({
-  user,
+export const getAllRecipesForUserId = async ({
+  userId,
 }: {
-  user: TSecureUser;
+  userId: string;
 }): Promise<IRecipe[]> => {
-  const userId = user._id;
+  console.log("get all recipes by id, 32 userId", userId);
   const req = await axios({
     method: "GET",
     url: `${API_URL}/api/user/${userId}/recipes`,

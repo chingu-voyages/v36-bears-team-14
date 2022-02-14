@@ -95,3 +95,27 @@ export const toggleLikeRecipe = async ({
     throw new Error(`Unable to toggle like/unlike for recipe by id ${id}`);
   }
 };
+
+export const deleteRecipesByArrayOfIds = async ({
+  recipeIds,
+}: {
+  recipeIds: string[];
+}): Promise<IRecipe[]> => {
+  if (recipeIds && recipeIds.length > 0) {
+    const res = await axios({
+      method: "DELETE",
+      url: `${API_URL}/api/recipe`,
+      withCredentials: true,
+      data: {
+        recipeIds,
+      },
+    });
+
+    if (res.status === 200) {
+      return res.data;
+    } else {
+      throw new Error("Unable to batch delete");
+    }
+  }
+  throw new Error("Unable to batch delete");
+};

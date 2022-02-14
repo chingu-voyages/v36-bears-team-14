@@ -26,11 +26,13 @@ interface IButtonProps {
   likeButtonState?: {
     liked: boolean;
   };
+  disabled?: boolean;
 }
 
 function Button(props: IButtonProps) {
   const handleOnClick = () => {
     // Do something
+    if (props.disabled) return;
     props.onClick && props.onClick();
   };
   return props.type === EButtonType.Normal ? (
@@ -38,12 +40,12 @@ function Button(props: IButtonProps) {
       onClick={handleOnClick}
       className={`Button__main button_normal ${
         props.customClassNames ? props.customClassNames : ""
-      }`}
+      } ${props.disabled ? "disabled-stylings" : ""}`}
     >
       <div
         className={`Button__text ${
           props.customTextClassNames ? props.customTextClassNames : ""
-        }`}
+        } ${props.disabled ? "disabled-stylings" : ""}`}
       >
         {props.text}
       </div>
@@ -53,12 +55,12 @@ function Button(props: IButtonProps) {
       onClick={handleOnClick}
       className={`Button__main button_like ${
         props.customClassNames ? props.customClassNames : ""
-      }`}
+      } ${props.disabled ? "disabled-stylings" : ""}`}
     >
       <img
         className={`Button__main like-button-svg ${
           props.likeButtonClassNames ? props.likeButtonClassNames : ""
-        }`}
+        } ${props.disabled ? "disabled-stylings-image" : ""}`}
         src={
           props.likeButtonState && props.likeButtonState.liked
             ? LikeTrueIcon
@@ -72,12 +74,12 @@ function Button(props: IButtonProps) {
       onClick={handleOnClick}
       className={`Button__main button_back ${
         props.customClassNames ? props.customClassNames : ""
-      }`}
+      } ${props.disabled ? "disabled-stylings" : ""}`}
     >
       <img
         className={`BackButton__Img ${
           props.backButtonClassNames ? props.backButtonClassNames : ""
-        }`}
+        }  ${props.disabled ? "disabled-stylings-image" : ""}`}
         src={BackButton}
         alt="add"
       />
@@ -87,12 +89,12 @@ function Button(props: IButtonProps) {
       onClick={handleOnClick}
       className={`Button__main button_edit ${
         props.customClassNames ? props.customClassNames : ""
-      }`}
+      } ${props.disabled ? "disabled-stylings" : ""}`}
     >
       <img
         className={`EditButton__img ${
           props.editButtonClassNames ? props.editButtonClassNames : ""
-        }`}
+        } ${props.disabled ? "disabled-stylings-image" : ""}`}
         src={EditButton}
         alt="edit"
       />
@@ -102,12 +104,12 @@ function Button(props: IButtonProps) {
       onClick={handleOnClick}
       className={`Button__main button_plus ${
         props.customClassNames ? props.customClassNames : ""
-      }`}
+      } ${props.disabled ? "disabled-stylings" : ""}`}
     >
       <img
         className={`PlusButton__Img ${
           props.plusButtonClassNames ? props.plusButtonClassNames : ""
-        }`}
+        } ${props.disabled ? "disabled-stylings-image" : ""}`}
         src={WhitePlusButton}
         alt="add"
       />

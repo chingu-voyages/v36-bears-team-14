@@ -1,13 +1,8 @@
 import { useEffect, useState } from "react";
-import { shallowEqual, useDispatch, useSelector } from "react-redux";
+import { shallowEqual, useSelector } from "react-redux";
 import Banner from "../../components/Banner";
-import {
-  selectCurrentRecipeContext,
-  toggleLikeRecipeAsync,
-} from "../../reducers/recipe-slice";
 import { EAppScene } from "../../services/app/app.types";
 import { getUserById } from "../../services/user/user.service";
-import { formatDate } from "../../utils/date-helpers/format-date";
 import { isURLValid } from "../../utils/string-helpers/validate-url";
 import GenericRecipeImage from "../../components/RecipeCard/sample-pasta.jpeg";
 import "../../components/CommonStyles/scene-style.css";
@@ -16,25 +11,25 @@ import Button from "../../components/Button";
 import { EButtonType } from "../../components/Button/Button";
 import { selectAuthenticatedUser } from "../../reducers/app-slice";
 import ProfileScene from "../Profile";
-import { setCurrentUserContextByIdAsync } from "../../reducers/user-slice";
+import { TSecureUser } from "../../services/user/user.types";
+import { IRecipe } from "../../services/recipe/recipe.types";
+import {
+  getRecipeById,
+  toggleLikeRecipe,
+} from "../../services/recipe/recipe.service";
 
 interface IRecipeSceneProps {
   customClassNames?: string;
   onDismiss?: () => void;
+  recipeContextId: string;
 }
 
-type TRecipeCreatorDetails = {
-  createdById: string | null;
-  firstName: string | null;
-  lastName: string | null;
-  createdAt: string | null;
-};
 enum EModalType {
   RecipeContextProfile = "recipeContextProfile",
 }
 
 function RecipeScene(props: IRecipeSceneProps) {
-  const recipeContext = useSelector(selectCurrentRecipeContext, shallowEqual);
+  const [recipeContext, setRecipeContext] = useState<IRecipe | null>(null);
   const authenticatedUserContext = useSelector(
     selectAuthenticatedUser,
     shallowEqual
@@ -43,14 +38,7 @@ function RecipeScene(props: IRecipeSceneProps) {
   const [modalType, setModalType] = useState<EModalType | null>(null);
 
   const [recipeCreatorData, setRecipeCreatorData] =
-    useState<TRecipeCreatorDetails>({
-      createdById: null,
-      firstName: null,
-      lastName: null,
-      createdAt: null,
-    });
-
-  const dispatch = useDispatch();
+    useState<TSecureUser | null>(null);
 
   const recipeHasImage = () =>
     !!recipeContext &&
@@ -63,12 +51,7 @@ function RecipeScene(props: IRecipeSceneProps) {
       if (recipeContext) {
         try {
           const userData = await getUserById({ id: recipeContext.postedBy });
-          setRecipeCreatorData({
-            createdById: userData._id.toString(),
-            firstName: userData.firstName,
-            lastName: userData.lastName,
-            createdAt: formatDate(recipeContext.createdAt.toString()),
-          });
+          setRecipeCreatorData(userData);
         } catch (error) {
           console.log(error);
         }
@@ -77,9 +60,24 @@ function RecipeScene(props: IRecipeSceneProps) {
     getRecipeDetails();
   }, [recipeContext]);
 
+  useEffect(() => {
+    const getRecipeContext = async () => {
+      if (props.recipeContextId) {
+        try {
+          const recipe = await getRecipeById({ id: props.recipeContextId });
+          setRecipeContext(recipe);
+          console.log("76 REcipe context set to ", recipe);
+        } catch (error) {
+          console.log("canot get recipe by id");
+        }
+      }
+    };
+    getRecipeContext();
+  }, []);
+
   const isAuthenticatedUserRecipeMatch = (): boolean => {
     if (authenticatedUserContext && recipeCreatorData) {
-      if (authenticatedUserContext._id === recipeCreatorData.createdById) {
+      if (authenticatedUserContext._id === recipeCreatorData._id) {
         return true;
       }
     }
@@ -100,15 +98,15 @@ function RecipeScene(props: IRecipeSceneProps) {
     return false;
   };
 
-  const handleToggleLikeRecipe = () => {
+  const handleToggleLikeRecipe = async () => {
     if (recipeContext) {
-      dispatch(toggleLikeRecipeAsync({ id: recipeContext._id }));
+      const result = await toggleLikeRecipe({ id: recipeContext?._id });
+      setRecipeContext(result.updatedRecipeDocument);
     }
   };
 
   const showRecipeCreatorContext = () => {
     if (recipeContext) {
-      dispatch(setCurrentUserContextByIdAsync({ id: recipeContext._id }));
       setModalType(EModalType.RecipeContextProfile);
       setIsModalOpen(true);
     }
@@ -162,12 +160,12 @@ function RecipeScene(props: IRecipeSceneProps) {
               <>{`Created by You`}</>
             ) : (
               <>
-                {`Created by ${recipeCreatorData.firstName} ${recipeCreatorData.lastName}`}
+                {`Created by ${recipeCreatorData?.firstName} ${recipeCreatorData?.lastName}`}
               </>
             )}
           </div>
           <div className="Recipe Scene__recipe-info-section__createDate recipe-user-font even-slighter-left-margin">
-            {`on ${recipeCreatorData.createdAt}`}
+            {`on ${recipeCreatorData?.createdAt}`}
           </div>
         </div>
         <div className="Recipe Scene__like-button-section slight-percent-margin-left">
@@ -230,12 +228,14 @@ function RecipeScene(props: IRecipeSceneProps) {
       </div>
       {isModalOpen && (
         <div className="modal__main">
-          {modalType === EModalType.RecipeContextProfile && (
-            <ProfileScene
-              onDismiss={handleCloseProfileContextView}
-              customClassNames="responsive-margining modal-top-margining"
-            />
-          )}
+          {modalType === EModalType.RecipeContextProfile &&
+            recipeCreatorData && (
+              <ProfileScene
+                onDismiss={handleCloseProfileContextView}
+                customClassNames="responsive-margining modal-top-margining"
+                userId={recipeCreatorData._id}
+              />
+            )}
         </div>
       )}
     </div>
