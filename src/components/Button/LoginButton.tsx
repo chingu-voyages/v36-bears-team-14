@@ -37,7 +37,7 @@ export function LoginButton(props: ILoginButtonProps) {
             alt="profile-icon"
           />
           <div
-            className={`Button__main__LoggedInButton__UserNameText username-top-padding-adjustment-logged-in ${
+            className={`Button__main__LoggedInButton__UserNameText username-top-padding-adjustment-logged-in user-name-responsive ${
               props.customTextClassNames ? props.customTextClassNames : ""
             }`}
           >

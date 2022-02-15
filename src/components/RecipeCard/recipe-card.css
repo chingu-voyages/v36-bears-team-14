@@ -32,10 +32,10 @@
     top: -40%;
   }
   .Card__main__body-text {
-    font-size: 9px;
+    font-size: 1rem;
   }
   .Card__main__header-text {
-    font-size: 7px;
+    font-size: 0.7rem;
   }
 }
 

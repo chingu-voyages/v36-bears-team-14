@@ -147,10 +147,6 @@ function NavBar(props: INavBarProps) {
     closeModal();
   };
 
-  // useEffect(()=> {
-  //   if (!modalPopType && !modalPopText && !modalType) closeModal()
-  // }, [modalPopType, modalPopText, modalType, isModalOpen ])
-
   return (
     <div className="Nav">
       <nav

@@ -1,6 +1,6 @@
 import axios from "axios";
 import { ICheckSessionResponseData } from "../../definitions";
-import { API_URL } from "../../environment";
+import { API_URL, AUTH_HEADER } from "../../environment";
 import {
   IUserRegistrationRequest,
   TSecureUser,
@@ -12,6 +12,7 @@ export const checkHasSession = async (): Promise<ICheckSessionResponseData> => {
     method: "GET",
     url: `${API_URL}/api/authentication/session`,
     withCredentials: true,
+    headers: AUTH_HEADER,
   });
   if (sessionResponse.status === 200) {
     if (sessionResponse.data.session && sessionResponse.data.session === true) {
@@ -40,6 +41,7 @@ export const logInUser = async ({
     method: "POST",
     url: `${API_URL}/api/authentication/local`,
     withCredentials: true,
+    headers: AUTH_HEADER,
     data: {
       email,
       password: plainTextPassword,
@@ -58,6 +60,7 @@ export const logOutUser = async (): Promise<void> => {
     method: "POST",
     url: `${API_URL}/api/authentication/logout`,
     withCredentials: true,
+    headers: AUTH_HEADER,
   });
 
   if (response.status !== 200) {
@@ -77,6 +80,7 @@ export const registerNewUser = async ({
     method: "POST",
     url: `${API_URL}/api/authentication/local/register`,
     withCredentials: true,
+    headers: AUTH_HEADER,
     data: {
       email,
       firstName,
