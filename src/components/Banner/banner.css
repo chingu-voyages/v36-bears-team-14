@@ -1,0 +1,52 @@
+.Banner__main {
+  background-color: var(--green-0);
+}
+.Banner__main__titleText {
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: normal;
+  color: var(--white);
+  padding-top: 8%;
+  margin-left: 2%;
+  /* max-width: 60vw; */
+}
+
+.default-font-size {
+  font-size: 3rem;
+}
+.long-text-smaller-font-size {
+  font-size: 2rem;
+}
+
+.Banner__main__bannerImage {
+  width: 100%;
+}
+.Banner__main__bannerImage__image {
+  border: 2px solid white;
+}
+
+.Banner_main__subtitle__link:hover {
+  cursor: pointer;
+}
+
+@media only screen and (max-width: 480px) {
+  .long-text-smaller-font-size {
+    font-size: 2rem;
+  }
+}
+
+@media only screen and (min-width: 481px) and (max-width: 1024px) {
+  .default-font-size {
+    font-size: 4rem;
+  }
+}
+
+@media only screen and (min-width: 1025px) {
+  .default-font-size{
+    font-size: 6rem;
+    padding-top: 50px;
+  }
+  .long-text-smaller-font-size {
+    font-size: 4rem;
+  }
+}

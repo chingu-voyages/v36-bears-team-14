@@ -1,0 +1,47 @@
+.ContextMenu__Main {
+  border: 0px solid black;
+  box-shadow: 0px 6px 6px darkgray;
+  float: right;
+  width: 250px;
+}
+.ContextMenuOption__main:hover {
+  cursor: pointer;
+  background-color: var(--super-light-grey);
+}
+
+.ContextMenuOption__main {
+  padding: 10px;
+}
+
+
+.bold-text {
+  font-weight: bold;
+}
+
+.font-size-20 {
+  font-size: 20px;
+}
+
+.dark-charcoal-grey {
+  color: var(--dark-charcoal-grey);
+}
+
+.menu-padding {
+  padding: 2%;
+}
+
+.ContextMenuOption__text {
+  text-align: center;
+}
+
+.ContextMenu__Main {
+  background-color: white;
+  position: relative;
+  top: 65px;
+}
+
+@media only screen and (max-width: 480px) {
+  .ContextMenu__Main {
+    width: 100vw;
+  }
+}

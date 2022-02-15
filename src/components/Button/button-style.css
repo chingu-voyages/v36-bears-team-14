@@ -1,0 +1,110 @@
+.Button__main {
+  text-align: center;
+  width: max-content;
+  align-self: center;
+}
+
+.bottom-padding-halfRem {
+  padding-bottom: 0.5rem;
+}
+.top-padding-halfRem {
+  padding-top: 0.5rem;
+}
+.left-padding-1rem {
+  padding-left: 1rem;
+}
+
+.PlusButton__Img {
+  width: 30px;
+}
+
+.Button__text-size-10 {
+  font-size: 10px;
+}
+
+.Button__main:hover {
+  cursor: pointer;
+}
+/**
+  square vs round - shape of the button
+**/
+.square {
+  border-radius: 0px;
+}
+
+.round {
+  border-radius: 30px;
+}
+
+.white-text {
+  color: white;
+}
+
+.green-text {
+  color: var(--green-0);
+}
+
+.black-text {
+  color: black;
+}
+.green-fill {
+  background-color: var(--green-0);
+  border: 2px solid var(--green-0);
+}
+
+.white-fill {
+  background-color: white;
+  border: 2px solid var(--green-0);
+}
+
+.text-size-36 {
+  font-size: 36px;
+}
+
+.username-top-padding-adjustment {
+  padding-top: 15px;
+}
+
+.username-top-padding-adjustment-logged-in {
+  padding-top: 10%;
+}
+
+.generic-profile-icon-width-adjustment {
+  width: 35px;
+}
+
+.BackButton__Img {
+  width: 30px;
+}
+
+.generic-padding {
+  padding: 10px;
+}
+
+.small-like-heart-size {
+  width: 16px;
+  height: 100%;
+}
+
+.thin-black-border {
+  border-width: 2px;
+  border-color: black;
+  border-style: solid;
+}
+
+.disabled-stylings {
+  color: #C6C6C6;
+  pointer-events: none;
+}
+
+.disabled-stylings-image {
+  pointer-events: none;
+  opacity: 0.4;
+  filter: alpha(opacity=40); /* msie */
+}
+
+@media only screen and (max-width: 374px) {
+  .user-name-responsive {
+    display: none;
+  }
+}

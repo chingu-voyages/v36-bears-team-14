@@ -1,0 +1,25 @@
+.responsive-image-recipe {
+  width: 200px;
+  height: 100%;
+  margin-left: 5%;
+}
+
+.recipe-user-font {
+  font-size: small;
+}
+.recipe-responsive-image-container {
+  display: flex;
+  justify-content: right;
+}
+
+@media only screen and (max-width: 480px) {
+  .recipe-responsive-image-container {
+    justify-content: center;
+  }
+}
+
+@media only screen and (min-width: 481px) {
+  .responsive-image-recipe {
+    margin-right: 5%;
+  }
+}

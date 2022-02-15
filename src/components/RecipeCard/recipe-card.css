@@ -1,0 +1,89 @@
+.Card__main__title__main {
+  position: relative;
+  background-color: white;
+  bottom: 25%;
+  padding: 3%;
+}
+
+
+.Card__main__header-text {
+  text-align: left;
+}
+
+.Card__main__body-text {
+  text-align: left;
+  overflow-wrap: anywhere;
+  max-width: fit-content;
+}
+
+.Card__main__title__overflow {
+  /* margin-right: 25%; */
+  top: -29%;
+}
+
+@media screen and (max-width: 480px) {
+  .Card__main__image {
+    width: 150px;
+  }
+  .Card__main__body-text__overflow {
+    font-size: 7px;
+  }
+  .Card__main__title__overflow {
+    top: -40%;
+  }
+  .Card__main__body-text {
+    font-size: 1rem;
+  }
+  .Card__main__header-text {
+    font-size: 0.7rem;
+  }
+}
+
+@media screen and (min-width: 481px) and (max-width: 769px) {
+  .Card__main__image {
+    width: 150px;
+  }
+  .Card__main__title__main {
+    margin-left: 6%;
+    margin-right: 6%;
+  }
+  .Card__main__body-text {
+    font-size: 12px;
+  }
+  .Card__main__header-text {
+    font-size: 10px;
+  }
+  .Card__main__title__overflow {
+    top: -40%;
+  }
+}
+
+@media screen and (min-width: 769px) and (max-width: 1024px) {
+  .Card__main__image {
+    width: 200px;
+  }
+  .Card__main__title__main {
+    margin-left: 6%;
+    margin-right: 6%;
+  }
+  .Card__main__header-text {
+    font-size: 11px;
+  }
+  .Card__main__body-text {
+    font-size: 13px;
+  }
+}
+
+@media screen and (min-width: 1025px) {
+  .Card__main__image {
+    width: 250px;
+  }
+  .Card__main__title__main {
+    margin-left: 7%;
+    margin-right: 8%;
+  }
+  .Card__main__header-text {
+    font-size: 11px;
+  }
+}
+

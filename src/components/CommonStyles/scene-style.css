@@ -1,0 +1,192 @@
+.green-background-white-text-smaller {
+  background-color: inherit;
+  color: white;
+  margin-top: -6px;
+  padding-top: 9px;
+  padding-left: 2%;
+}
+
+.Scene__back {
+  padding: 5px;
+  text-align: right;
+  color: inherit;
+}
+
+.Scene__back:hover {
+  cursor: pointer;
+}
+
+.thin-border-black {
+  border: 2px solid black;
+}
+
+.green-background {
+  background-color: var(--green-0);
+}
+
+.white-text {
+  color: white;
+}
+
+.centered-text {
+  text-align: center;
+}
+
+.box-padding {
+  padding: 10px;
+}
+
+.Scene__body__header__description-text {
+  padding-left: 2%;
+  text-align: center;
+}
+
+.Scene__body__header {
+  margin-bottom: 10px;
+}
+
+.no-margin {
+  margin:0;
+}
+
+.section-header {
+  font-weight: bold;
+}
+
+.profile-flex-flow {
+  display: flex;
+}
+
+.smaller-edit-button-icon {
+  width: 20px;
+}
+.slim-padding-right {
+  padding: 0px;
+}
+
+.padding-center-text {
+  padding-top: 7px;
+}
+
+.slight-margin-left {
+  margin-left: 10%;
+}
+
+.slight-bottom-margin {
+  margin-bottom: 10px;
+  padding-bottom: 0px;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+.buffer-padding-5px {
+  padding: 5px;
+}
+
+.responsive-buffer-padding {
+  padding: 10px;
+}
+
+.navigation-controls-buffer-margin {
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+
+.top-bottom-buffer {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.bottom-buffer-padding {
+  padding-bottom: 30px;
+}
+
+.Scene__body__header__favorite-foods-edit__instructions > p {
+  font-size: 12px;
+}
+
+@media only screen and (max-width: 466px) {
+  .responsive-image {
+    max-width: 200px;
+    height: 100%;
+  }
+  .Banner__main__bannerImage {
+    margin-top: unset;
+  }
+}
+
+@media only screen and (min-width: 467px) and (max-width: 480px) {
+  .Banner__main__bannerImage__image {
+    margin-right: 0;
+  }
+  .responsive-image {
+    max-width: 200px;
+    max-height: 112.5px;
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  .responsive-bio-text {
+    width: 90vw;
+    max-height: 10vh;
+  }
+}
+
+@media only screen and (min-width: 481px) and (max-width: 768px) {
+  .responsive-image {
+    max-width: 250px;
+    height: 100%;
+  }
+  .responsive-bio-text {
+    width: 90vw;
+    max-height: 10vh;
+  }
+  .responsive-margining {
+    margin-left: 5%;
+    margin-right: 5%;
+  }
+}
+@media only screen and (min-width: 769px) and (max-width: 1024px) {
+  .responsive-image {
+    max-width: 320px;
+    max-height: 180px;
+    margin-left: 30%;
+    position: relative;
+  }
+  .flex-responsive-middle {
+    display: flex;
+    justify-content: space-around;
+  }
+  .responsive-margining {
+    margin-left: 10%;
+    margin-right: 10%;
+  }
+  .responsive-bio-text {
+    width: 76vw;
+    max-height: 10vh;
+  }
+}
+
+@media only screen and (min-width: 1025px) {
+  .responsive-image {
+    max-width: 200px;
+    max-height: 337.5px;
+    /* margin-left: 63vw; */
+    margin-left: 50%;
+  }
+  .flex-responsive-middle {
+    display: flex;
+    justify-content: space-around;
+  }
+  .responsive-margining {
+    margin-left: 15%;
+    margin-right: 20%;
+  }
+  .responsive-bio-text {
+    width: 76vw;
+    max-height: 25vh;
+    font-size:larger;
+  }
+}

@@ -1,0 +1,101 @@
+.Nav {
+  position: fixed;
+  width: 100vw;
+  z-index: 2000;
+}
+.NavBar__AppLogoGroup {
+  align-self: center;
+  margin-left: 2%;
+}
+.NavBar__nav__main {
+  box-shadow: 0px 0px 6px #8D8D8D;
+  display: flex;
+  justify-content: space-between;
+  position: sticky;
+  top: 0px;
+}
+
+.NavBar__SecondGroup {
+  display: flex;
+}
+
+.NavBar__TextBarSearchGroup {
+  display: flex;
+}
+.Submit-Recipe-Text-Button {
+  display: none;
+}
+
+.nav-bar-flex-width {
+  width: 50vw;
+}
+
+.full-recipe-top-margin-adjustment {
+  margin-top: 16px;
+}
+
+.plus-button-recipe-margin-adjustment {
+  margin-top: 8px;
+}
+
+.tweak-top-margin {
+  margin-top: 8px;
+}
+
+@media only screen and (max-width: 480px) {
+  .responsive-login-hamburger-icon {
+    display: block;
+  }
+  .responsive-login-text {
+    display: none;
+  }
+  .NavBar__AppLogoGroup {
+    display: none;
+  }
+  .Submit-Recipe-Text-Button {
+    display: none;
+  }
+  .search-bar-left-margin {
+    margin-left: 10px;
+  }
+}
+
+@media only screen and (min-width: 481px) {
+  .responsive-login-hamburger-icon {
+    display: none;
+  }
+  .responsive-login-text {
+    display: block;
+  }
+}
+
+@media only screen and (min-width: 769px) {
+  .Submit-Recipe-Text-Button {
+    display: block;
+  }
+  .Submit-Recipe-Plus-Button {
+    display: none;
+  }
+  .window-body {
+    margin-left: 30%;
+    margin-right: 30%;
+    margin-top: 5%;
+  }
+}
+
+@media only screen and (min-width: 769px) and (max-width: 1024px) {
+  .nav-responsive-modal-profile {
+    margin-top: 64px;
+    margin-left: 20%;
+    margin-right: 20%;
+  }
+}
+
+
+@media only screen and (min-width: 1025px) {
+  .nav-responsive-modal-profile {
+    margin-top: 64px;
+    margin-left: 20%;
+    margin-right: 20%;
+  }
+}
