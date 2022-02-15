@@ -4,7 +4,7 @@ import {
   TUserProfilePatchResponseData,
 } from "./user.types";
 import axios from "axios";
-import { API_URL } from "../../environment";
+import { API_URL, AUTH_HEADER } from "../../environment";
 import { IRecipe } from "../recipe/recipe.types";
 
 export const getUserById = async ({
@@ -16,6 +16,7 @@ export const getUserById = async ({
     method: "GET",
     withCredentials: true,
     url: `${API_URL}/api/user/${id}`,
+    headers: AUTH_HEADER,
   });
   if (req.status === 200) {
     return req.data as TSecureUser;
@@ -34,6 +35,7 @@ export const getAllRecipesForUserId = async ({
     method: "GET",
     url: `${API_URL}/api/user/${userId}/recipes`,
     withCredentials: true,
+    headers: AUTH_HEADER,
   });
   if (req.status === 200) {
     return req.data;
@@ -58,6 +60,7 @@ export const patchUserProfileDataByUserId = async ({
     method: "PATCH",
     url: `${API_URL}/api/user/${id}`,
     withCredentials: true,
+    headers: AUTH_HEADER,
     data: {
       bio,
       favoriteFoods,

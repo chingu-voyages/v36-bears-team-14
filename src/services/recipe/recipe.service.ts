@@ -4,7 +4,7 @@ import {
   TRecipeToggleLikeAction,
 } from "./recipe.types";
 import axios from "axios";
-import { API_URL } from "../../environment";
+import { API_URL, AUTH_HEADER } from "../../environment";
 
 export const getRecipeById = async ({
   id,
@@ -15,6 +15,7 @@ export const getRecipeById = async ({
     method: "GET",
     url: `${API_URL}/api/recipe/${id}`,
     withCredentials: true,
+    headers: AUTH_HEADER,
   });
   if (response.status === 200) {
     return response.data as IRecipe;
@@ -33,6 +34,7 @@ export const getAllRecipes = async ({
   const response = await axios({
     method: "GET",
     withCredentials: true,
+    headers: AUTH_HEADER,
     url: `${API_URL}/api/recipe/?context=allRecipes&limit=${limit ?? 0}&skip=${
       limit ?? 0
     }`,
@@ -60,6 +62,7 @@ export const postNewRecipe = async ({
     method: "POST",
     url: `${API_URL}/api/recipe`,
     withCredentials: true,
+    headers: AUTH_HEADER,
     data: {
       name,
       description,
@@ -88,6 +91,7 @@ export const toggleLikeRecipe = async ({
     method: "PATCH",
     withCredentials: true,
     url: `${API_URL}/api/recipe/${id}/like`,
+    headers: AUTH_HEADER,
   });
   if (req.status === 200) {
     return req.data;
@@ -106,6 +110,7 @@ export const deleteRecipesByArrayOfIds = async ({
       method: "DELETE",
       url: `${API_URL}/api/recipe`,
       withCredentials: true,
+      headers: AUTH_HEADER,
       data: {
         recipeIds,
       },
