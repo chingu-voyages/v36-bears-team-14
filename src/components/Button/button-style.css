@@ -102,3 +102,9 @@
   opacity: 0.4;
   filter: alpha(opacity=40); /* msie */
 }
+
+@media only screen and (max-width: 374px) {
+  .user-name-responsive {
+    display: none;
+  }
+}
