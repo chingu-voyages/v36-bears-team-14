@@ -116,6 +116,13 @@ function NavBar(props: INavBarProps) {
     setIsModalOpen(true);
   };
 
+  const handleSuccessfulRegistration = () => {
+    showDialog({
+      type: EModalPopType.Success,
+      text: "Created a new account successfully",
+    });
+  };
+
   useEffect(() => {
     dispatch(checkHasSessionAsync());
   }, []);
@@ -249,6 +256,7 @@ function NavBar(props: INavBarProps) {
               <RegistrationScene
                 onDismiss={dismissRegistrationWindow}
                 customSceneClassNames="window-body white-background"
+                onRegistrationSuccess={handleSuccessfulRegistration}
               />
             )}
             {modalType &&

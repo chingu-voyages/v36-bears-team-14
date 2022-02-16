@@ -16,6 +16,7 @@ import "./user-registration-style.css";
 
 interface IUserRegistrationSceneProps {
   onDismiss?: () => void;
+  onRegistrationSuccess?: () => void;
   customSceneClassNames?: string;
 }
 function RegistrationScene(props: IUserRegistrationSceneProps) {
@@ -135,11 +136,13 @@ function RegistrationScene(props: IUserRegistrationSceneProps) {
   };
 
   const handleRegistrationSuccess = () => {
-    // do something
+    props.onRegistrationSuccess && props.onRegistrationSuccess();
   };
 
   const handleRegistrationFail = () => {
     // do some fail action
+    setHasRegistrationError(true);
+    setRegistrationErrorMessage("Unable to complete this registration");
   };
 
   const clearAllErrorMessages = () => {
