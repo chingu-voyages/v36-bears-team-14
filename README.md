@@ -1,33 +1,58 @@
-# Recipes App Front end
+# Essen - Recipes App (Front end)
 
 ## About
 
-Essen is a social recipe app where the user can sign up, login and create a profile. Once logged in, the user can add recipes including ingredients, directions and an image. The user may like other user's recipes. The app is a collaboration through the Chingu organiztion which allows developers to develop technical, team building and mentorship skills.
+Essen is a full-stack social recipe app where the user can sign up, login and create a profile. Once logged in, the user can add recipes including ingredients, directions and an image. The user may like other user's recipes. The app is a collaboration through the Chingu organization which allows developers to develop technical, team building and mentorship skills.
 
-## Installation
+## Features
+
+- User authentication
+- CSS responsive
+- Image uploading
+- Profile creation, editing
+- Create and submit recipe
+
+## Setting up a development environment
 
 1. Fork the branch
-2. Run npm i
-3. Run npm start
+2. Run npm i to install dependencies
+3. Create a `.env` file in the root folder of your project, using the `sample.env` as a template.
+4. Photo uploading requires Digital Ocean's space's subscription
 
-## Development
+## Running development version of the app
+
+1. There is a link at the bottom of this page for the API repo. The API must be running for this app to be fully functional. Follow the instructions indicated on the API repo.
+2. Run the API repo.
+3. Run the front end app by using the command: `npm run dev`
 
 ## Tech stack
 
 - React
 - TypeScript
-- Axios
-- Jest
-- Cors
+- Redux Toolkit
+
+## What it looks like
+
+Responsive landing page
+
+Profile
+
+Recipe view
+
+## 3rd Party APIs
+
+- We used [Digital Ocean Spaces](https://www.digitalocean.com/) for image storage, which is S3 compatible.
 
 ## Team members
 
-Arron Mivo
+#### Here are the contributing members and links to the corresponding GitHub
 
-- [GitHub](https://github.com/aaronmivo)
-  David Eastmond
-- [GitHub](https://github.com/davideastmond)
+[David](https://github.com/davideastmond)
 
-## Deployment
+[Aaron](https://github.com/aaronmivo)
 
-- [GitHub](https://github.com/chingu-voyages/v36-bears-team-14)
+## API Repo
+
+The API repo can be found here
+
+- [GitHub](https://github.com/chingu-voyages/v36-bears-team-14be)
