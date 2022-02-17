@@ -34,10 +34,12 @@ Essen is a full-stack social recipe app where the user can sign up, login and cr
 ## What it looks like
 
 Responsive landing page
+![Responsive Landing Page](https://raw.githubusercontent.com/chingu-voyages/v36-bears-team-14/31a4060929de278a3a1854321a133f1f74c1045b/images/responsive-landing.jpg)
 
-Profile
+Profile View ![Profile View](https://raw.githubusercontent.com/chingu-voyages/v36-bears-team-14/31a4060929de278a3a1854321a133f1f74c1045b/images/profile-pop.jpg)
 
 Recipe view
+![Recipe View](https://raw.githubusercontent.com/chingu-voyages/v36-bears-team-14/31a4060929de278a3a1854321a133f1f74c1045b/images/recipe-pop.jpg)
 
 ## 3rd Party APIs
 
