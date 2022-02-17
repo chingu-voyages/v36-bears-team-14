@@ -1,6 +1,7 @@
 import axios from "axios";
 import { ICheckSessionResponseData } from "../../definitions";
 import { API_URL, AUTH_HEADER } from "../../environment";
+import { setCookie } from "../../utils/cookie/cookie-utils";
 import {
   IUserRegistrationRequest,
   TSecureUser,
@@ -16,10 +17,12 @@ export const checkHasSession = async (): Promise<ICheckSessionResponseData> => {
   });
   if (sessionResponse.status === 200) {
     if (sessionResponse.data.session && sessionResponse.data.session === true) {
+      setCookie("has-existing-auth-cookie", "true", 90);
       const sessionUserResponse = await axios({
         method: "GET",
         url: `${API_URL}/api/user/me`,
         withCredentials: true,
+        headers: AUTH_HEADER,
       });
       if (sessionUserResponse.status === 200) {
         return {
@@ -27,6 +30,11 @@ export const checkHasSession = async (): Promise<ICheckSessionResponseData> => {
           sessionUser: sessionUserResponse.data,
         };
       }
+    } else if (
+      sessionResponse.data.session &&
+      sessionResponse.data.session === false
+    ) {
+      setCookie("has-existing-auth-cookie", "false", 90);
     }
   }
   return { session: false, sessionUser: null };
