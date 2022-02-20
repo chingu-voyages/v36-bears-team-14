@@ -103,6 +103,18 @@
   filter: alpha(opacity=40); /* msie */
 }
 
+.generic-button-padding {
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 2%;
+  padding-bottom: 2%;
+}
+
+.standard-button-padding {
+  padding: 5px;
+  padding-left: 20px;
+  padding-right: 20px;
+}
 @media only screen and (max-width: 374px) {
   .user-name-responsive {
     display: none;

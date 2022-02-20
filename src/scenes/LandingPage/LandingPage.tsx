@@ -1,11 +1,18 @@
 import { useEffect, useState } from "react";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import RecipeCard from "../../components/RecipeCard";
-import { getAllRecipesAsync, selectRecipes } from "../../reducers/recipe-slice";
+import {
+  getAllRecipesAsync,
+  selectRecipes,
+  selectRecipeStateStatus,
+} from "../../reducers/recipe-slice";
 import RecipeScene from "../Recipe";
 
 import "./landing-page-style.css";
 import "../../components/CommonStyles/scene-style.css";
+import { EStatus } from "../../definitions";
+import Spinner from "../../components/Spinner";
+import ErrorMessage from "../../components/ErrorMessage";
 
 enum EModalType {
   FullRecipeView = "fullRecipeView",
@@ -16,6 +23,8 @@ function LandingPage() {
   const [modalType, setModalType] = useState<EModalType | null>(null);
   const [selectedRecipeId, setSelectedRecipeId] = useState<string | null>(null);
   const allRecipes = useSelector(selectRecipes, shallowEqual);
+  const recipeStateStatus = useSelector(selectRecipeStateStatus, shallowEqual);
+
   const dispatch = useDispatch();
 
   const handleRecipeCardClicked = (id: string) => {
@@ -34,6 +43,14 @@ function LandingPage() {
   }, []);
   return (
     <div className="LandingPage__main landing-page-slight-top-bottom-margin">
+      {recipeStateStatus && recipeStateStatus.status === EStatus.Loading && (
+        <Spinner />
+      )}
+      {recipeStateStatus && recipeStateStatus.status === EStatus.Error && (
+        <ErrorMessage
+          text={recipeStateStatus.message || "Error processing this request"}
+        />
+      )}
       <div className="LandingPage__recipe-card recipe-list-responsive-flex">
         {allRecipes &&
           allRecipes.map((recipeItem) => (
@@ -46,6 +63,7 @@ function LandingPage() {
               }
               isGenericImage={!recipeItem.images || !recipeItem.images[0]}
               onCardClicked={handleRecipeCardClicked}
+              customBodyClassNames={"hover-shake"}
               title={{
                 headerText: `${recipeItem.prepTimeMinutes} min prep | ${recipeItem.cookTimeMinutes} min cook`,
                 bodyText: `${recipeItem.name}`,
@@ -58,7 +76,7 @@ function LandingPage() {
           {modalType === EModalType.FullRecipeView && (
             <RecipeScene
               onDismiss={handleCloseFullRecipeView}
-              customClassNames="responsive-margining modal-top-margining"
+              customClassNames="responsive-margining modal-top-margining fade-in-animation"
               recipeContextId={selectedRecipeId!}
             />
           )}

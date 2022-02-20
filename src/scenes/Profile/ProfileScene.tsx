@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
-import { shallowEqual, useDispatch, useSelector } from "react-redux";
+import { shallowEqual, useSelector } from "react-redux";
 import Banner from "../../components/Banner";
 import Button from "../../components/Button";
 import { EButtonType } from "../../components/Button/Button";
 import "../../components/CommonStyles/scene-style.css";
+import ErrorMessage from "../../components/ErrorMessage";
 import ImageUploader from "../../components/ImageUploader";
 import RecipeCard from "../../components/RecipeCard";
+import Spinner from "../../components/Spinner";
 import TextField from "../../components/TextField";
 import { selectAuthenticatedUser } from "../../reducers/app-slice";
 import { IRecipe } from "../../services/recipe/recipe.types";
@@ -40,6 +42,9 @@ function ProfileScene(props: IProfileSceneProps) {
   const [modalType, setModalType] = useState<EModalType | null>(null);
   const [isBioEditMode, setIsBioEditMode] = useState<boolean>(false);
   const [editedBioText, setEditedBioText] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [hasError, setHasError] = useState<boolean>(false);
+  const [errorText, setErrorText] = useState<string | null>(null);
 
   const [isFavoriteFoodsEditMode, setFavoriteFoodsEditMode] =
     useState<boolean>(false);
@@ -132,10 +137,14 @@ function ProfileScene(props: IProfileSceneProps) {
   useEffect(() => {
     const getUserContext = async () => {
       try {
+        setIsLoading(true);
         const user = await getUserById({ id: props.userId });
         setUserContext(user);
+        setIsLoading(false);
       } catch (exception) {
-        console.log("189 unable to get user by id for the Profile scene");
+        setIsLoading(false);
+        setHasError(true);
+        setErrorText("Unable to retrieve user data for this context");
       }
     };
     getUserContext();
@@ -159,9 +168,15 @@ function ProfileScene(props: IProfileSceneProps) {
           action: "update",
           data: url,
         },
+        onError: ({ message }) => handleProfilePhotoUpdateError({ message }),
       });
       setUserContext(result.user);
     }
+  };
+
+  const handleProfilePhotoUpdateError = ({ message }: { message: string }) => {
+    setErrorText(message);
+    setHasError(true);
   };
 
   const handleShowMoreRecipes = () => {
@@ -173,36 +188,42 @@ function ProfileScene(props: IProfileSceneProps) {
     setModalType(null);
     setIsModalOpen(false);
   };
+
   const handleRefreshDeletedItems = async () => {
-    // do something
     try {
       if (userContext) {
+        setIsLoading(true);
         const recipes = await getAllRecipesForUserId({
           userId: userContext._id,
         });
-        console.log("198 recipes for user id", recipes);
         if (recipes) {
           setUserContextRecipes(recipes);
         }
+        setIsLoading(false);
       }
     } catch (exception) {
-      console.log("248 can't get recipes for user context", userContext);
+      setErrorText("There was an error retrieving information for this user");
+      setHasError(true);
+      setIsLoading(false);
     }
   };
   useEffect(() => {
     const getRecipesByUser = async () => {
       try {
         if (userContext) {
+          setIsLoading(true);
           const recipes = await getAllRecipesForUserId({
             userId: userContext._id,
           });
-          console.log("198 recipes for user id", recipes);
           if (recipes) {
             setUserContextRecipes(recipes);
           }
+          setIsLoading(false);
         }
       } catch (exception) {
-        console.log("248 can't get recipes for user context", userContext);
+        setErrorText("There was an error retrieving information for this user");
+        setHasError(true);
+        setIsLoading(false);
       }
     };
     getRecipesByUser();
@@ -214,10 +235,13 @@ function ProfileScene(props: IProfileSceneProps) {
         props.customClassNames ? props.customClassNames : ""
       }`}
     >
+      {isLoading && <Spinner customClassNames="color-crimson-red" />}
+
       <Button
         type={EButtonType.Back}
         onClick={() => props.onDismiss && props.onDismiss()}
       />
+      {hasError && errorText && <ErrorMessage text={errorText} />}
       <Banner
         customClassNames="bottom-margin-buffer"
         titleText={`${
@@ -406,7 +430,7 @@ function ProfileScene(props: IProfileSceneProps) {
           <div className="modal__main">
             <RecipeScene
               onDismiss={handleCloseFullRecipeView}
-              customClassNames="responsive-margining top-margin-padding-px"
+              customClassNames="responsive-margining top-margin-padding-px fade-in-animation"
               recipeContextId={profileContextRecipeId}
             />
           </div>
@@ -415,7 +439,7 @@ function ProfileScene(props: IProfileSceneProps) {
         <div className="modal__main">
           <UserRecipesList
             onDismiss={() => closeModal()}
-            customClassNames="responsive-margining recipe-list-modal-padding top-margin-padding-px"
+            customClassNames="responsive-margining recipe-list-modal-padding top-margin-padding-px fade-in-animation"
             userContext={userContext}
             onItemsDelete={handleRefreshDeletedItems}
           />

@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "../../../components/Button";
 import { EButtonType } from "../../../components/Button/Button";
 import ImageUploader from "../../../components/ImageUploader";
+import { RecipeStorageIO } from "../../../utils/recipe-submission/recipe-storage-writer";
 import "../new-recipe-style.css";
 import { SceneName } from "../scene.types";
 
@@ -58,10 +59,18 @@ function RecipePhotoScene(props: IRecipePhotoProps) {
   const handleClearOutPhoto = () => {
     setPhotoUrlValue(null);
     setHasImage(false);
+    RecipeStorageIO.clearDataByKey("imageUrl");
   };
+  useEffect(() => {
+    const ppImageUrl = RecipeStorageIO.getDataByKey("imageUrl");
+    if (ppImageUrl && ppImageUrl !== "") {
+      setPhotoUrlValue(ppImageUrl as string);
+      setHasImage(true);
+    }
+  }, []);
   return (
     <div
-      className={`NewRecipe__title-description-scene__main white-background buffer-padding ${
+      className={`NewRecipe__title-description-scene__main white-background buffer-padding fade-in-animation ${
         props.customClassNames ? props.customClassNames : ""
       }`}
     >
@@ -93,7 +102,7 @@ function RecipePhotoScene(props: IRecipePhotoProps) {
             text="Next"
             onClick={handleGoToNext}
             type={EButtonType.Normal}
-            customClassNames="slight-right-margin"
+            customClassNames="slight-right-margin round green-text white-fill standard-button-padding"
           />
           <Button
             text="Back"

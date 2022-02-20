@@ -8,11 +8,21 @@ interface INewRecipeSubmitData {
   customClassNames?: string;
   index: number;
   sceneName: SceneName;
-  onClickBack?: () => void;
+  onClickBack?: ({
+    currentIndex,
+    sceneName,
+  }: {
+    currentIndex: number;
+    sceneName: string;
+  }) => void;
 }
 function CreateRecipeSubmitScene(props: INewRecipeSubmitData) {
   const handleGoBack = () => {
-    props.onClickBack && props.onClickBack();
+    props.onClickBack &&
+      props.onClickBack({
+        currentIndex: props.index,
+        sceneName: props.sceneName,
+      });
   };
   const handleOnDismissWindow = () => {
     props.onDismiss && props.onDismiss();
@@ -42,7 +52,7 @@ function CreateRecipeSubmitScene(props: INewRecipeSubmitData) {
             text="Submit Recipe"
             onClick={handleSubmit}
             type={EButtonType.Normal}
-            customClassNames="green-fill white-text round generic-padding"
+            customClassNames="green-fill white-text round standard-button-padding green-fill white-text"
           />
           <Button
             text="Cancel"

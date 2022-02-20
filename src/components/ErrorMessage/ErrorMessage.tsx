@@ -5,6 +5,7 @@ interface IErrorMessageProps {
   customTextClassNames?: string;
   customErrorMessageIconClassNames?: string;
   text: string;
+  onDismiss?: () => void;
 }
 function ErrorMessage(props: IErrorMessageProps) {
   return (
@@ -12,6 +13,7 @@ function ErrorMessage(props: IErrorMessageProps) {
       className={`ErrorMessage__Main flex error-margin-bottom ${
         props.customClassNames ? props.customClassNames : ""
       }`}
+      onClick={() => props.onDismiss && props.onDismiss()}
     >
       <img
         className={`ErrorMessage__icon flex-size ${
