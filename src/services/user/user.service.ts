@@ -72,7 +72,7 @@ export const patchUserProfileDataByUserId = async ({
     onSuccess && onSuccess({ responseData: response });
     return response;
   } else {
-    onError && onError({ message: `Unable to patch user ` });
+    onError && onError({ message: `Unable to patch user` });
     throw new Error(`Unable to patch user`);
   }
 };

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { shallowEqual, useSelector } from "react-redux";
 import Banner from "../../components/Banner";
 import Button from "../../components/Button";
@@ -8,6 +8,7 @@ import Spinner from "../../components/Spinner";
 import TextField from "../../components/TextField";
 import { EStatus } from "../../definitions";
 import { selectLoginStateStatus } from "../../reducers/app-slice";
+import { CSSTransition } from "react-transition-group";
 import "./login-style.css";
 
 interface ILoginSceneProps {
@@ -40,6 +41,7 @@ function LoginScene(props: ILoginSceneProps) {
     string | null
   >(null);
 
+  const [isAnimating, setIsAnimating] = useState<boolean>(false);
   const handleEmailTextBoxChange = ({ value }: { value: string }) => {
     setEmail(value);
   };
@@ -76,6 +78,9 @@ function LoginScene(props: ILoginSceneProps) {
     setPasswordErrorMessage(null);
   };
 
+  useEffect(() => {
+    setIsAnimating(true);
+  }, []);
   return (
     <div
       className={`LoginScene__Main ${
@@ -85,6 +90,7 @@ function LoginScene(props: ILoginSceneProps) {
       {loginStateStatus && loginStateStatus.status === EStatus.Loading && (
         <Spinner customClassNames="burgundy-spinner-color" />
       )}
+
       <Banner titleText="Log in" />
       <div className="LoginScene__innerForm__main">
         <div className="LoginScene__Email__div">
@@ -144,10 +150,3 @@ function LoginScene(props: ILoginSceneProps) {
 }
 
 export default LoginScene;
-
-/**
- * 
- *     {spinnerStatus && spinnerStatus.status === EStatus.Loading && (
-        <Spinner title={spinnerStatus.message && "Loading"} />
-      )}
- */

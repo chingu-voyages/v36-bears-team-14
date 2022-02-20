@@ -6,6 +6,7 @@ interface IRecipeCardProps {
   id: string;
   imageUrl: string;
   customBodyClassNames?: string;
+  customClassNames?: string;
   customImageClassNames?: string;
   onCardClicked?: (id: string) => void;
   isGenericImage: boolean;
@@ -43,7 +44,9 @@ function RecipeCard(props: IRecipeCardProps) {
 
   return (
     <div
-      className={`Card__main ${props.customBodyClassNames || ""} roboto`}
+      className={`Card__main ${props.customBodyClassNames || ""} ${
+        props.customClassNames ? props.customClassNames : ""
+      } roboto`}
       onClick={() => props.onCardClicked && props.onCardClicked(props.id)}
     >
       <img

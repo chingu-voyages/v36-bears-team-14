@@ -42,6 +42,11 @@
   margin-top: 8px;
 }
 
+.highlight-hover:hover {
+  background-color: var(--green-0);
+  color: white;
+}
+
 @media only screen and (max-width: 480px) {
   .responsive-login-hamburger-icon {
     display: block;

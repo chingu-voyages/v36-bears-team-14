@@ -45,7 +45,7 @@ function ContextMenuOption(props: IContextMenuOptionProps) {
 function ContextMenu(props: IContextMenuProps) {
   return (
     <div
-      className={`ContextMenu__Main ${
+      className={`ContextMenu__Main fade-in-animation ${
         props.customClassNames ? props.customClassNames : ""
       }`}
     >

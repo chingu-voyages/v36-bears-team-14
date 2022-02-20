@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "../../../components/Button";
 import { EButtonType } from "../../../components/Button/Button";
 import ErrorMessage from "../../../components/ErrorMessage";
 import TextField from "../../../components/TextField";
+import { RecipeStorageIO } from "../../../utils/recipe-submission/recipe-storage-writer";
 import { titleDescriptionValidator } from "../../../utils/validators";
 import "../new-recipe-style.css";
 import { SceneName } from "../scene.types";
@@ -72,9 +73,21 @@ function TitleDescriptionScene(props: ITitleDescriptionSceneProps) {
     setErrorText(null);
   };
 
+  useEffect(() => {
+    const ppName = RecipeStorageIO.getDataByKey("name");
+    const ppDescription = RecipeStorageIO.getDataByKey("description");
+
+    if (ppName) {
+      setRecipeNameText(ppName as string);
+    }
+    if (ppDescription) {
+      setRecipeDescriptionText(ppDescription as string);
+    }
+  }, []);
+
   return (
     <div
-      className={`NewRecipe__title-description-scene__main white-background buffer-padding ${
+      className={`NewRecipe__title-description-scene__main white-background buffer-padding fade-in-animation${
         props.customClassNames ? props.customClassNames : ""
       }`}
     >
@@ -89,6 +102,7 @@ function TitleDescriptionScene(props: ITitleDescriptionSceneProps) {
             maxLength={250}
             onChange={handleRecipeTitleTextChange}
             inputClassNames="new-recipe-text-responsive"
+            value={recipeNameText}
           />
           <TextField
             label="Description"
@@ -98,6 +112,7 @@ function TitleDescriptionScene(props: ITitleDescriptionSceneProps) {
             name="recipe_description"
             onChange={handleRecipeDescriptionTextChange}
             inputClassNames="new-recipe-text-responsive"
+            value={recipeDescriptionText}
           />
         </div>
         {hasError && errorText && <ErrorMessage text={errorText} />}
@@ -106,7 +121,7 @@ function TitleDescriptionScene(props: ITitleDescriptionSceneProps) {
             text="Next"
             onClick={handleGoToNext}
             type={EButtonType.Normal}
-            customClassNames="slight-right-margin"
+            customClassNames="slight-right-margin round green-text white-fill standard-button-padding"
           />
           <Button
             text="Cancel"

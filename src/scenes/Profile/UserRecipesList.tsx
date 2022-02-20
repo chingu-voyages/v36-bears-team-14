@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import { TSecureUser } from "../../services/user/user.types";
 import { getAllRecipesForUserId } from "../../services/user/user.service";
 import { deleteRecipesByArrayOfIds } from "../../services/recipe/recipe.service";
+import ErrorMessage from "../../components/ErrorMessage";
 
 interface IUserRecipesListProps {
   customClassNames?: string;
@@ -80,9 +81,9 @@ function RecipeTableHeader(props: IRecipeTableHeaderProps) {
 
 function UserRecipesList(props: IUserRecipesListProps) {
   const [userContextRecipes, setUserContextRecipes] = useState<IRecipe[]>([]);
-
   const authenticatedUser = useSelector(selectAuthenticatedUser, shallowEqual);
-
+  const [hasError, setHasError] = useState<boolean>(false);
+  const [errorText, setErrorText] = useState<string | null>(null);
   const handleDeleteRecipes = async ({ recipeId }: { recipeId: string }) => {
     try {
       const result = await deleteRecipesByArrayOfIds({ recipeIds: [recipeId] });
@@ -112,7 +113,10 @@ function UserRecipesList(props: IUserRecipesListProps) {
           setUserContextRecipes(recipes);
         }
       } catch (exception) {
-        console.log("Unable to fetch complete list of recipes for user id");
+        setHasError(true);
+        setErrorText(
+          `Unable to fetch complete list of recipes for user id ${exception}`
+        );
       }
     };
     getUserContextRecipes();
@@ -120,22 +124,25 @@ function UserRecipesList(props: IUserRecipesListProps) {
 
   function RecipeTable(tableProps: IRecipeTableProps) {
     return (
-      <table
-        className={`Profile__MoreRecipes__main__body__table ${
-          tableProps.customClassNames ? tableProps.customClassNames : ""
-        }`}
-      >
-        <RecipeTableHeader editable={tableProps.editable} />
-        {userContextRecipes &&
-          userContextRecipes.length > 0 &&
-          userContextRecipes.map((recipeItem) => (
-            <RecipeItemRow
-              recipeData={recipeItem}
-              editable={tableProps.editable}
-              onDeleteClicked={handleDeleteRecipes}
-            />
-          ))}
-      </table>
+      <>
+        {hasError && errorText && <ErrorMessage text={errorText} />}
+        <table
+          className={`Profile__MoreRecipes__main__body__table ${
+            tableProps.customClassNames ? tableProps.customClassNames : ""
+          }`}
+        >
+          <RecipeTableHeader editable={tableProps.editable} />
+          {userContextRecipes &&
+            userContextRecipes.length > 0 &&
+            userContextRecipes.map((recipeItem) => (
+              <RecipeItemRow
+                recipeData={recipeItem}
+                editable={tableProps.editable}
+                onDeleteClicked={handleDeleteRecipes}
+              />
+            ))}
+        </table>
+      </>
     );
   }
 

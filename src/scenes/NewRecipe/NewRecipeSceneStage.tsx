@@ -7,6 +7,7 @@ import {
   TRecipeIngredient,
   TRecipeStep,
 } from "../../services/recipe/recipe.types";
+import { RecipeStorageIO } from "../../utils/recipe-submission/recipe-storage-writer";
 import "./new-recipe-style.css";
 import { SceneName } from "./scene.types";
 import CookPrepTimeScene from "./scenes/CookPreTimeScene";
@@ -106,24 +107,62 @@ export function NewRecipeScene(props: INewRecipeSceneProps) {
     }
   };
 
-  const handleClickNext = (data: any) => {
+  type TRecipeCreationProcessData = {
+    sceneName: string;
+    recipeTitle?: string;
+    recipeDescription?: string;
+    cookTime?: number;
+    prepTime?: number;
+    photoUrl?: string;
+    ingredientsList?: Array<TRecipeIngredient>;
+    directionsList?: Array<TRecipeStep>;
+  };
+  const handleClickNext = (data: TRecipeCreationProcessData) => {
     if (data) {
       if (data.sceneName === SceneName.TitleDescription) {
-        setRecipeTitle(data.recipeTitle);
-        setRecipeDescription(data.recipeDescription);
+        setRecipeTitle(data.recipeTitle!);
+        setRecipeDescription(data.recipeDescription!);
+        RecipeStorageIO.writeDataToStorage({
+          key: "name",
+          data: data.recipeTitle,
+        });
+        RecipeStorageIO.writeDataToStorage({
+          key: "description",
+          data: data.recipeDescription,
+        });
         setCurrentStageIndex(() => currentStageIndex + 1);
       } else if (data.sceneName === SceneName.CookPrepTime) {
-        setCookTime(data.cookTime);
-        setPrepTime(data.prepTime);
+        setCookTime(data.cookTime!);
+        setPrepTime(data.prepTime!);
+        RecipeStorageIO.writeDataToStorage({
+          key: "cookTimeMinutes",
+          data: data.cookTime,
+        });
+        RecipeStorageIO.writeDataToStorage({
+          key: "prepTimeMinutes",
+          data: data.prepTime,
+        });
         setCurrentStageIndex(() => currentStageIndex + 1);
       } else if (data.sceneName === SceneName.Photo) {
-        setPhotoUrl(data.photoUrl);
+        setPhotoUrl(data.photoUrl!);
+        RecipeStorageIO.writeDataToStorage({
+          key: "imageUrl",
+          data: data.photoUrl,
+        });
         setCurrentStageIndex(() => currentStageIndex + 1);
       } else if (data.sceneName === SceneName.Ingredients) {
-        setIngredientsList(data.ingredientsList);
+        setIngredientsList(data.ingredientsList!);
+        RecipeStorageIO.writeDataToStorage({
+          key: "ingredients",
+          data: data.ingredientsList,
+        });
         setCurrentStageIndex(() => currentStageIndex + 1);
       } else if (data.sceneName === SceneName.Directions) {
-        setRecipeSteps(data.directionsList);
+        setRecipeSteps(data.directionsList!);
+        RecipeStorageIO.writeDataToStorage({
+          key: "directions",
+          data: data.directionsList,
+        });
         setCurrentStageIndex(() => currentStageIndex + 1);
       }
     }
@@ -156,12 +195,14 @@ export function NewRecipeScene(props: INewRecipeSceneProps) {
     setPhotoUrl(null);
     setIngredientsList([]);
     setRecipeSteps([]);
+    RecipeStorageIO.clearAllData();
   };
 
   const handleClickCancel = () => {
     setCurrentStageIndex(0);
     clearAllData();
     props.onDismiss();
+    RecipeStorageIO.clearAllData();
   };
 
   const handleSubmit = () => {
@@ -194,6 +235,7 @@ export function NewRecipeScene(props: INewRecipeSceneProps) {
   };
   testLog();
   const handleSuccessfulSubmit = () => {
+    RecipeStorageIO.clearAllData();
     props.onSubmitSuccess && props.onSubmitSuccess();
   };
   return (

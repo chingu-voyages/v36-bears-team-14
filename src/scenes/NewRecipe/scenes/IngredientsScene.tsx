@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "../../../components/Button";
 import { EButtonType } from "../../../components/Button/Button";
 import IngredientsForm from "../../../components/IngredientsForm";
@@ -8,6 +8,7 @@ import { SceneName } from "../scene.types";
 import { v4 as uuidv4 } from "uuid";
 import ErrorMessage from "../../../components/ErrorMessage";
 import { ingredientsValidator } from "../../../utils/validators";
+import { RecipeStorageIO } from "../../../utils/recipe-submission/recipe-storage-writer";
 
 export type TRecipeIngredientsCallBackData = ({
   currentIndex,
@@ -122,9 +123,16 @@ function IngredientsScene(props: IIngredientsSceneProps) {
     setIngredientsList(filteredItems);
   };
 
+  useEffect(() => {
+    const ppIngredients = RecipeStorageIO.getDataByKey("ingredients");
+    if (ppIngredients) {
+      setIngredientsList(ppIngredients as any);
+    }
+  }, []);
+
   return (
     <div
-      className={`NewRecipe__title-description-scene__main white-background buffer-padding ${
+      className={`NewRecipe__title-description-scene__main white-background buffer-padding fade-in-animation ${
         props.customClassNames ? props.customClassNames : ""
       }`}
     >
@@ -166,7 +174,7 @@ function IngredientsScene(props: IIngredientsSceneProps) {
             text="Next"
             onClick={handleGoToNext}
             type={EButtonType.Normal}
-            customClassNames="slight-right-margin"
+            customClassNames="slight-right-margin round green-text white-fill standard-button-padding"
           />
           <Button
             text="Back"

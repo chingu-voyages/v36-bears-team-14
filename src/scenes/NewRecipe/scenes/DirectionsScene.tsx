@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "../../../components/Button";
 import { EButtonType } from "../../../components/Button/Button";
 import { TRecipeStep } from "../../../services/recipe/recipe.types";
@@ -8,6 +8,7 @@ import { v4 as uuidv4 } from "uuid";
 import DirectionsForm from "../../../components/DirectionsForm";
 import ErrorMessage from "../../../components/ErrorMessage";
 import { directionsValidator } from "../../../utils/validators";
+import { RecipeStorageIO } from "../../../utils/recipe-submission/recipe-storage-writer";
 
 export type TRecipeDirectionsCallBackData = ({
   currentIndex,
@@ -121,9 +122,16 @@ function DirectionsScene(props: IDirectionsSceneProps) {
     setRecipeStepList(filteredItems);
   };
 
+  useEffect(() => {
+    const ppDirections = RecipeStorageIO.getDataByKey("directions");
+    if (ppDirections) {
+      setRecipeStepList(ppDirections as any);
+    }
+  }, []);
+
   return (
     <div
-      className={`NewRecipe__directions-scene__main white-background buffer-padding ${
+      className={`NewRecipe__directions-scene__main white-background buffer-padding fade-in-animation ${
         props.customClassNames ? props.customClassNames : ""
       }`}
     >
@@ -165,7 +173,7 @@ function DirectionsScene(props: IDirectionsSceneProps) {
             text="Next"
             onClick={handleGoToNext}
             type={EButtonType.Normal}
-            customClassNames="slight-right-margin"
+            customClassNames="slight-right-margin round green-text white-fill standard-button-padding"
           />
           <Button
             text="Back"
