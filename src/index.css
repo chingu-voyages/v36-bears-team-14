@@ -124,3 +124,22 @@ body {
 .top-margin-padding-px {
   margin-top: 64px;
 }
+
+@keyframes fade-in {
+  from {opacity: 0;}
+  to { opacity: 1 ;}
+}
+
+@keyframes fade-out {
+  to { opacity: 1 ;}
+  from {opacity: 0;}
+}
+
+.fade-in-animation {
+  animation-name: fade-in;
+  animation-duration: 0.5s;
+}
+.scene-fade-out {
+  animation: fade-out;
+  animation-duration: 3.5s;
+}

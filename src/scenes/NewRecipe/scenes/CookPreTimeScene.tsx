@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "../../../components/Button";
 import { EButtonType } from "../../../components/Button/Button";
 import ErrorMessage from "../../../components/ErrorMessage";
 import NumberField from "../../../components/NumberField";
+import { RecipeStorageIO } from "../../../utils/recipe-submission/recipe-storage-writer";
 import { cookTimePrepTimeValidator } from "../../../utils/validators";
 import "../new-recipe-style.css";
 import { SceneName } from "../scene.types";
@@ -29,8 +30,8 @@ interface ICookPrepTimeSceneProps {
 }
 
 function CookPrepTimeScene(props: ICookPrepTimeSceneProps) {
-  const [cookTimeValue, setCookTimeValue] = useState<number>(0);
-  const [prepTimeValue, setPrepTimeValue] = useState<number>(0);
+  const [cookTimeValue, setCookTimeValue] = useState<number>(1);
+  const [prepTimeValue, setPrepTimeValue] = useState<number>(1);
   const [hasError, setHasError] = useState<boolean>(false);
   const [errorText, setErrorText] = useState<string | null>(null);
 
@@ -80,9 +81,22 @@ function CookPrepTimeScene(props: ICookPrepTimeSceneProps) {
     setHasError(false);
     setErrorText(null);
   };
+
+  useEffect(() => {
+    const ppCookTimeMinutes = RecipeStorageIO.getDataByKey("cookTimeMinutes");
+    const ppPrepTimeMinutes = RecipeStorageIO.getDataByKey("prepTimeMinutes");
+
+    if (ppCookTimeMinutes) {
+      setCookTimeValue(ppCookTimeMinutes as number);
+    }
+    if (ppPrepTimeMinutes) {
+      setPrepTimeValue(ppPrepTimeMinutes as number);
+    }
+  }, []);
+
   return (
     <div
-      className={`NewRecipe__title-description-scene__main white-background buffer-padding ${
+      className={`NewRecipe__title-description-scene__main white-background buffer-padding fade-in-animation${
         props.customClassNames ? props.customClassNames : ""
       }`}
     >
@@ -96,6 +110,7 @@ function CookPrepTimeScene(props: ICookPrepTimeSceneProps) {
             numericalRangeLimit={{ min: 1 }}
             onChange={handleCookTimeValueChange}
             inputClassName=""
+            value={cookTimeValue}
           />
           <NumberField
             label="Prep Time (minutes)"
@@ -103,6 +118,7 @@ function CookPrepTimeScene(props: ICookPrepTimeSceneProps) {
             numericalRangeLimit={{ min: 1 }}
             onChange={handlePrepTimeValueChange}
             inputClassName=""
+            value={prepTimeValue}
           />
         </div>
         {hasError && errorText && <ErrorMessage text={errorText} />}
@@ -111,7 +127,7 @@ function CookPrepTimeScene(props: ICookPrepTimeSceneProps) {
             text="Next"
             onClick={handleGoToNext}
             type={EButtonType.Normal}
-            customClassNames="slight-right-margin"
+            customClassNames="slight-right-margin round green-text white-fill standard-button-padding"
           />
           <Button
             text="Back"

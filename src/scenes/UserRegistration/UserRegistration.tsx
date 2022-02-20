@@ -252,14 +252,14 @@ function RegistrationScene(props: IUserRegistrationSceneProps) {
           <div className="UserRegistration__Controls vertical-spacing">
             <Button
               type={EButtonType.Normal}
-              customClassNames="square green-fill"
+              customClassNames="square green-fill generic-button-padding"
               text="Go"
               customTextClassNames="white-text"
               onClick={validateRegistrationInfo}
             />
             <Button
               type={EButtonType.Normal}
-              customClassNames="square white-fill"
+              customClassNames="square white-fill generic-button-padding"
               text="Cancel"
               customTextClassNames="black-text"
               onClick={handleRegistrationCancelDismiss}

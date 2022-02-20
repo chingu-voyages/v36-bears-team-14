@@ -67,8 +67,6 @@ function NavBar(props: INavBarProps) {
   const handleLogOut = () => {
     if (isAuthenticated) {
       dispatch(logOutUserAsync());
-    } else {
-      console.log("User isn't authenticated so not logging out");
     }
   };
 
@@ -180,7 +178,7 @@ function NavBar(props: INavBarProps) {
             <div className="NavBar__authenticated-function-buttons">
               <Button
                 text="Submit Recipe"
-                customClassNames="Submit-Recipe-Text-Button round white-fill green-text tweak-top-margin bottom-padding-halfRem left-padding-1rem right-padding-1rem top-padding-halfRem"
+                customClassNames="Submit-Recipe-Text-Button round white-fill green-text tweak-top-margin bottom-padding-halfRem left-padding-1rem right-padding-1rem top-padding-halfRem highlight-hover"
                 type={EButtonType.Normal}
                 onClick={handleAddNewRecipe}
               />
@@ -191,7 +189,6 @@ function NavBar(props: INavBarProps) {
               />
             </div>
           )}
-
           {isAuthenticated && authenticatedUser ? (
             <LoginButton
               buttonText=""
@@ -243,7 +240,7 @@ function NavBar(props: INavBarProps) {
             {modalType && modalType === EModalType.Login && (
               <LoginScene
                 onDismiss={dismissLoginWindow}
-                customSceneClassNames="window-body white-background"
+                customSceneClassNames={`window-body white-background fade-in-animation`}
                 onLoginSubmit={handleLogInSubmit}
                 errorMessage={
                   logInStatus.status === EStatus.Error && logInStatus.message
@@ -255,7 +252,7 @@ function NavBar(props: INavBarProps) {
             {modalType && modalType === EModalType.Register && (
               <RegistrationScene
                 onDismiss={dismissRegistrationWindow}
-                customSceneClassNames="window-body white-background"
+                customSceneClassNames="window-body white-background fade-in-animation"
                 onRegistrationSuccess={handleSuccessfulRegistration}
               />
             )}
@@ -264,7 +261,7 @@ function NavBar(props: INavBarProps) {
               authenticatedUser && (
                 <ProfileScene
                   onDismiss={dismissProfileWindow}
-                  customClassNames="nav-responsive-modal-profile"
+                  customClassNames="nav-responsive-modal-profile fade-in-animation"
                   userId={authenticatedUser._id}
                 />
               )}
@@ -272,6 +269,7 @@ function NavBar(props: INavBarProps) {
               <NewRecipeScene
                 onDismiss={dismissNewRecipeWindow}
                 onSubmitSuccess={refreshRecipesAfterSubmit}
+                customClassNames="fade-in-animation"
               />
             )}
             {modalType &&
@@ -280,7 +278,7 @@ function NavBar(props: INavBarProps) {
               modalPopText && (
                 <ModalPopUp
                   text={modalPopText ? modalPopText : "Text is not defined"}
-                  customClassNames="pop-text-responsive-padding"
+                  customClassNames="pop-text-responsive-padding fade-in-animation"
                   type={modalPopType}
                   onDismiss={handleModalPopClose}
                 />

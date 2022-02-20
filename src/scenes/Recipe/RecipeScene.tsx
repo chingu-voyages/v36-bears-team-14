@@ -17,6 +17,8 @@ import {
   getRecipeById,
   toggleLikeRecipe,
 } from "../../services/recipe/recipe.service";
+import ErrorMessage from "../../components/ErrorMessage";
+import Spinner from "../../components/Spinner";
 
 interface IRecipeSceneProps {
   customClassNames?: string;
@@ -30,6 +32,9 @@ enum EModalType {
 
 function RecipeScene(props: IRecipeSceneProps) {
   const [recipeContext, setRecipeContext] = useState<IRecipe | null>(null);
+  const [hasError, setHasError] = useState<boolean>(false);
+  const [errorText, setErrorText] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const authenticatedUserContext = useSelector(
     selectAuthenticatedUser,
     shallowEqual
@@ -50,10 +55,13 @@ function RecipeScene(props: IRecipeSceneProps) {
     const getRecipeDetails = async () => {
       if (recipeContext) {
         try {
+          setIsLoading(true);
           const userData = await getUserById({ id: recipeContext.postedBy });
           setRecipeCreatorData(userData);
+          setIsLoading(false);
         } catch (error) {
-          console.log(error);
+          setErrorText(`Error: we're not able to retrieve recipe details`);
+          setIsLoading(false);
         }
       }
     };
@@ -64,11 +72,14 @@ function RecipeScene(props: IRecipeSceneProps) {
     const getRecipeContext = async () => {
       if (props.recipeContextId) {
         try {
+          setIsLoading(true);
           const recipe = await getRecipeById({ id: props.recipeContextId });
           setRecipeContext(recipe);
-          console.log("76 REcipe context set to ", recipe);
+          setIsLoading(false);
         } catch (error) {
-          console.log("canot get recipe by id");
+          setErrorText(`Error: Unable to retrieve recipe data`);
+          setIsLoading(false);
+          setHasError(true);
         }
       }
     };
@@ -123,6 +134,8 @@ function RecipeScene(props: IRecipeSceneProps) {
         props.customClassNames ? props.customClassNames : ""
       }`}
     >
+      {isLoading && <Spinner />}
+      {hasError && errorText && <ErrorMessage text={errorText} />}
       <Button
         type={EButtonType.Back}
         onClick={() => props.onDismiss && props.onDismiss()}
@@ -160,30 +173,44 @@ function RecipeScene(props: IRecipeSceneProps) {
               <>{`Created by You`}</>
             ) : (
               <>
-                {`Created by ${recipeCreatorData?.firstName} ${recipeCreatorData?.lastName}`}
+                {` ${
+                  recipeCreatorData && recipeCreatorData.firstName
+                    ? `Created by ${recipeCreatorData.firstName}`
+                    : ""
+                } ${
+                  recipeCreatorData && recipeCreatorData.lastName
+                    ? recipeCreatorData.lastName
+                    : ""
+                }`}
               </>
             )}
           </div>
           <div className="Recipe Scene__recipe-info-section__createDate recipe-user-font even-slighter-left-margin">
-            {`on ${recipeCreatorData?.createdAt}`}
+            {recipeCreatorData &&
+              recipeCreatorData.createdAt &&
+              `on ${recipeCreatorData?.createdAt}`}
           </div>
         </div>
         <div className="Recipe Scene__like-button-section slight-percent-margin-left">
-          {!isAuthenticatedUserRecipeMatch() && (
-            <div className="Recipe Scene__like-button-section__enclosure flex">
-              <Button
-                onClick={handleToggleLikeRecipe}
-                type={EButtonType.Like}
-                likeButtonClassNames="small-like-heart-size"
-                likeButtonState={{ liked: isRecipeLikedByAuthenticatedUser() }}
-              />
-              <div className="Recipe Scene__like-button-section__like-caption-text even-slighter-left-margin recipe-user-font">
-                {isRecipeLikedByAuthenticatedUser()
-                  ? `You like this`
-                  : `Like this`}
+          {!isAuthenticatedUserRecipeMatch() &&
+            authenticatedUserContext &&
+            !hasError && (
+              <div className="Recipe Scene__like-button-section__enclosure flex">
+                <Button
+                  onClick={handleToggleLikeRecipe}
+                  type={EButtonType.Like}
+                  likeButtonClassNames="small-like-heart-size"
+                  likeButtonState={{
+                    liked: isRecipeLikedByAuthenticatedUser(),
+                  }}
+                />
+                <div className="Recipe Scene__like-button-section__like-caption-text even-slighter-left-margin recipe-user-font">
+                  {isRecipeLikedByAuthenticatedUser()
+                    ? `You like this`
+                    : `Like this`}
+                </div>
               </div>
-            </div>
-          )}
+            )}
         </div>
         <div className="Recipe Scene__body__header">
           <div className="Recipe Scene__body__header__description-text">
@@ -232,7 +259,7 @@ function RecipeScene(props: IRecipeSceneProps) {
             recipeCreatorData && (
               <ProfileScene
                 onDismiss={handleCloseProfileContextView}
-                customClassNames="responsive-margining modal-top-margining"
+                customClassNames="responsive-margining modal-top-margining fade-in-animation"
                 userId={recipeCreatorData._id}
               />
             )}
