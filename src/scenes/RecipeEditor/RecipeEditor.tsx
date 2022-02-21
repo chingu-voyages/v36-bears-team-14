@@ -1,14 +1,18 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import Banner from "../../components/Banner";
 import ErrorMessage from "../../components/ErrorMessage";
 import { postNewRecipeAsync } from "../../reducers/recipe-slice";
 import {
+  getRecipeById,
+  patchRecipe,
+} from "../../services/recipe/recipe.service";
+import {
   TRecipeIngredient,
   TRecipeStep,
 } from "../../services/recipe/recipe.types";
 import { RecipeStorageIO } from "../../utils/recipe-submission/recipe-storage-writer";
-import "./new-recipe-style.css";
+import "./recipe-editor-style.css";
 import { SceneName } from "./scene.types";
 import CookPrepTimeScene from "./scenes/CookPreTimeScene";
 import DirectionsScene from "./scenes/DirectionsScene";
@@ -17,13 +21,16 @@ import RecipePhotoScene from "./scenes/RecipePhoto";
 import CreateRecipeSubmitScene from "./scenes/Submit";
 import TitleDescriptionScene from "./scenes/TitleDescriptionScene";
 
-interface INewRecipeSceneProps {
+interface IRecipeEditorSceneProps {
   customClassNames?: string;
   onDismiss: () => void;
   onSubmitSuccess?: () => void;
+  editMode: boolean;
+  recipeEditContextId?: string;
+  titleText: string;
 }
 
-export function NewRecipeScene(props: INewRecipeSceneProps) {
+export function RecipeEditor(props: IRecipeEditorSceneProps) {
   const [currentStageIndex, setCurrentStageIndex] = useState<number>(0);
   const [recipeTitle, setRecipeTitle] = useState<string | null>(null);
   const [recipeDescription, setRecipeDescription] = useState<string | null>(
@@ -52,6 +59,12 @@ export function NewRecipeScene(props: INewRecipeSceneProps) {
             sceneName={SceneName.TitleDescription}
             onClickNext={handleClickNext}
             onDismiss={handleClickCancel}
+            editMode={props.editMode}
+            recipeContextId={
+              props.editMode && props.recipeEditContextId
+                ? props.recipeEditContextId
+                : undefined
+            }
           />
         );
       case 1:
@@ -102,6 +115,7 @@ export function NewRecipeScene(props: INewRecipeSceneProps) {
             onSubmit={handleSubmit}
             onDismiss={handleClickCancel}
             onClickBack={handleClickBack}
+            editMode={props.editMode}
           />
         );
     }
@@ -205,46 +219,57 @@ export function NewRecipeScene(props: INewRecipeSceneProps) {
     RecipeStorageIO.clearAllData();
   };
 
-  const handleSubmit = () => {
-    dispatch(
-      postNewRecipeAsync({
-        name: recipeTitle!,
-        description: recipeDescription!,
-        cookTimeMinutes: cookTime!,
-        prepTimeMinutes: prepTime!,
-        directions: recipeSteps!,
-        ingredients: ingredientsList!,
-        imageUrl: photoUrl!,
-        onSuccess: handleSuccessfulSubmit,
-        onError: (message: string) => {
-          setHasError(true);
-          setErrorText(message);
+  const handleSubmit = async () => {
+    if (!props.editMode) {
+      dispatch(
+        postNewRecipeAsync({
+          name: recipeTitle!,
+          description: recipeDescription!,
+          cookTimeMinutes: cookTime!,
+          prepTimeMinutes: prepTime!,
+          directions: recipeSteps!,
+          ingredients: ingredientsList!,
+          imageUrl: photoUrl!,
+          onSuccess: handleSuccessfulSubmit,
+          onError: (message: string) => {
+            setHasError(true);
+            setErrorText(message);
+          },
+        })
+      );
+    } else {
+      await patchRecipe({
+        recipeId: props.recipeEditContextId!,
+        payload: {
+          name: recipeTitle!,
+          description: recipeDescription!,
+          cookTimeMinutes: cookTime!,
+          prepTimeMinutes: prepTime!,
+          directions: recipeSteps!,
+          ingredients: ingredientsList!,
+          imageUrl: photoUrl!,
+          onSuccess: handleSuccessfulSubmit,
+          onError: (message: string) => {
+            setHasError(true);
+            setErrorText(message);
+          },
         },
-      })
-    );
+      });
+    }
   };
 
-  const testLog = () => {
-    console.log(recipeTitle);
-    console.log(recipeDescription);
-    console.log(cookTime);
-    console.log(prepTime);
-    console.log(photoUrl);
-    console.log(ingredientsList);
-    console.log(recipeSteps);
-  };
-  testLog();
   const handleSuccessfulSubmit = () => {
     RecipeStorageIO.clearAllData();
     props.onSubmitSuccess && props.onSubmitSuccess();
   };
+
   return (
     <div
       className={`NewRecipe__main response-new-recipe-modal responsive-new-recipe-top-margin ${
         props.customClassNames ? props.customClassNames : ""
       }`}
     >
-      <Banner titleText="New Recipe" />
+      <Banner titleText={props.titleText} />
       <div className="NewRecipe__main__Stage__main">
         {getNewRecipeScene({ idx: currentStageIndex })}
       </div>
@@ -253,4 +278,4 @@ export function NewRecipeScene(props: INewRecipeSceneProps) {
   );
 }
 
-export default NewRecipeScene;
+export default RecipeEditor;

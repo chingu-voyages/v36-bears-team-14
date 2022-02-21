@@ -1,6 +1,7 @@
 import {
   IRecipe,
   TRecipeCreationData,
+  TRecipePayloadData,
   TRecipeToggleLikeAction,
 } from "./recipe.types";
 import axios from "axios";
@@ -123,4 +124,35 @@ export const deleteRecipesByArrayOfIds = async ({
     }
   }
   throw new Error("Unable to batch delete");
+};
+
+export const patchRecipe = async ({
+  recipeId,
+  payload,
+}: {
+  recipeId: string;
+  payload: TRecipePayloadData;
+}): Promise<IRecipe> => {
+  const req = await axios({
+    method: "PATCH",
+    url: `${API_URL}/api/recipe/${recipeId}/update`,
+    withCredentials: true,
+    headers: AUTH_HEADER,
+    data: {
+      name: payload.name,
+      description: payload.description,
+      cookTimeMinutes: payload.cookTimeMinutes,
+      prepTimeMinutes: payload.prepTimeMinutes,
+      imageUrl: payload.imageUrl,
+      directions: payload.directions,
+      ingredients: payload.ingredients,
+    },
+  });
+  if (req.status === 200) {
+    payload.onSuccess && payload.onSuccess(req.data);
+    return req.data;
+  } else {
+    payload.onError && payload.onError("Unable to patch this recipe");
+  }
+  throw new Error("Unable to patch this recipe");
 };

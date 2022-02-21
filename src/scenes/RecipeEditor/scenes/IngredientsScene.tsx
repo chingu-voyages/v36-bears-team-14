@@ -3,7 +3,7 @@ import Button from "../../../components/Button";
 import { EButtonType } from "../../../components/Button/Button";
 import IngredientsForm from "../../../components/IngredientsForm";
 import { TRecipeIngredient } from "../../../services/recipe/recipe.types";
-import "../new-recipe-style.css";
+import "../recipe-editor-style.css";
 import { SceneName } from "../scene.types";
 import { v4 as uuidv4 } from "uuid";
 import ErrorMessage from "../../../components/ErrorMessage";

@@ -1,7 +1,7 @@
 import Button from "../../../components/Button";
 import { EButtonType } from "../../../components/Button/Button";
 import { SceneName } from "../scene.types";
-import "../new-recipe-style.css";
+import "../recipe-editor-style.css";
 interface INewRecipeSubmitData {
   onSubmit: () => void;
   onDismiss?: () => void;
@@ -15,6 +15,7 @@ interface INewRecipeSubmitData {
     currentIndex: number;
     sceneName: string;
   }) => void;
+  editMode?: boolean;
 }
 function CreateRecipeSubmitScene(props: INewRecipeSubmitData) {
   const handleGoBack = () => {
@@ -49,7 +50,7 @@ function CreateRecipeSubmitScene(props: INewRecipeSubmitData) {
             customClassNames="slight-right-margin"
           />
           <Button
-            text="Submit Recipe"
+            text={props.editMode ? "Submit updates" : "Submit new recipe"}
             onClick={handleSubmit}
             type={EButtonType.Normal}
             customClassNames="green-fill white-text round standard-button-padding green-fill white-text"

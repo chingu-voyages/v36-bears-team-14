@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { shallowEqual, useSelector } from "react-redux";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import Banner from "../../components/Banner";
 import { EAppScene } from "../../services/app/app.types";
 import { getUserById } from "../../services/user/user.service";
@@ -19,6 +19,12 @@ import {
 } from "../../services/recipe/recipe.service";
 import ErrorMessage from "../../components/ErrorMessage";
 import Spinner from "../../components/Spinner";
+import RecipeEditor from "../RecipeEditor";
+import { formatDate } from "../../utils/date-helpers/format-date";
+import { RecipeStorageIO } from "../../utils/recipe-submission/recipe-storage-writer";
+import { EModalPopType } from "../../components/ModalPop/types";
+import ModalPop from "../../components/ModalPop/ModalPop";
+import { getAllRecipesAsync } from "../../reducers/recipe-slice";
 
 interface IRecipeSceneProps {
   customClassNames?: string;
@@ -28,6 +34,8 @@ interface IRecipeSceneProps {
 
 enum EModalType {
   RecipeContextProfile = "recipeContextProfile",
+  RecipeContextEdit = "recipeContextEdit",
+  ModalPop = "modalPop",
 }
 
 function RecipeScene(props: IRecipeSceneProps) {
@@ -35,6 +43,8 @@ function RecipeScene(props: IRecipeSceneProps) {
   const [hasError, setHasError] = useState<boolean>(false);
   const [errorText, setErrorText] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [modalPopText, setModalPopText] = useState<string | null>(null);
+  const [modalPopType, setModalPopType] = useState<EModalPopType | null>(null);
   const authenticatedUserContext = useSelector(
     selectAuthenticatedUser,
     shallowEqual
@@ -50,9 +60,9 @@ function RecipeScene(props: IRecipeSceneProps) {
     recipeContext.images &&
     recipeContext.images.length > 0 &&
     isURLValid(recipeContext.images[0].url);
-
+  const dispatch = useDispatch();
   useEffect(() => {
-    const getRecipeDetails = async () => {
+    const getRecipeCreatorDetails = async () => {
       if (recipeContext) {
         try {
           setIsLoading(true);
@@ -65,24 +75,43 @@ function RecipeScene(props: IRecipeSceneProps) {
         }
       }
     };
-    getRecipeDetails();
+    getRecipeCreatorDetails();
   }, [recipeContext]);
 
-  useEffect(() => {
-    const getRecipeContext = async () => {
-      if (props.recipeContextId) {
-        try {
-          setIsLoading(true);
-          const recipe = await getRecipeById({ id: props.recipeContextId });
-          setRecipeContext(recipe);
-          setIsLoading(false);
-        } catch (error) {
-          setErrorText(`Error: Unable to retrieve recipe data`);
-          setIsLoading(false);
-          setHasError(true);
-        }
+  const getRecipeContext = async () => {
+    if (props.recipeContextId) {
+      try {
+        setIsLoading(true);
+        const recipe = await getRecipeById({ id: props.recipeContextId });
+        RecipeStorageIO.writeRecipeData(recipe);
+        setRecipeContext(recipe);
+        setIsLoading(false);
+      } catch (error) {
+        console.log(error);
+        setErrorText(`Error: Unable to retrieve recipe data`);
+        setIsLoading(false);
+        setHasError(true);
       }
-    };
+    }
+  };
+
+  useEffect(() => {
+    // const getRecipeContext = async () => {
+    //   if (props.recipeContextId) {
+    //     try {
+    //       setIsLoading(true);
+    //       const recipe = await getRecipeById({ id: props.recipeContextId });
+    //       RecipeStorageIO.writeRecipeData(recipe);
+    //       setRecipeContext(recipe);
+    //       setIsLoading(false);
+    //     } catch (error) {
+    //       console.log(error)
+    //       setErrorText(`Error: Unable to retrieve recipe data`);
+    //       setIsLoading(false);
+    //       setHasError(true);
+    //     }
+    //   }
+    // };
     getRecipeContext();
   }, []);
 
@@ -123,11 +152,33 @@ function RecipeScene(props: IRecipeSceneProps) {
     }
   };
 
-  const handleCloseProfileContextView = () => {
+  const closeModal = () => {
+    setModalPopText(null);
+    setModalPopType(null);
     setIsModalOpen(false);
     setModalType(null);
   };
 
+  const handleShowRecipeEdit = async () => {
+    if (recipeContext) {
+      RecipeStorageIO.writeRecipeData(recipeContext);
+      setModalType(EModalType.RecipeContextEdit);
+      setIsModalOpen(true);
+    }
+  };
+
+  const handleOnSuccessfulRecipeUpdate = () => {
+    setModalType(EModalType.ModalPop);
+    setModalPopText("Recipe updated successfully");
+    setModalPopType(EModalPopType.Success);
+    setIsModalOpen(true);
+    dispatch(getAllRecipesAsync({}));
+    getRecipeContext();
+  };
+
+  const handleModalPopClose = () => {
+    closeModal();
+  };
   return (
     <div
       className={`Recipe Scene__main white-background ${
@@ -170,7 +221,7 @@ function RecipeScene(props: IRecipeSceneProps) {
             onClick={showRecipeCreatorContext}
           >
             {isAuthenticatedUserRecipeMatch() ? (
-              <>{`Created by You`}</>
+              <>{`Created by You.`}</>
             ) : (
               <>
                 {` ${
@@ -188,8 +239,19 @@ function RecipeScene(props: IRecipeSceneProps) {
           <div className="Recipe Scene__recipe-info-section__createDate recipe-user-font even-slighter-left-margin">
             {recipeCreatorData &&
               recipeCreatorData.createdAt &&
-              `on ${recipeCreatorData?.createdAt}`}
+              `Last updated on ${formatDate(
+                recipeCreatorData?.updatedAt.toString()
+              )}`}
           </div>
+          {isAuthenticatedUserRecipeMatch() && (
+            <Button
+              type={EButtonType.Normal}
+              text="Edit this recipe"
+              onClick={handleShowRecipeEdit}
+              customClassNames="slight-left-margin"
+              customTextClassNames="recipe-user-font underline-text color-dark-blue-green"
+            />
+          )}
         </div>
         <div className="Recipe Scene__like-button-section slight-percent-margin-left">
           {!isAuthenticatedUserRecipeMatch() &&
@@ -258,9 +320,28 @@ function RecipeScene(props: IRecipeSceneProps) {
           {modalType === EModalType.RecipeContextProfile &&
             recipeCreatorData && (
               <ProfileScene
-                onDismiss={handleCloseProfileContextView}
+                onDismiss={closeModal}
                 customClassNames="responsive-margining modal-top-margining fade-in-animation"
                 userId={recipeCreatorData._id}
+              />
+            )}
+          {modalType === EModalType.RecipeContextEdit && (
+            <RecipeEditor
+              editMode={isAuthenticatedUserRecipeMatch()}
+              titleText="Edit Recipe"
+              onDismiss={closeModal}
+              recipeEditContextId={props.recipeContextId}
+              onSubmitSuccess={handleOnSuccessfulRecipeUpdate}
+            />
+          )}
+          {modalType === EModalType.ModalPop &&
+            modalPopType &&
+            modalPopText && (
+              <ModalPop
+                text={modalPopText ? modalPopText : ""}
+                customClassNames="pop-text-responsive-padding fade-in-animation"
+                type={modalPopType}
+                onDismiss={handleModalPopClose}
               />
             )}
         </div>
