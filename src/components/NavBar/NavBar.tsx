@@ -12,7 +12,7 @@ import {
 } from "../../reducers/app-slice";
 import { getAllRecipesAsync } from "../../reducers/recipe-slice";
 import LoginScene from "../../scenes/Login";
-import NewRecipeScene from "../../scenes/NewRecipe";
+import RecipeEditor from "../../scenes/RecipeEditor";
 import ProfileScene from "../../scenes/Profile";
 import RegistrationScene from "../../scenes/UserRegistration/UserRegistration";
 import AppLogo from "../App-logo/App-logo";
@@ -25,6 +25,7 @@ import ModalPopUp from "../ModalPop/ModalPop";
 import { EModalPopType } from "../ModalPop/types";
 import TextField from "../TextField";
 import "./nav-bar-style.css";
+import { RecipeStorageIO } from "../../utils/recipe-submission/recipe-storage-writer";
 
 interface INavBarProps {
   customClassNames?: string;
@@ -98,7 +99,6 @@ function NavBar(props: INavBarProps) {
     email: string;
     plainTextPassword: string;
   }) => {
-    // This should be validated at this point
     dispatch(
       logInUserAsync({ email, plainTextPassword, onSuccess: onLoginSuccess })
     );
@@ -110,6 +110,7 @@ function NavBar(props: INavBarProps) {
   };
 
   const handleAddNewRecipe = () => {
+    RecipeStorageIO.clearAllData(); // POIJ hmm
     setModalType(EModalType.NewRecipe);
     setIsModalOpen(true);
   };
@@ -266,10 +267,12 @@ function NavBar(props: INavBarProps) {
                 />
               )}
             {modalType && modalType === EModalType.NewRecipe && (
-              <NewRecipeScene
+              <RecipeEditor
                 onDismiss={dismissNewRecipeWindow}
                 onSubmitSuccess={refreshRecipesAfterSubmit}
                 customClassNames="fade-in-animation"
+                editMode={false}
+                titleText={"New Recipe"}
               />
             )}
             {modalType &&
@@ -277,7 +280,7 @@ function NavBar(props: INavBarProps) {
               modalPopType &&
               modalPopText && (
                 <ModalPopUp
-                  text={modalPopText ? modalPopText : "Text is not defined"}
+                  text={modalPopText ? modalPopText : ""}
                   customClassNames="pop-text-responsive-padding fade-in-animation"
                   type={modalPopType}
                   onDismiss={handleModalPopClose}

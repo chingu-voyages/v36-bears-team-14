@@ -5,7 +5,7 @@ import ErrorMessage from "../../../components/ErrorMessage";
 import TextField from "../../../components/TextField";
 import { RecipeStorageIO } from "../../../utils/recipe-submission/recipe-storage-writer";
 import { titleDescriptionValidator } from "../../../utils/validators";
-import "../new-recipe-style.css";
+import "../recipe-editor-style.css";
 import { SceneName } from "../scene.types";
 
 export type TRecipeNameDescriptionCallBackData = ({
@@ -27,6 +27,8 @@ interface ITitleDescriptionSceneProps {
   onDismiss?: () => void;
   onClickNext?: TRecipeNameDescriptionCallBackData;
   onClickBack?: TRecipeNameDescriptionCallBackData;
+  editMode: boolean;
+  recipeContextId?: string;
 }
 
 function TitleDescriptionScene(props: ITitleDescriptionSceneProps) {

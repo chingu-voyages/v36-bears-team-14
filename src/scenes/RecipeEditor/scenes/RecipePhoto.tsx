@@ -3,7 +3,7 @@ import Button from "../../../components/Button";
 import { EButtonType } from "../../../components/Button/Button";
 import ImageUploader from "../../../components/ImageUploader";
 import { RecipeStorageIO } from "../../../utils/recipe-submission/recipe-storage-writer";
-import "../new-recipe-style.css";
+import "../recipe-editor-style.css";
 import { SceneName } from "../scene.types";
 
 export type TRecipePhotoUrlCallBackData = ({

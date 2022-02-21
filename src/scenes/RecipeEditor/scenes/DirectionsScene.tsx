@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Button from "../../../components/Button";
 import { EButtonType } from "../../../components/Button/Button";
 import { TRecipeStep } from "../../../services/recipe/recipe.types";
-import "../new-recipe-style.css";
+import "../recipe-editor-style.css";
 import { SceneName } from "../scene.types";
 import { v4 as uuidv4 } from "uuid";
 import DirectionsForm from "../../../components/DirectionsForm";

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { shallowEqual, useSelector } from "react-redux";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import Banner from "../../components/Banner";
 import Button from "../../components/Button";
 import { EButtonType } from "../../components/Button/Button";
@@ -10,6 +10,7 @@ import RecipeCard from "../../components/RecipeCard";
 import Spinner from "../../components/Spinner";
 import TextField from "../../components/TextField";
 import { selectAuthenticatedUser } from "../../reducers/app-slice";
+import { getAllRecipesAsync } from "../../reducers/recipe-slice";
 import { IRecipe } from "../../services/recipe/recipe.types";
 import {
   getAllRecipesForUserId,
@@ -51,6 +52,7 @@ function ProfileScene(props: IProfileSceneProps) {
   const [commaSeparatedFavoriteFoods, setCommaSeparatedFavoriteFoods] =
     useState<string>("");
 
+  const dispatch = useDispatch();
   const userHasImage = () => {
     return !!(userContext && isURLValid(userContext.photoUrl!));
   };
@@ -190,6 +192,7 @@ function ProfileScene(props: IProfileSceneProps) {
   };
 
   const handleRefreshDeletedItems = async () => {
+    dispatch(getAllRecipesAsync({}));
     try {
       if (userContext) {
         setIsLoading(true);

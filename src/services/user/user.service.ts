@@ -30,7 +30,6 @@ export const getAllRecipesForUserId = async ({
 }: {
   userId: string;
 }): Promise<IRecipe[]> => {
-  console.log("get all recipes by id, 32 userId", userId);
   const req = await axios({
     method: "GET",
     url: `${API_URL}/api/user/${userId}/recipes`,
