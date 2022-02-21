@@ -9,6 +9,7 @@ interface INumberFieldProps {
   onChange?: ({ value, HTMLName }: { value: number; HTMLName: string }) => void;
   numericalRangeLimit?: { min?: number; max?: number };
   labelClassNames?: string;
+  disabled?: boolean;
 }
 
 function NumberField(props: INumberFieldProps) {
@@ -58,6 +59,7 @@ function NumberField(props: INumberFieldProps) {
             : 0
         }
         id={props.name}
+        disabled={props.disabled}
       />
     </div>
   );

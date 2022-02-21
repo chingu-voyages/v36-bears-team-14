@@ -25,6 +25,10 @@
 .Button__main:hover {
   cursor: pointer;
 }
+
+.standard-padding {
+  padding: 5px;
+}
 /**
   square vs round - shape of the button
 **/
