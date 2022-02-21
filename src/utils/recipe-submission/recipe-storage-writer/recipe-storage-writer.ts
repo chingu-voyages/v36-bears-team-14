@@ -1,3 +1,5 @@
+import { IRecipe } from "../../../services/recipe/recipe.types";
+
 export class RecipeStorageIO {
   public static readonly sessionKey = "recipeData";
   private static writeDataWithKeyData = ({ data }: { data: any }): void => {
@@ -49,5 +51,32 @@ export class RecipeStorageIO {
       return recipeInfo[key];
     }
     return null;
+  }
+
+  public static writeRecipeData(recipeData: IRecipe) {
+    this.writeDataToStorage({ key: "name", data: recipeData.name });
+    this.writeDataToStorage({
+      key: "description",
+      data: recipeData.description,
+    });
+    this.writeDataToStorage({ key: "_id", data: recipeData._id });
+    this.writeDataToStorage({
+      key: "cookTimeMinutes",
+      data: recipeData.cookTimeMinutes,
+    });
+    this.writeDataToStorage({
+      key: "prepTimeMinutes",
+      data: recipeData.prepTimeMinutes,
+    });
+    this.writeDataToStorage({
+      key: "imageUrl",
+      data:
+        recipeData.images && recipeData.images[0] ? recipeData.images[0] : "",
+    });
+    this.writeDataToStorage({
+      key: "ingredients",
+      data: recipeData.ingredients,
+    });
+    this.writeDataToStorage({ key: "directions", data: recipeData.directions });
   }
 }

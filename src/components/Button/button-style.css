@@ -115,6 +115,10 @@
   padding-left: 20px;
   padding-right: 20px;
 }
+
+.underline-text {
+  text-decoration: underline;
+}
 @media only screen and (max-width: 374px) {
   .user-name-responsive {
     display: none;

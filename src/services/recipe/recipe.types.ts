@@ -38,6 +38,8 @@ export type TRecipeCreationData = Pick<
   onError?: (message: string) => void;
 };
 
+export type TRecipePayloadData = TRecipeCreationData;
+
 export type TRecipeToggleLikeAction = {
   actionTaken: "like" | "unlike";
   updatedRecipeDocument: IRecipe;

@@ -4,6 +4,7 @@ html * {
 :root {
   --white: #ffffff;
   --green-0: #18a96c;
+  --dark-blue-green: #189ea9;
   --dark-charcoal-grey: #333333;
   --super-light-grey: #ededed;
   --burgundy: #a92e18
@@ -35,6 +36,10 @@ body {
 
 .color-crimson-red {
   color: #CA3433
+}
+
+.color-dark-blue-green {
+  color: var(--dark-blue-green);
 }
 .menu-hover-color {
   color: var(--super-light-grey);

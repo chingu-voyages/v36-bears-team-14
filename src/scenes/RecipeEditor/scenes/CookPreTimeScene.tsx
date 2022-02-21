@@ -5,7 +5,7 @@ import ErrorMessage from "../../../components/ErrorMessage";
 import NumberField from "../../../components/NumberField";
 import { RecipeStorageIO } from "../../../utils/recipe-submission/recipe-storage-writer";
 import { cookTimePrepTimeValidator } from "../../../utils/validators";
-import "../new-recipe-style.css";
+import "../recipe-editor-style.css";
 import { SceneName } from "../scene.types";
 
 export type TRecipeCookPrepTimeCallBackData = ({
