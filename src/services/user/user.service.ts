@@ -75,3 +75,40 @@ export const patchUserProfileDataByUserId = async ({
     throw new Error(`Unable to patch user`);
   }
 };
+
+export const securePatchUserDataByUserId = async ({
+  id,
+  updateType,
+  payload,
+  onSuccess,
+  onError,
+}: {
+  id: string;
+  updateType: "name" | "password";
+  payload: { password: string } | { firstName: string; lastName: string };
+  onSuccess?: (updatedUser: TSecureUser) => void;
+  onError?: (message: string) => void;
+}): Promise<TSecureUser> => {
+  try {
+    const req = await axios({
+      method: "PATCH",
+      url: `${API_URL}/api/user/${id}/secure`,
+      withCredentials: true,
+      headers: AUTH_HEADER,
+      data: {
+        updateType: updateType,
+        payload,
+      },
+    });
+    if (req.status === 200) {
+      onSuccess && onSuccess(req.data);
+    } else {
+      onError &&
+        onError(`Unable to update secure profile data: ${req.statusText}`);
+    }
+  } catch (exception: any) {
+    onError &&
+      onError(`Unable to update secure profile data: ${exception.message}`);
+  }
+  throw new Error("Unable to update secure profile data");
+};
