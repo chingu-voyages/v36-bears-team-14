@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import Banner from "../../components/Banner";
 import Button from "../../components/Button";
 import { EButtonType } from "../../components/Button/Button";
 import "../../components/CommonStyles/scene-style.css";
 import ErrorMessage from "../../components/ErrorMessage";
 import TextField from "../../components/TextField";
+import { checkHasSessionAsync } from "../../reducers/app-slice";
 import { securePatchUserDataByUserId } from "../../services/user/user.service";
 import { TSecureUser } from "../../services/user/user.types";
 import SuccessIcon from "./success-icon.svg";
@@ -39,7 +41,7 @@ function MoreProfileSettingsModal(props: IMoreSettingsProps) {
     null
   );
   useState<boolean>(false);
-
+  const dispatch = useDispatch();
   useEffect(() => {
     setFirstName(props.userContext.firstName);
     setLastName(props.userContext.lastName);
@@ -78,6 +80,7 @@ function MoreProfileSettingsModal(props: IMoreSettingsProps) {
 
   const handleSuccessfulNameUpdate = () => {
     setNameSuccessText("Successfully updated first and last name");
+    dispatch(checkHasSessionAsync());
     setNameUpdateDisabled(true);
     setHasNameSuccessMessage(true);
   };
@@ -92,8 +95,8 @@ function MoreProfileSettingsModal(props: IMoreSettingsProps) {
 
   const handleSuccessfulPasswordUpdate = () => {
     setPasswordSuccessText("Successfully updated password");
-    setPasswordUpdateDisabled(true);
     setHasPasswordSuccessMessage(true);
+    setPasswordUpdateDisabled(true);
   };
 
   const handleErrorPasswordUpdate = (message: string) => {
@@ -221,6 +224,9 @@ function MoreProfileSettingsModal(props: IMoreSettingsProps) {
           />
           {hasPasswordError && passwordErrorText && (
             <ErrorMessage text={passwordErrorText} />
+          )}
+          {hasPasswordSuccessMessage && passwordSuccessText && (
+            <SuccessMessage text={passwordSuccessText} />
           )}
           <Button
             disabled={passwordUpdateDisabled}

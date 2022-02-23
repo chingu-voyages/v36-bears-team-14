@@ -88,7 +88,7 @@ export const securePatchUserDataByUserId = async ({
   payload: { password: string } | { firstName: string; lastName: string };
   onSuccess?: (updatedUser: TSecureUser) => void;
   onError?: (message: string) => void;
-}): Promise<TSecureUser> => {
+}): Promise<{ updateType: "name" | "password"; user: TSecureUser }> => {
   try {
     const req = await axios({
       method: "PATCH",

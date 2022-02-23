@@ -30,19 +30,19 @@ interface IIngredientsSceneProps {
 }
 
 interface IIngredientItemProps {
-  onClickDelete: (id: string) => void;
+  onClickDelete: (_id: string) => void;
   customClassNames?: string;
   customLiClassNames?: string;
   recipeListItemData: TRecipeListItem;
 }
 
 type TRecipeListItem = TRecipeIngredient & {
-  id: string; // unique id we can use to delete things from the array
+  _id: string; // unique id we can use to delete things from the array
 };
 
 function IngredientItem(props: IIngredientItemProps) {
   const handleIngredientItemClick = () => {
-    props.onClickDelete(props.recipeListItemData.id);
+    props.onClickDelete(props.recipeListItemData._id);
   };
   return (
     <div
@@ -51,7 +51,7 @@ function IngredientItem(props: IIngredientItemProps) {
       } flex light-border`}
     >
       <li
-        key={props.recipeListItemData.id}
+        key={props.recipeListItemData._id}
         className={`IngredientItem__li ${
           props.customLiClassNames ? props.customLiClassNames : ""
         } responsive-buffer-padding`}
@@ -104,7 +104,7 @@ function IngredientsScene(props: IIngredientsSceneProps) {
   const handleAddRecipeIngredient = (data: TRecipeIngredient) => {
     const ingredientWithAppendedId = {
       ...data,
-      id: uuidv4(),
+      _id: uuidv4(),
     };
     setIngredientsList(() => [...ingredientsList, ingredientWithAppendedId]);
   };
@@ -119,7 +119,9 @@ function IngredientsScene(props: IIngredientsSceneProps) {
   };
 
   const handleDeleteRecipeIngredient = (id: string) => {
-    const filteredItems = [...ingredientsList].filter((item) => item.id !== id);
+    const filteredItems = [...ingredientsList].filter(
+      (item) => item._id !== id
+    );
     setIngredientsList(filteredItems);
   };
 
@@ -151,6 +153,7 @@ function IngredientsScene(props: IIngredientsSceneProps) {
                   <IngredientItem
                     onClickDelete={handleDeleteRecipeIngredient}
                     recipeListItemData={item}
+                    key={item._id}
                   />
                 ))}
               {ingredientsList.length === 0 && (

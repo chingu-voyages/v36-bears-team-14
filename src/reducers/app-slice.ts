@@ -156,7 +156,9 @@ const appSlice = createSlice({
       .addCase(logInUserAsync.rejected, (state, action) => {
         state.logInStatus = {
           status: EStatus.Error,
-          message: `Log in failed: ${action.error.message}`,
+          message: action.error.message?.includes("401")
+            ? `We could not authenticate your log in. Please verify that your e-mail and password are correct.`
+            : `Log in authentication error.`,
         };
       })
       .addCase(logOutUserAsync.pending, (state) => {

@@ -129,19 +129,21 @@ function ProfileScene(props: IProfileSceneProps) {
       }
     }
   }, [userContext]);
+
+  const getUserContext = async () => {
+    try {
+      setIsLoading(true);
+      const user = await getUserById({ id: props.userId });
+      setUserContext(user);
+      setIsLoading(false);
+    } catch (exception) {
+      setIsLoading(false);
+      setHasError(true);
+      setErrorText("Unable to retrieve user data for this context");
+    }
+  };
+
   useEffect(() => {
-    const getUserContext = async () => {
-      try {
-        setIsLoading(true);
-        const user = await getUserById({ id: props.userId });
-        setUserContext(user);
-        setIsLoading(false);
-      } catch (exception) {
-        setIsLoading(false);
-        setHasError(true);
-        setErrorText("Unable to retrieve user data for this context");
-      }
-    };
     getUserContext();
   }, []);
 
@@ -180,6 +182,7 @@ function ProfileScene(props: IProfileSceneProps) {
   };
 
   const closeModal = () => {
+    getUserContext();
     setModalType(null);
     setIsModalOpen(false);
   };
@@ -460,7 +463,10 @@ function ProfileScene(props: IProfileSceneProps) {
         modalType === EModalType.MoreProfileSettings &&
         userContext && (
           <div className="modal__main">
-            <MoreProfileSettingsModal userContext={userContext} />
+            <MoreProfileSettingsModal
+              userContext={userContext}
+              onDismiss={closeModal}
+            />
           </div>
         )}
     </div>

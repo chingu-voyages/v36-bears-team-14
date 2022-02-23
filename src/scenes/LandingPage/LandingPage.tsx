@@ -56,6 +56,7 @@ function LandingPage() {
           allRecipes.map((recipeItem) => (
             <RecipeCard
               id={recipeItem._id}
+              key={recipeItem._id}
               imageUrl={
                 recipeItem.images && recipeItem.images[0]
                   ? recipeItem.images[0].url
