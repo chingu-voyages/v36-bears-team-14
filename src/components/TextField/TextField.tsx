@@ -14,6 +14,7 @@ interface ITextFieldProps {
   rows?: number;
   cols?: number;
   maxLength?: number;
+  disabled?: boolean;
 }
 
 const TEXT_MAX_LENGTH = 5000;
@@ -68,6 +69,7 @@ function TextField(props: ITextFieldProps) {
           rows={props.rows ?? 10}
           cols={props.cols ?? 6}
           maxLength={props.maxLength ?? TEXT_MAX_LENGTH}
+          disabled={props.disabled}
         />
       ) : (
         <input
@@ -81,6 +83,7 @@ function TextField(props: ITextFieldProps) {
           name={`${props.name}`}
           id={props.name}
           maxLength={props.maxLength ?? TEXT_MAX_LENGTH}
+          disabled={props.disabled}
         />
       )}
     </div>

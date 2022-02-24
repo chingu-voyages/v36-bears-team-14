@@ -107,6 +107,22 @@
   font-size: 12px;
 }
 
+.section-bottom-border {
+  margin-bottom: 20px;
+}
+
+.top-margin-spacing {
+  margin-top: 15%;
+}
+.input-text-width {
+  width: 98%;
+}
+
+.top-bottom-margining {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
 @media only screen and (max-width: 466px) {
   .responsive-image {
     max-width: 200px;
@@ -131,6 +147,10 @@
   .responsive-bio-text {
     width: 100%;
     max-height: 10vh;
+  }
+  .responsive-margin-padding {
+    margin-top: 15px;
+    padding-bottom: 5%;
   }
 }
 

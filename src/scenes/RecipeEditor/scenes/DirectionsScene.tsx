@@ -37,12 +37,12 @@ interface IDirectionItemProps {
 }
 
 type TRecipeStepItem = TRecipeStep & {
-  id: string; // unique id we can use to delete things from the array
+  _id: string; // unique id we can use to delete things from the array
 };
 
 function DirectionItem(props: IDirectionItemProps) {
   const handleDirectionItemClick = () => {
-    props.onClickDelete(props.recipeDirectionItemData.id);
+    props.onClickDelete(props.recipeDirectionItemData._id);
   };
   return (
     <div
@@ -51,7 +51,7 @@ function DirectionItem(props: IDirectionItemProps) {
       } flex light-border`}
     >
       <li
-        key={props.recipeDirectionItemData.id}
+        key={props.recipeDirectionItemData._id}
         className={`DirectionItem__li ${
           props.customLiClassNames ? props.customLiClassNames : ""
         } responsive-buffer-padding`}
@@ -103,7 +103,7 @@ function DirectionsScene(props: IDirectionsSceneProps) {
   const handleAddRecipeStep = (data: TRecipeStep) => {
     const stepWithAppendedId = {
       ...data,
-      id: uuidv4(),
+      _id: uuidv4(),
     };
     setRecipeStepList(() => [...recipeStepList, stepWithAppendedId]);
   };
@@ -118,7 +118,7 @@ function DirectionsScene(props: IDirectionsSceneProps) {
   };
 
   const handleDeleteRecipeStep = (id: string) => {
-    const filteredItems = [...recipeStepList].filter((item) => item.id !== id);
+    const filteredItems = [...recipeStepList].filter((item) => item._id !== id);
     setRecipeStepList(filteredItems);
   };
 
