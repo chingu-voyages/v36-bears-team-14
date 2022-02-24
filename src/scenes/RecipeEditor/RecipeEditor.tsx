@@ -244,10 +244,9 @@ export function RecipeEditor(props: IRecipeEditorSceneProps) {
   };
 
   const handleSubmit = async () => {
+    const directionsNoId = getRecipeStepsWithoutId();
+    const ingredientsNoId = getIngredientsListWithoutId();
     if (!props.editMode) {
-      const directionsNoId = getRecipeStepsWithoutId();
-      const ingredientsNoId = getIngredientsListWithoutId();
-
       dispatch(
         postNewRecipeAsync({
           name: recipeTitle!,
@@ -272,8 +271,8 @@ export function RecipeEditor(props: IRecipeEditorSceneProps) {
           description: recipeDescription!,
           cookTimeMinutes: cookTime!,
           prepTimeMinutes: prepTime!,
-          directions: recipeSteps!,
-          ingredients: ingredientsList!,
+          directions: directionsNoId,
+          ingredients: ingredientsNoId,
           imageUrl: photoUrl!,
           onSuccess: handleSuccessfulSubmit,
           onError: (message: string) => {

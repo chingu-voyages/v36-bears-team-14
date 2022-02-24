@@ -87,7 +87,7 @@ function RecipeScene(props: IRecipeSceneProps) {
         setRecipeContext(recipe);
         setIsLoading(false);
       } catch (error) {
-        console.log(error);
+        console.error("Recipe scene - getRecipeContext:", error);
         setErrorText(`Error: Unable to retrieve recipe data`);
         setIsLoading(false);
         setHasError(true);
@@ -96,22 +96,6 @@ function RecipeScene(props: IRecipeSceneProps) {
   };
 
   useEffect(() => {
-    // const getRecipeContext = async () => {
-    //   if (props.recipeContextId) {
-    //     try {
-    //       setIsLoading(true);
-    //       const recipe = await getRecipeById({ id: props.recipeContextId });
-    //       RecipeStorageIO.writeRecipeData(recipe);
-    //       setRecipeContext(recipe);
-    //       setIsLoading(false);
-    //     } catch (error) {
-    //       console.log(error)
-    //       setErrorText(`Error: Unable to retrieve recipe data`);
-    //       setIsLoading(false);
-    //       setHasError(true);
-    //     }
-    //   }
-    // };
     getRecipeContext();
   }, []);
 
@@ -303,8 +287,10 @@ function RecipeScene(props: IRecipeSceneProps) {
             {recipeContext &&
               recipeContext.directions &&
               recipeContext.directions.length > 0 &&
-              recipeContext.directions.map((directionStep) => (
-                <li className="centered-text">{directionStep.description}</li>
+              recipeContext.directions.map((directionStep, index) => (
+                <li key={`context_${index + 1}`} className="centered-text">
+                  {index + 1}. {directionStep.description}
+                </li>
               ))}
           </ul>
           <div className="Recipe Scene__body__footer__controls white-background">

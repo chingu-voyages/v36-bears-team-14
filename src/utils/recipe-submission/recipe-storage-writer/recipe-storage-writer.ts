@@ -32,7 +32,7 @@ export class RecipeStorageIO {
       const data = JSON.parse(window.sessionStorage.getItem(this.sessionKey)!);
       return data;
     } catch (exception) {
-      console.log("getDataFromStorage:", exception);
+      console.error("getDataFromStorage error:", exception);
       return null;
     }
   }

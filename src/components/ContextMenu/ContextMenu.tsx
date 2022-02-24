@@ -61,6 +61,7 @@ function ContextMenu(props: IContextMenuProps) {
             text={value.text}
             onClick={value.onClick}
             action={key}
+            key={`ContextMenu_${value.text}`}
           />
         ))}
     </div>
