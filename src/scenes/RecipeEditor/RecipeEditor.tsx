@@ -17,7 +17,7 @@ import { SceneName } from "./scene.types";
 import CookPrepTimeScene from "./scenes/CookPreTimeScene";
 import DirectionsScene from "./scenes/DirectionsScene";
 import IngredientsScene from "./scenes/IngredientsScene";
-import RecipePhotoScene from "./scenes/RecipePhoto";
+import RecipePhotoScene from "./scenes/RecipePhotoScene";
 import CreateRecipeSubmitScene from "./scenes/Submit";
 import TitleDescriptionScene from "./scenes/TitleDescriptionScene";
 
@@ -161,7 +161,7 @@ export function RecipeEditor(props: IRecipeEditorSceneProps) {
         setPhotoUrl(data.photoUrl!);
         RecipeStorageIO.writeDataToStorage({
           key: "imageUrl",
-          data: data.photoUrl,
+          data: { url: data.photoUrl },
         });
         setCurrentStageIndex(() => currentStageIndex + 1);
       } else if (data.sceneName === SceneName.Ingredients) {
@@ -219,7 +219,33 @@ export function RecipeEditor(props: IRecipeEditorSceneProps) {
     RecipeStorageIO.clearAllData();
   };
 
+  const getIngredientsListWithoutId = (): TRecipeIngredient[] => {
+    if (ingredientsList && ingredientsList.length > 0) {
+      return ingredientsList.map((ingredient) => {
+        return {
+          name: ingredient.name,
+          unit: ingredient.unit,
+          quantity: ingredient.quantity,
+        };
+      });
+    }
+    return [];
+  };
+
+  const getRecipeStepsWithoutId = (): TRecipeStep[] => {
+    if (recipeSteps && recipeSteps.length > 0) {
+      return recipeSteps.map((step) => {
+        return {
+          description: step.description,
+        };
+      });
+    }
+    return [];
+  };
+
   const handleSubmit = async () => {
+    const directionsNoId = getRecipeStepsWithoutId();
+    const ingredientsNoId = getIngredientsListWithoutId();
     if (!props.editMode) {
       dispatch(
         postNewRecipeAsync({
@@ -227,8 +253,8 @@ export function RecipeEditor(props: IRecipeEditorSceneProps) {
           description: recipeDescription!,
           cookTimeMinutes: cookTime!,
           prepTimeMinutes: prepTime!,
-          directions: recipeSteps!,
-          ingredients: ingredientsList!,
+          directions: directionsNoId,
+          ingredients: ingredientsNoId,
           imageUrl: photoUrl!,
           onSuccess: handleSuccessfulSubmit,
           onError: (message: string) => {
@@ -245,8 +271,8 @@ export function RecipeEditor(props: IRecipeEditorSceneProps) {
           description: recipeDescription!,
           cookTimeMinutes: cookTime!,
           prepTimeMinutes: prepTime!,
-          directions: recipeSteps!,
-          ingredients: ingredientsList!,
+          directions: directionsNoId,
+          ingredients: ingredientsNoId,
           imageUrl: photoUrl!,
           onSuccess: handleSuccessfulSubmit,
           onError: (message: string) => {

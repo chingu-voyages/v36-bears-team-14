@@ -22,10 +22,13 @@ import { isURLValid } from "../../utils/string-helpers/validate-url";
 import RecipeScene from "../Recipe";
 
 import GenericRacoon from "./generic-racoon.svg";
+import MoreProfileSettingsModal from "./MoreProfileSettings";
 import UserRecipesList from "./UserRecipesList";
+import { isOwnProfile } from "./utils";
 enum EModalType {
   FullRecipeView = "fullRecipeView",
   MoreRecipesList = "moreRecipesList",
+  MoreProfileSettings = "moreProfileSettings",
 }
 interface IProfileSceneProps {
   customClassNames?: string;
@@ -110,16 +113,6 @@ function ProfileScene(props: IProfileSceneProps) {
     }
   };
 
-  const isOwnProfile = (): boolean => {
-    if (
-      userContext &&
-      authenticatedUser &&
-      userContext._id === authenticatedUser._id
-    )
-      return true;
-    return false;
-  };
-
   const handleCommaSeparatedFavoriteFoodsChange = ({
     value,
   }: {
@@ -136,19 +129,21 @@ function ProfileScene(props: IProfileSceneProps) {
       }
     }
   }, [userContext]);
+
+  const getUserContext = async () => {
+    try {
+      setIsLoading(true);
+      const user = await getUserById({ id: props.userId });
+      setUserContext(user);
+      setIsLoading(false);
+    } catch (exception) {
+      setIsLoading(false);
+      setHasError(true);
+      setErrorText("Unable to retrieve user data for this context");
+    }
+  };
+
   useEffect(() => {
-    const getUserContext = async () => {
-      try {
-        setIsLoading(true);
-        const user = await getUserById({ id: props.userId });
-        setUserContext(user);
-        setIsLoading(false);
-      } catch (exception) {
-        setIsLoading(false);
-        setHasError(true);
-        setErrorText("Unable to retrieve user data for this context");
-      }
-    };
     getUserContext();
   }, []);
 
@@ -187,6 +182,7 @@ function ProfileScene(props: IProfileSceneProps) {
   };
 
   const closeModal = () => {
+    getUserContext();
     setModalType(null);
     setIsModalOpen(false);
   };
@@ -232,6 +228,11 @@ function ProfileScene(props: IProfileSceneProps) {
     getRecipesByUser();
   }, [userContext]);
 
+  const handleOpenMoreSettings = () => {
+    // Do something
+    setModalType(EModalType.MoreProfileSettings);
+    setIsModalOpen(true);
+  };
   return (
     <div
       className={`Profile Scene__main white-background ${
@@ -258,7 +259,17 @@ function ProfileScene(props: IProfileSceneProps) {
         }}
       />
       <div className="Profile Scene__body top-margin-padding responsive-margining">
-        {isOwnProfile() && (
+        {isOwnProfile({ userContext, authenticatedUser }) && (
+          <div className="Profile Scene__body__admin flex flex-right">
+            <Button
+              type={EButtonType.Normal}
+              text="More settings..."
+              customTextClassNames="underline-text smaller-font color-dark-blue-green"
+              onClick={handleOpenMoreSettings}
+            />
+          </div>
+        )}
+        {isOwnProfile({ userContext, authenticatedUser }) && (
           <div className="Profile Scene__body__image-edit-controls__enclosure slight-bottom-margin flex">
             <div className="Profile Scene__body__image-edit-controls__prompt smaller-font">
               Edit profile photo
@@ -276,7 +287,7 @@ function ProfileScene(props: IProfileSceneProps) {
                 <div className="Profile Scene__body__bio__header-text section-header padding-center-text">
                   Bio
                 </div>
-                {isOwnProfile() && (
+                {isOwnProfile({ userContext, authenticatedUser }) && (
                   <Button
                     type={EButtonType.Edit}
                     editButtonClassNames="smaller-edit-button-icon slim-padding-right"
@@ -448,6 +459,16 @@ function ProfileScene(props: IProfileSceneProps) {
           />
         </div>
       )}
+      {isModalOpen &&
+        modalType === EModalType.MoreProfileSettings &&
+        userContext && (
+          <div className="modal__main">
+            <MoreProfileSettingsModal
+              userContext={userContext}
+              onDismiss={closeModal}
+            />
+          </div>
+        )}
     </div>
   );
 }

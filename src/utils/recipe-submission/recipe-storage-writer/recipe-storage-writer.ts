@@ -28,7 +28,13 @@ export class RecipeStorageIO {
     }
   };
   private static getDataFromStorage() {
-    return JSON.parse(window.sessionStorage.getItem(this.sessionKey)!);
+    try {
+      const data = JSON.parse(window.sessionStorage.getItem(this.sessionKey)!);
+      return data;
+    } catch (exception) {
+      console.error("getDataFromStorage error:", exception);
+      return null;
+    }
   }
 
   public static clearAllData() {
@@ -71,7 +77,9 @@ export class RecipeStorageIO {
     this.writeDataToStorage({
       key: "imageUrl",
       data:
-        recipeData.images && recipeData.images[0] ? recipeData.images[0] : "",
+        recipeData.images && recipeData.images[0]
+          ? recipeData.images[0]
+          : { url: "" },
     });
     this.writeDataToStorage({
       key: "ingredients",

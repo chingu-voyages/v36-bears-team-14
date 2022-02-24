@@ -62,10 +62,17 @@ function RecipePhotoScene(props: IRecipePhotoProps) {
     RecipeStorageIO.clearDataByKey("imageUrl");
   };
   useEffect(() => {
-    const ppImageUrl = RecipeStorageIO.getDataByKey("imageUrl");
-    if (ppImageUrl && ppImageUrl !== "") {
-      setPhotoUrlValue(ppImageUrl as string);
-      setHasImage(true);
+    try {
+      const ppImage = RecipeStorageIO.getDataByKey("imageUrl") as {
+        url: string;
+        _id: string;
+      };
+      if (ppImage && ppImage.url) {
+        setPhotoUrlValue(ppImage.url);
+        setHasImage(true);
+      }
+    } catch (exception) {
+      console.log("Error getting recipe image on render", exception);
     }
   }, []);
   return (
